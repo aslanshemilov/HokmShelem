@@ -1,0 +1,47 @@
+
+<div class="mb-3">
+    <div [class.input-group]="label.toLowerCase().includes('password')">
+        <div class="form-floating">
+            <input
+                [formControl]="control"
+                type="{{!label.toLowerCase().includes('password') == true ? type : (!displayPassword ? 'password' : 'text')}}"
+                placeholder="{{labelOverride ?? label}}" class="form-control"
+                [class.is-invalid]="submitted && control.invalid">
+            <label for="{{label}}">{{labelOverride ?? label}}</label>
+
+        </div>
+        <span class="input-group-text"
+            *ngIf="label.toLowerCase().includes('password')"
+            (click)="togglePasswordDisplay()">
+            <i [ngClass]="displayPassword ? 'bi-eye-slash' : 'bi-eye'"
+                class="bi "></i>
+        </span>
+    </div>
+    <div class="text-danger"
+        *ngIf="submitted && control.errors?.['required']">
+        {{label}} is required
+    </div>
+    <div class="text-danger"
+        *ngIf="submitted && control.errors?.['minlength']">
+        {{label}} must be at least
+        {{control.errors?.['minlength'].requiredLength}} characters
+    </div>
+    <div class="text-danger"
+        *ngIf="submitted && control.errors?.['maxlength']">
+        {{label}} must be at most
+        {{control.errors?.['maxlength'].requiredLength}} characters
+    </div>
+    <div class="text-danger"
+        *ngIf="submitted && control.errors?.['notMatching']">
+        Password do not match
+    </div>
+    <div class="text-danger"
+        *ngIf="submitted && control.errors?.['pattern']">
+        <ng-container *ngIf="invalidPatternMessage">
+            {{invalidPatternMessage}}
+        </ng-container>
+        <ng-container *ngIf="!invalidPatternMessage">
+            Invalid {{label}}
+        </ng-container>
+    </div>
+</div>

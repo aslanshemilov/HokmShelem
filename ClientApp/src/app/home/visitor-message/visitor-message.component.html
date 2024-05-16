@@ -1,0 +1,84 @@
+<form [formGroup]="messageForm" (ngSubmit)="sendMessage()" autocomplete="off">
+    <br />
+    <div class="container border">
+        <b>
+            Please feel free to use the form below to share any suggestions or
+            recommendations you may have. Thank you!
+        </b>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">
+                <i class="bi bi-asterisk text-danger"></i>
+                <label for="name" class="control-label ms-1">Name</label>
+            </div>
+            <div class="col-md-10">
+                <input formControlName="name"
+                    [class.is-invalid]="submitted && messageForm.get('name')?.errors"
+                    class="form-control" />
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('name')?.hasError('required')">
+                    Name is required
+                </span>
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('name')?.hasError('maxlength')">
+                    Maximum 100 characters
+                </span>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <i class="bi bi-asterisk text-danger"></i>
+                <label for="email" class="control-label ms-1">Email</label>
+            </div>
+            <div class="col-md-10">
+                <input formControlName="email"
+                    [class.is-invalid]="submitted && messageForm.get('email')?.errors"
+                    class="form-control" />
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('email')?.hasError('required')">
+                    Email is required
+                </span>
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('email')?.hasError('pattern')">
+                    Invalid email address
+                </span>
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('email')?.hasError('maxlength')">
+                    Maximum 100 characters
+                </span>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <i class="bi bi-asterisk text-danger"></i>
+                <label for="message" class="control-label ms-1">Message</label>
+            </div>
+            <div class="col-md-10">
+                <textarea formControlName="message"
+                    [class.is-invalid]="submitted && messageForm.get('message')?.errors"
+                    class="form-control" rows="10"></textarea>
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('message')?.hasError('required')">
+                    Message is required
+                </span>
+                <span class="text-danger"
+                    *ngIf="submitted && messageForm.get('message')?.hasError('maxlength')">
+                    Maximum 5000 characters
+                </span>
+            </div>
+        </div>
+
+        <div class="form-floating" *ngIf="apiResponse">
+            <app-validation-messages
+                [apiResponse]="apiResponse"></app-validation-messages>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col text-center">
+                <button class="btn btn-success" type="submit"
+                    style="width:130px;">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

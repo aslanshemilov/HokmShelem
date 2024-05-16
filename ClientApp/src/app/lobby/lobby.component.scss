@@ -1,0 +1,58 @@
+@import '../shared/Variables';
+
+.card {
+    height: 100% !important;
+}
+
+.player-room-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    overflow-y: auto;
+    height: $screenHeight * 0.64;
+}
+
+.side-box {
+    overflow-y: auto;
+    height: $screenHeight * 0.32;
+}
+
+.minBtnHeight {
+    min-height: 3rem;
+}
+
+.room {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    & label {
+        flex: 1;
+    }
+
+    & .sitSelection {
+        flex: 2;
+    }
+}
+
+
+.mediumFont {
+    font-size: medium;
+}
+
+@media (max-width: 960px) {
+    .container-fluid {
+        margin: 0;
+        padding: 0;
+    }
+
+    .chat-box {
+        height: 300px;
+    }
+
+    .side-box {
+        height: 300px;
+    }
+}

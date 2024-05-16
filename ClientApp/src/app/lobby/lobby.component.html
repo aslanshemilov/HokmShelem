@@ -1,0 +1,228 @@
+<div class="container-fluid">
+    <div class="hs-layout hs-layout-format">
+        <div class="card border-success">
+            <div class="card-header">
+                <ng-container *ngIf="lobbyService.mode.showLobbyChat">
+                    <div class="row">
+                        <div class="col">
+                            <span *ngIf="lobbyService.connectedRoom">Lobby</span> Chats
+                        </div>
+                        <div class="col text-end" *ngIf="lobbyService.connectedRoom">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(1)">
+                                Back to Room
+                                <ng-container *ngIf="(lobbyService.roomChats$ | async) as chats">
+                                    <i class="text-info bi bi-chat-left-text-fill"
+                                        *ngIf="chats.length > lobbyService.mode.roomChatSize"></i>
+                                </ng-container>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!lobbyService.mode.showLobbyChat && lobbyService.connectedRoom">
+                    <div class="row">
+                        <div class="col">
+                            <strong class="text-warning">
+                                {{lobbyService.connectedRoom.roomName}}
+                            </strong>
+                        </div>
+                        <div class="col text-end">
+                            <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(1)">
+                                See Lobby chats
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="card-body chat-box hs-position-relative scroller">
+                <ng-container *ngIf="lobbyService.mode.showLobbyChat">
+                    <app-chat-messages [messageThreads]="(lobbyService.lobbyChats$ | async)">
+                    </app-chat-messages>
+                </ng-container>
+                <ng-container *ngIf="!lobbyService.mode.showLobbyChat && lobbyService.connectedRoom">
+                    <app-chat-messages [messageThreads]="(lobbyService.roomChats$ | async)">
+                    </app-chat-messages>
+                </ng-container>
+            </div>
+            <div class="card-footer">
+                <app-chat-input (messageToSend)="sendMessage($event)"></app-chat-input>
+            </div>
+        </div>
+        <section class="player-room-box">
+            <div class="card border-success">
+                <div class="card-header">
+                    <ng-container *ngIf="lobbyService.mode.showLobbyPlayers">
+                        <div class="row">
+                            <div class="col">
+                                <span *ngIf="lobbyService.connectedRoom">Lobby</span> Players
+                            </div>
+                            <div class="col text-end" *ngIf="lobbyService.connectedRoom">
+                                <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(2)">
+                                    Back to Room
+                                    <ng-container *ngIf="(lobbyService.roomPlayers$ | async) as roomPlayers">
+                                        <i class="text-info bi bi-4-circle-fill" *ngIf="roomPlayers.length === 4"></i>
+                                    </ng-container>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!lobbyService.mode.showLobbyPlayers && lobbyService.connectedRoom">
+                        <div class="row">
+                            <div class="col">
+                                <strong class="text-warning">
+                                    {{lobbyService.connectedRoom.roomName}}
+                                </strong>
+                            </div>
+                            <div class="col text-end">
+                                <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(2)">
+                                    See Lobby players
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="card-body side-box scroller">
+                    <ng-container *ngIf="lobbyService.mode.showLobbyPlayers">
+                        <app-connected-players [players]="(lobbyService.lobbyPlayers$ | async)"></app-connected-players>
+                    </ng-container>
+                    <ng-container *ngIf="!lobbyService.mode.showLobbyPlayers && lobbyService.connectedRoom">
+                        <app-connected-players [players]="(lobbyService.roomPlayers$ | async)"></app-connected-players>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="card border-success mt-1">
+                <div class="card-header">
+                    <ng-container *ngIf="lobbyService.mode.showLobbyRooms">
+                        <div class="row">
+                            <div class="col">
+                                <span *ngIf="lobbyService.connectedRoom">Lobby</span> Rooms
+                            </div>
+                            <div class="col text-end" *ngIf="lobbyService.connectedRoom">
+                                <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(3)">
+                                    Back to Room
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!lobbyService.mode.showLobbyRooms && lobbyService.connectedRoom">
+                        <div class="row">
+                            <div class="col">
+                                <strong class="text-warning">
+                                    {{lobbyService.connectedRoom.roomName}}
+                                </strong>
+                            </div>
+                            <div class="col text-end">
+                                <button class="btn btn-outline-secondary btn-sm" (click)="lobbyButtonToggle(3)">
+                                    See Lobby rooms
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="card-body side-box scroller" style="position: relative;">
+                    <ng-container *ngIf="lobbyService.mode.showLobbyRooms">
+                        <app-room-to-join [rooms]="(lobbyService.rooms$ | async)"></app-room-to-join>
+                    </ng-container>
+                    <ng-container *ngIf="!lobbyService.mode.showLobbyRooms && lobbyService.connectedRoom">
+                        <div class="room">
+                            <label class="d-flex justify-content-between">
+                                <span class="h5">
+                                    {{lobbyService.connectedRoom.gameType | titlecase}}
+                                    ({{lobbyService.connectedRoom.targetScore}})
+                                </span>
+                                <i class="float-end h5">Select your sit</i>
+                            </label>
+                            <div class="sitSelection" style="flex: 2;">
+                                <div class="row">
+                                    <div class="col-6 offset-3 d-grid">
+                                        <button type="button" class="btn btn-info btn-lg minBtnHeight"
+                                            (click)="selectSit('b2')">
+                                            <span class="mediumFont">
+                                                {{lobbyService.connectedRoom.blue2}}
+                                            </span>
+                                            <span *ngIf="lobbyService.connectedRoom.blue2Ready">
+                                                <i class="bi bi-check"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitSelection" style="flex: 2;">
+                                <div class="row">
+                                    <div class="col-6 d-grid">
+                                        <button type="button" class="btn btn-danger btn-lg minBtnHeight"
+                                            (click)="selectSit('r2')">
+                                            <span class="mediumFont">
+                                                {{lobbyService.connectedRoom.red2}}
+                                            </span>
+                                            <span *ngIf="lobbyService.connectedRoom.red2Ready">
+                                                <i class="bi bi-check"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="col-6 d-grid">
+                                        <button type="button" class="btn btn-danger btn-lg minBtnHeight"
+                                            (click)="selectSit('r1')">
+                                            <span class="mediumFont">
+                                                {{lobbyService.connectedRoom.red1}}
+                                            </span>
+                                            <span *ngIf="lobbyService.connectedRoom.red1Ready">
+                                                <i class="bi bi-check"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitSelection">
+                                <div class="row">
+                                    <div class="col-3 text-center">
+                                        <button class="btn btn-warning btn-sm"
+                                            [disabled]="lobbyService.gameAboutToStartInNumberOfSeconds"
+                                            (click)="leaveTheRoom()">Leave</button>
+                                    </div>
+                                    <div class="col-6 d-grid">
+                                        <button type="button" class="btn btn-info btn-lg minBtnHeight"
+                                            (click)="selectSit('b1')">
+                                            <span class="mediumFont">
+                                                {{lobbyService.connectedRoom.blue1}}
+                                            </span>
+                                            <span *ngIf="lobbyService.connectedRoom.blue1Ready">
+                                                <i class="bi bi-check"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="col-3 text-center"
+                                        *ngIf="lobbyService.connectedRoom.hostName === lobbyService.myPlayerName">
+                                        <button class="btn btn-secondary btn-sm"
+                                            [disabled]="!lobbyService.connectedRoom.blue1Ready || !lobbyService.connectedRoom.red1Ready
+                                        || !lobbyService.connectedRoom.blue2Ready || !lobbyService.connectedRoom.red2Ready" (click)="start()">Start</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="card-footer">
+                    <div class="d-grid">
+                        <ng-container *ngIf="lobbyService.mode.showLobbyRooms">
+                            <button (click)="createRoom()" [disabled]="lobbyService.connectedRoom !== undefined"
+                                class="btn btn-dark btn-block" type="submit">
+                                Create Room
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="!lobbyService.mode.showLobbyRooms && lobbyService.connectedRoom">
+                            <button [disabled]="!lobbyService.connectedRoom.readyButtonEnabled || 
+                            lobbyService.checkIfIhavePressReady() == true" class="btn btn-success btn-block"
+                                (click)="ready()">
+                                Ready
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div style="position: absolute; top: 40%; left: 40%;" *ngIf="lobbyService.gameAboutToStartInNumberOfSeconds">
+    <app-count-down-to-start [countDown]="lobbyService.gameAboutToStartInNumberOfSeconds"></app-count-down-to-start>
+</div>

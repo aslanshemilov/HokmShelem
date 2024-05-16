@@ -1,0 +1,7 @@
+<div class="wrapper" #scrollMe>
+    <div *ngFor="let item of messageThreads" class="card-text">
+        <span class="fw-bold text-info">{{item.from}}:</span>
+        <span class="ms-1">{{item.message}}</span>
+    </div>
+</div>
+

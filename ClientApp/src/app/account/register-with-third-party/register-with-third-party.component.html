@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="col-12 col-lg-5">
+            <main class="form-signin">
+                <form [formGroup]="registerForm" (ngSubmit)="register()"
+                    autocomplete="off" *ngIf="complete">
+                    <div class="text-center mb-4">
+                        <h1 class="h3 mb-3 font-weight-normal">
+                            Registering using your <span
+                                class="text-warning">{{provider | titlecase}}</span>
+                            account
+                        </h1>
+                    </div>
+    
+                    <div class="form-floating mb-3">
+                        <input formControlName="playerName" type="text"
+                            placeholder="Player name"
+                            class="form-control"
+                            placeholder="Player name (Username)"
+                            [class.is-invalid]="(submitted || registerForm.get('playerName')?.dirty) && registerForm.get('playerName')?.errors"
+                            [class.is-valid]="registerForm.get('playerName')?.status === 'VALID'" />
+                        <label for="playerName">
+                            Player name (Username)
+                        </label>
+                        <div
+                            *ngIf="registerForm.get('playerName')?.status === 'PENDING'"
+                            class="fa fa-spinner fa-spin loader"></div>
+                        <div
+                            class="position-absolute top-50 start-50 translate-middle"
+                            *ngIf>
+                            <span>Checking...</span>
+                        </div>
+                        <div class="invalid-feedback"
+                            *ngIf="submitted && registerForm.get('playerName')?.hasError('required')">
+                            Player name is required
+                        </div>
+                        <div class="invalid-feedback"
+                            *ngIf="submitted && registerForm.get('playerName')?.hasError('minlength') || registerForm.get('playerName')?.hasError('maxlength')">
+                            Player name must be at least 3, and maximum 15
+                            characters
+                        </div>
+                        <div class="invalid-feedback"
+                            *ngIf="registerForm.get('playerName')?.dirty && registerForm.get('playerName')?.hasError('playerNameTaken')">
+                            Player name is taken, please choose another name
+                        </div>
+                        <div class="text-danger"
+                            *ngIf="registerForm.get('playerName')?.hasError('pattern')">
+                            No special characters
+                        </div>
+                    </div>
+    
+                    <div class="form-floating mb-3">
+                        <select class="form-select" formControlName="countryId"
+                            [class.is-invalid]="submitted && registerForm.get('countryId')?.errors">
+                            <option *ngFor="let country of countries"
+                                [value]="country.id">
+                                {{country.name}}
+                            </option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="submitted && registerForm.get('countryId')?.hasError('noCountrySelected')">
+                            Country is required
+                        </div>
+                    </div>
+    
+                    <div class="form-floating" *ngIf="apiResponse">
+                        <app-validation-messages
+                            [apiResponse]="apiResponse"></app-validation-messages>
+                    </div>
+    
+                    <div class="d-grid mt-4 px-1">
+                        <button class="btn btn-lg btn-warning" type="submit">Create
+                            Account</button>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </div>
+</div>

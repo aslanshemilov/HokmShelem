@@ -1,0 +1,9 @@
+<span *ngIf="label">
+     <i
+          (click)="toggleArrow()"
+          [ngClass]="arrowUp === undefined ? '' : (arrowUp === true ? 'bi-arrow-up-short' : 'bi-arrow-down-short')"
+          [ngStyle]="{'cursor': isSortable ? 'pointer' : ''}"
+          class="bi">
+          {{label}}
+     </i>
+</span>

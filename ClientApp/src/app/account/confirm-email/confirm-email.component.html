@@ -1,0 +1,21 @@
+<div class="container" *ngIf="completed">
+    <div class="card border-info text-center" style="max-width: 100%;"
+        *ngIf="apiResponse">
+        <div class="card-header text-white"
+            [ngClass]="success ? 'bg-success' : 'bg-danger'">
+            {{apiResponse.title}}
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                {{apiResponse.message}}
+            </p>
+            <p
+                *ngIf="apiResponse.message.includes('Invalid token')">
+                <a class="btn btn-link"
+                    (click)="resendEmailConfirmationLink()">
+                    Click here to resend email confirmaiton link
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

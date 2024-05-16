@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Hentaigana+Akebono&display=swap');
+
+@keyframes fa-blink {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.blink {
+    font-size: 15rem;
+    font-weight: bold;
+    animation: fa-blink 1s infinite;
+    color: #692d91;
+    font-family: 'Yuji Hentaigana Akebono', cursive;
+}

@@ -1,0 +1,172 @@
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <a class="btn btn-primary"
+                routerLink="/admin/add-edit-member">Create Member</a>
+        </div>
+    
+        <div class="col-6">
+            <div class="d-flex justify-content-end">
+                <app-paging-size-entries
+                    (pageSize)="pageSizeEntry($event)"></app-paging-size-entries>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="paginatedMember && a_dropdownFilters">
+        <div class="row my-2">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-4">
+                                <app-drop-down-filter-entries [label]="'Provider'"
+                                    [action]="'provider'"
+                                    [entries]="a_dropdownFilters.providers"
+                                    [defaultValue]="'all'"
+                                    (selectedValue)="onDropDownFilterEntries($event)">
+                                </app-drop-down-filter-entries>
+                            </div>
+    
+                            <div class="col-4">
+                                <app-drop-down-filter-entries [label]="'Status'"
+                                    [action]="'status'"
+                                    [entries]="a_dropdownFilters.statuses"
+                                    [defaultValue]="'all'"
+                                    (selectedValue)="onDropDownFilterEntries($event)">
+                                </app-drop-down-filter-entries>
+                            </div>
+    
+                            <div class="col-4">
+                                <app-drop-down-filter-entries [label]="'Roles'"
+                                    [action]="'role'"
+                                    [entries]="a_dropdownFilters.roles"
+                                    [defaultValue]="'all'"
+                                    (selectedValue)="onDropDownFilterEntries($event)">
+                                </app-drop-down-filter-entries>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-end">
+                            <app-paging-input-search
+                                (searchOutput)="receivedSearchInput($event)"></app-paging-input-search>
+                            <button class="btn btn-outline-success ms-2"
+                                (click)="onReset()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <section class="p-2 border rounded table-wrapper">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="table-warning">
+                        <th>
+                            <app-th-table [label]="'Id'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Username'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Playername'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Email'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Confirmed'"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Provider'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Is Locked'"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Status'"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Created'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Last Active'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th>
+                            <app-th-table [label]="'Roles'"
+                                [isSortable]="true"
+                                (sortBy)="onSortBy($event)"></app-th-table>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="paginatedMember.items.length === 0">
+                        <td colspan="11" class="text-center">No Members</td>
+                    </tr>
+                    <tr *ngFor="let member of paginatedMember.items">
+                        <td>{{ member.id}}</td>
+                        <td>{{ member.userName}}</td>
+                        <td>{{ member.playerName }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>{{ member.emailConfirmed }}</td>
+                        <td>{{ member.provider }}</td>
+                        <td>{{ member.isLocked }}</td>
+                        <td>{{ member.userProfileStatusName }}</td>
+                        <td>{{ member.accountCreated | date }}</td>
+                        <td>
+                            {{ member.lastActive ? (member.lastActive | timeago) :
+                            'Never' }}
+                        </td>
+                        <td>
+                            <span *ngFor="let role of member.roles; let i = index">
+                                {{role}}<span *ngIf="i + 1 < member.roles.length">,
+                                </span>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-primary btn-sm me-1" routerLink="/admin/add-edit-member/{{member.id}}">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-center">
+                <app-paging-numbers
+                    [totalCount]="paginatedMember.totalItemsCount"
+                    [pageSize]="paginatedMember.pageSize"
+                    (pageChanged)="onPageChanged($event)">
+                </app-paging-numbers>
+            </div>
+            <div class="d-flex justify-content-center">
+                <app-paging-header
+                    [totalItemsCount]="paginatedMember.totalItemsCount"
+                    [pageNumber]="paginatedMember.pageNumber"
+                    [pageSize]="paginatedMember.pageSize">
+                </app-paging-header>
+            </div>
+        </section>
+    </ng-container>
+</div>

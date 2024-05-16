@@ -1,0 +1,30 @@
+<ng-container *ngIf="rooms">
+    <div *ngFor="let room of rooms" class="d-flex justify-content-between mb-2">
+        <section class="text-secondary-emphasis">
+            {{room.roomName}}
+        </section>
+        <section>
+            <span class="text-info fw-bold me-2">
+                {{room.gameType | titlecase}} ({{room.targetScore}})
+            </span>
+            <span class="text-secondary-emphasis me-2">
+                <button type="button" class="btn" [tooltip]="players" placement="right">
+                    {{room.players.length}}/4
+                </button>
+            </span>
+            <button class="btn btn-outline-dark btn-sm"
+                *ngIf="!lobbyService.connectedRoom || (lobbyService.connectedRoom && lobbyService.connectedRoom.roomName !== room.roomName)"
+                [disabled]="room.players.length === 4" (click)="join(room.roomName)">
+                Join
+            </button>
+
+            <ng-template #players>
+                <p>
+                    <ng-container *ngFor="let player of room.players">
+                        {{player}} <i class="bi bi-star-fill" *ngIf="room.hostName === player"></i> <br />
+                    </ng-container>
+                </p>
+            </ng-template>
+        </section>
+    </div>
+</ng-container>

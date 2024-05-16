@@ -1,0 +1,13 @@
+<ul class="text-danger"
+    *ngIf="apiResponse && apiResponse.errors && apiResponse.errors.length > 0">
+    <li *ngFor="let error of apiResponse.errors">
+        <span *ngIf="apiResponse.isHtmlEnabled" [innerHTML]="error"></span>
+        <span *ngIf="!apiResponse.isHtmlEnabled">{{error}}</span>
+    </li>
+</ul>
+<p class="text-danger"
+    *ngIf="apiResponse && apiResponse.message && apiResponse.message !== 'Bad Request' && (apiResponse.statusCode === 401 || apiResponse.statusCode === 400)">
+    <span *ngIf="apiResponse.isHtmlEnabled"
+        [innerHTML]="apiResponse.message"></span>
+    <span *ngIf="!apiResponse.isHtmlEnabled">{{apiResponse.message}}</span>
+</p>

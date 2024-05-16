@@ -1,0 +1,95 @@
+/* You can add global styles to this file, and also import other style files */
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.hs-margin-top {
+    margin-top: 2rem;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow: auto;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.scroller {
+    scrollbar-color: #EC9813 #102027;
+    scrollbar-width: thin;
+}
+
+.hs-position-relative {
+    position: relative;
+}
+
+.hs-xy-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+// game setting classes start
+.hs-layout {
+    margin: 10px 5px;
+    display: grid;
+    column-gap: 0.2em;
+    position: relative;
+}
+
+.hs-layout-format {
+    grid-template-columns: 2.5fr 1fr;
+}
+
+// game setting classes end
+
+
+
+@media (max-width: 960px) {
+    .wrapper {
+        max-width: 100%;
+    }
+
+    .hs-layout {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .firstPart {
+        flex: 1;
+    }
+
+    .secondPart {
+        flex: 2;
+        margin-bottom: 5px;
+    }
+
+    .hs-suit {
+        width: 60%;
+    }
+}
+
+@media (max-width: 720px) {
+    .container-fluid {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (max-height: 800px) {
+    .hs-margin-top {
+        margin-top: 0px;
+    }
+}

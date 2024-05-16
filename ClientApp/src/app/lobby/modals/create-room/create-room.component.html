@@ -1,0 +1,88 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Create Room</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="createRoomForm" (ngSubmit)="create()" id="createRoomForm">
+        <div class="row g-3 align-items-center">
+            <div class="col-4">
+                <label class="form-label">Room name:</label>
+            </div>
+            <div class="col-8" style="position: relative;">
+                <div class="input-group">
+                    <input class="form-control" type="text" formControlName='roomName'
+                        [class.is-invalid]="createRoomForm.get('roomName')?.dirty && createRoomForm.get('roomName')?.errors"
+                        [class.is-valid]="createRoomForm.get('roomName')?.status === 'VALID'" />
+                    <span class="input-group-text" *ngIf="!createRoomForm.get('roomName')?.errors && checking">
+                        <i *ngIf="createRoomForm.get('roomName')?.status === 'PENDING'"
+                            class="fa fa-spinner fa fa-spinner fa-spin" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <span
+                    *ngIf="createRoomForm.get('roomName')?.dirty && createRoomForm.get('roomName')?.hasError('required')"
+                    class="text-danger">
+                    Please enter a name
+                </span>
+                <span
+                    *ngIf="createRoomForm.get('roomName')?.dirty && 
+                    (createRoomForm.get('roomName')?.hasError('minlength') || createRoomForm.get('roomName')?.hasError('maxlength'))"
+                    class="text-danger">
+                    Name must be between 3 - 15 characters
+                </span>
+                <span class="text-danger"
+                    *ngIf="createRoomForm.get('roomName')?.dirty && createRoomForm.get('roomName')?.hasError('roomNameTaken')">
+                    Room name is already taken. Please choose another name.
+                </span>
+            </div>
+        </div>
+
+        <div class="mt-2 row g-3 align-items-center">
+            <div class="col-4">
+                <label class="form-label">Game type:</label>
+            </div>
+            <div class="col-8 text-end">
+                <label class="form-check-label mx-2">Hokm</label>
+                <input class="form-check-input" type="radio" value='hokm' formControlName='gameType' [checked]="true"
+                    (click)="onGameTypeSelected('hokm')" />
+
+                <label class="form-check-label mx-2">Shelem</label>
+                <input class="form-check-input" type="radio" value='shelem' formControlName='gameType'
+                    (click)="onGameTypeSelected('shelem')" />
+            </div>
+        </div>
+
+        <div class="mt-2 row g-3 align-items-center">
+            <div class="col-4">
+                <label class="col-8 form-label">
+                    Target score:
+                </label>
+            </div>
+            <div class="offset-4 col-4">
+                <input [class.is-invalid]="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.errors"
+                    class="form-control" type="number" formControlName='targetScore' mask="{{createRoomForm.controls['gameType'].value === 'hokm' ? '0' : '0000'}}" />
+                <span
+                    *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('required')"
+                    class="text-danger">
+                    Please enter a value
+                </span>
+                <span
+                    *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern')"
+                    class="text-danger">
+                    ({{minScore}} - {{maxScore}})
+                </span>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success" form="createRoomForm" [disabled]="!createRoomForm.valid">
+        Create
+    </button>
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">
+        Cancel
+    </button>
+</div>

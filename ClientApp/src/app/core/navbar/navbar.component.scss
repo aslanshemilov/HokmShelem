@@ -1,0 +1,43 @@
+header .logo {
+    margin-right: 10px;
+    border-radius: 8px;
+}
+
+.nav-item a {
+    text-decoration: none;
+    &.active {
+        color: orange;
+    }
+}
+
+.nav-item a:hover {
+    text-decoration: none;
+    color: rgb(255, 225, 169);
+}
+
+.profilePic {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #808080;
+    display: inline;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.welcome {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.container {
+    max-width: 90%;
+    margin: auto;
+}
+
+.dropdown {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    color: #fff !important;
+}

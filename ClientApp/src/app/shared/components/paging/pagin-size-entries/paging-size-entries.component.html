@@ -1,0 +1,9 @@
+<div class="btn-group">
+    <label class="me-2">Entries per page</label>
+    <select class="form-select" (change)="onEntriesSelection($event)">
+        <option *ngFor="let entry of entries"
+            [value]="entry.value">
+            {{entry.name}}
+        </option>
+    </select>
+</div>

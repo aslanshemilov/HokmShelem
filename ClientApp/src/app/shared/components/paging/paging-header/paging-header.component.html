@@ -1,0 +1,16 @@
+<header
+    *ngIf="totalItemsCount !== undefined && pageNumber !== undefined && pageSize != undefined">
+    <span *ngIf="totalItemsCount > 0">
+        Showing
+        <strong>
+            {{(pageNumber -1) * pageSize + 1}} -
+            {{pageNumber * pageSize
+            > totalItemsCount
+            ? totalItemsCount
+            : pageNumber * pageSize
+            }}
+        </strong>&nbsp;of&nbsp;<strong>{{totalItemsCount}}</strong> Results</span>
+    <span *ngIf="totalItemsCount === 0">There are <strong>0</strong>
+        results
+    </span>
+</header>

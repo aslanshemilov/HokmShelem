@@ -1,0 +1,13 @@
+<form [formGroup]="dropdownForm">
+    <div class="btn-group" *ngIf="label && entries">
+        <label class="form-label me-2">{{label}}</label>
+        <select class="form-select" (change)="onEntriesSelection($event)"  formControlName="mydropdown">
+            <option
+                *ngFor="let entry of entries"
+                [value]="entry">
+                {{entry}}
+            </option>
+        </select>
+    </div>
+</form>
+

@@ -1,0 +1,16 @@
+<div class="modal-header"
+    [ngClass]="{'bg-success': isSuccess, 'bg-danger': !isSuccess}">
+    <h4 class="modal-title pull-left text-white">{{title}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close"
+        (click)="bsModalRef.hide()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <span *ngIf="isHtmlEnabled" [innerHTML]="message"></span>
+    <span *ngIf="!isHtmlEnabled">{{message}}</span>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default"
+        (click)="bsModalRef.hide()">Ok</button>
+</div>

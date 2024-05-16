@@ -1,0 +1,26 @@
+<ng-container *ngIf="players">
+    <div *ngFor="let player of players">
+
+        <button type="button" class="btn" [tooltip]="playerProfile" placement="right">
+            <img src="assets/images/badges/small/{{player.badge}}.png">
+            <span class="fw-bold mx-2">{{player.playerName}}</span>
+            <span *ngIf="lobbyService.connectedRoom?.hostName === player.playerName">
+                <i class="bi bi-star-fill"></i>
+            </span>
+        </button>
+
+        <ng-template #playerProfile>
+            <p>
+                <img src="{{player.photoUrl}}" /><br><br>
+                Rate: {{player.rate}}<br>
+                Hokm score: {{player.hokmScore}}<br>
+                Shelem score: {{player.shelemScore}}<br>
+                Games won: {{player.gamesWon}}<br>
+                Games lost: {{player.gamesLost}}<br>
+                Games left: {{player.gamesLeft}}<br><br>
+                <img src="assets/images/countries/small/{{player.country}}.png" />
+            </p>
+
+        </ng-template>
+    </div>
+</ng-container>

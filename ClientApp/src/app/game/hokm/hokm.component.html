@@ -1,0 +1,256 @@
+<div class="container-fluid" *ngIf="gameService.gameInfo as gameInfo">
+    <div class="hs-layout hs-layout-format">
+        <div class="card border-danger">
+            <div class="card-header d-flex justify-content-between">
+                <span class="h4">{{gameInfo.gameType | titlecase}}
+                    (<span class="text-warning">{{gameInfo.targetScore}}</span>)
+                </span>
+                <span class="float-end">
+                    <button type="button" class="btn btn-outline-warning btn-sm">Pause</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mx-1">End</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm">Leave</button>
+                </span>
+            </div>
+            <div class="card-body hs-box hs-game-box scroller" #divgamebox>
+                <div class="hs-side-column hs-row-format">
+                    <!-- hokm suit -->
+                    <section class="hs-xy-center">
+                        <!-- <i class="h3 bi bi-suit-club-fill"></i> -->
+                    </section>
+                    <!-- sit four -->
+                    <section class="hs-player-sit hs-position-relative"
+                        [ngClass]="gameInfo.sitSetting.sitColorOfOpponent">
+                        <div id="sit-4-player-name">{{gameInfo.sitSetting.sitFour}}</div>
+                        <div class="text-center" *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex == 1 && gameInfo.sitSetting.sitFormat == 2) ||
+                        (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 3) ||
+                        (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 4) ||
+                        (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 1)">
+                            <img class="crown" src="./assets/images/game/crown.png">
+                        </div>
+                    </section>
+                    <section class="hs-xy-center">
+                        <span class="badge bg-danger">{{gameInfo.redRoundScore}}</span>
+                    </section>
+                </div>
+
+                <div class="hs-main-column hs-row-format">
+                    <!-- sit three -->
+                    <section class="hs-player-sit" [ngClass]="gameInfo.sitSetting.sitColorOfMe">
+                        <div class="text-center" *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex == 1 && gameInfo.sitSetting.sitFormat == 3) ||
+                        (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 4) ||
+                        (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 1) ||
+                        (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 2)">
+                            <img class="crown" src="./assets/images/game/crown.png">
+                        </div>
+                        <div class="text-center">
+                            <label>{{gameInfo.sitSetting.sitThree}}</label>
+                        </div>
+                    </section>
+
+                    <section class="throw-cards-box">
+                        <div class="side-thorw-cards-box">
+                            <div></div>
+                            <div class="hs-xy-center">
+                                <!-- card 4 -->
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
+                                    <img class="thrown-card-img cursor-pointer"
+                                        src="/assets/images/game/h.png" (click)="chooseHokm('h')">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.blue1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.red1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.blue2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.red2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <div></div>
+                        </div>
+
+                        <div class="up-down-throw-cards-box">
+                            <div class="hs-xy-center">
+                                <!-- card 3 -->
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
+                                    <img class="thrown-card-img cursor-pointer"
+                                        src="/assets/images/game/s.png" (click)="chooseHokm('s')">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.blue1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.red1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.blue2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.red2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <div class="hs-position-relative">
+                                <div class="center text-center">
+                                    <span
+                                        *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.hakemIndex == gameInfo.myIndex">
+                                        Choose your Hokm
+                                    </span>
+                                    <span
+                                        *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.hakemIndex != gameInfo.myIndex">
+                                        Hakem is choosing Hokm
+                                    </span>
+                                    <img class="back-deck" src="/assets/images/game/back.png"
+                                        *ngIf="gameInfo.gs == GS.DetermineHakem">
+                                </div>
+                            </div>
+                            <div class="hs-xy-center">
+                                <!-- card 1 -->
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
+                                    <img class="thrown-card-img cursor-pointer"
+                                        src="/assets/images/game/c.png" (click)="chooseHokm('c')">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.blue1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.red1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.blue2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.red2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="side-thorw-cards-box">
+                            <div></div>
+                            <div class="hs-xy-center">
+                                <!-- card 2 -->
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
+                                    <img class="thrown-card-img cursor-pointer"
+                                        src="/assets/images/game/d.png" (click)="chooseHokm('d')">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.blue1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.red1Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.blue2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.red2Index == 1">
+                                        <img class="thrown-card-img"
+                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <div></div>
+                        </div>
+
+                    </section>
+
+                    <!-- sit one -->
+                    <section class="hs-player-sit hs-position-relative" [ngClass]="gameInfo.sitSetting.sitColorOfMe">
+                        <div class="player-name-box">
+                            <div class="player-label">
+                                <span class="me-1">{{gameInfo.myPlayerName}}</span>
+                                <ng-container *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex == 1 && gameInfo.sitSetting.sitFormat == 1) ||
+                                (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 2) ||
+                                (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 3) ||
+                                (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 4)">
+                                    <img class="crown" src="./assets/images/game/crown.png">
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="player-cards-box">
+                            <app-player-card [cards]="gameInfo.myCards" (cardOutPut)="playerPlayedCard($event)">
+                            </app-player-card>
+                        </div>
+                    </section>
+                </div>
+                <div class="hs-side-column hs-row-format">
+                    <section class="hs-xy-center">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row mt-1">
+                                    <div class="col">
+                                        <span class="badge bg-danger">{{gameInfo.redTotalScore}}</span>
+                                    </div>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col">
+                                        <span class="badge bg-info">{{gameInfo.blueTotalScore}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- sit two -->
+                    <section class="hs-player-sit hs-position-relative"
+                        [ngClass]="gameInfo.sitSetting.sitColorOfOpponent">
+                        <div id="sit-2-player-name">{{gameInfo.sitSetting.sitTwo}}</div>
+                        <div class="text-center" *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex === 1 && gameInfo.sitSetting.sitFormat === 4) ||
+                        (gameInfo.hakemIndex === 2 && gameInfo.sitSetting.sitFormat === 1) ||
+                        (gameInfo.hakemIndex === 3 && gameInfo.sitSetting.sitFormat === 2) ||
+                        (gameInfo.hakemIndex === 4 && gameInfo.sitSetting.sitFormat === 3)">
+                            <img class="crown" src="./assets/images/game/crown.png">
+                        </div>
+                    </section>
+                    <section class="hs-xy-center">
+                        <span class="badge bg-info">{{gameInfo.blueRoundScore}}</span>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="card border-danger">
+            <div class="card-header">Chats</div>
+            <div class="card-body hs-chat-box hs-position-relative scroller">
+                <app-chat-messages [messageThreads]="(gameService.gameChats$ | async)">
+                </app-chat-messages>
+            </div>
+            <div class="card-footer">
+                <app-chat-input (messageToSend)="sendMessage($event)"></app-chat-input>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- blinking arrow for turning
+<i class="h4 bi bi-arrow-up-circle-fill blinking-span"></i> -->
