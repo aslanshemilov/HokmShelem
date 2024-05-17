@@ -15,7 +15,7 @@ export class CoreService {
   loading() {
     this.interupt = false;
 
-    timer$(1).subscribe(
+    timer$(3).subscribe(
       () => {
         if (!this.interupt) {
           this.loadingRequestCount++;

@@ -51,12 +51,14 @@ export class HokmComponent implements OnInit, AfterViewInit {
     this.gameService.sendMessage(message);
   }
 
-  chooseHokm(suit: string) {
-    this.gameService.hakemChoseHokmSuit(suit);
+  chooseHokm(suit: string | null) {
+    if (suit) {
+      this.gameService.hakemChoseHokmSuit(suit);
+    }
   }
 
-  playerPlayedCard(card: string) {
-    console.log(card);
+  playerPlayedTheCard(card: string) {
+    this.gameService.playerPlayedTheCard(card);
   }
 
   private scrollToGameBox(): void {

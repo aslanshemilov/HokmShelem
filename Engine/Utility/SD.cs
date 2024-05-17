@@ -88,11 +88,15 @@
                 }
             }
 
-            return hakemIndex + 1;
+            return 1;// hakemIndex + 1;
         }
         public static int GetValueOfCard(string card)
         {
             return Convert.ToInt32(card.Split('-').First());
+        }
+        public static string GetSuitOfCard(string card)
+        {
+            return card.Split('-').Last();
         }
     }
 }

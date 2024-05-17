@@ -9,7 +9,7 @@ import { GS } from 'src/app/shared/models/engine/game';
 })
 export class PlayerCardComponent implements OnInit {
   @Input() cards: string[] | undefined;
-  @Output() cardOutPut = new EventEmitter();
+  @Output() cardBeingPlayed = new EventEmitter();
   clickCount = 0;
   @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   currentJumpedCard: string | null = null;
@@ -22,7 +22,8 @@ export class PlayerCardComponent implements OnInit {
 
   onMouseOver(card: string) {
     if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs != GS.HakemChooseHokm) {
+      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
+        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
         const imgElement = this.getCardElement(card);
         if (imgElement) {
           this.renderer.addClass(imgElement.nativeElement, 'jump');
@@ -33,7 +34,8 @@ export class PlayerCardComponent implements OnInit {
 
   onMouseOut(card: string) {
     if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs != GS.HakemChooseHokm) {
+      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
+        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
         const imgElement = this.getCardElement(card);
         if (imgElement) {
           this.renderer.removeClass(imgElement.nativeElement, 'jump');
@@ -44,19 +46,21 @@ export class PlayerCardComponent implements OnInit {
 
   onDoubleClick(card: string, event: MouseEvent) {
     if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs != GS.HakemChooseHokm) {
+      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
+        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
         event.stopPropagation();
         if (this.clickTimeout) {
           clearTimeout(this.clickTimeout);
           this.clickTimeout = null;
         }
-        console.log(card);
+
+        this.cardBeingPlayed.emit(card);
       }
     }
   }
 
   onClick(card: string, event: MouseEvent) {
-   event.stopPropagation();
+    event.stopPropagation();
 
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
@@ -96,7 +100,7 @@ export class PlayerCardComponent implements OnInit {
     //     console.log(card);
     //     this.cardOutPut.emit(card);
     //   } else  {
-       
+
     //   }
     //   this.clickCount = 0;
     // }, 200)

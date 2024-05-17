@@ -26,7 +26,7 @@
 
         public string MyPlayerName { get; set; }
         public int MyIndex { get; set; }
-        public string[] MyCards { get; set; }
+        public List<string> MyCards { get; set; }
 
         public PlayersIndexDto PlayersIndex { get; set; }
     }

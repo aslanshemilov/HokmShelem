@@ -14,8 +14,9 @@
             <div class="card-body hs-box hs-game-box scroller" #divgamebox>
                 <div class="hs-side-column hs-row-format">
                     <!-- hokm suit -->
-                    <section class="hs-xy-center">
-                        <!-- <i class="h3 bi bi-suit-club-fill"></i> -->
+                    <section style="background-color: #D3D3D3;" class="hs-xy-center rounded-circle">
+                        <img class="hokm-suit" src="./assets/images/game/{{gameInfo.hokmSuit}}.png"
+                            *ngIf="gameInfo.hokmSuit" />
                     </section>
                     <!-- sit four -->
                     <section class="hs-player-sit hs-position-relative"
@@ -55,24 +56,34 @@
                                 <ng-container
                                     *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="thrown-card-img cursor-pointer"
-                                        src="/assets/images/game/h.png" (click)="chooseHokm('h')">
+                                        src="/assets/images/game/{{gameInfo.red2Card}}.png"
+                                        (click)="chooseHokm(gameInfo.red2Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.blue1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.red1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.blue2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.red2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue2Card}}.png">
                                     </ng-container>
                                 </ng-container>
@@ -86,24 +97,34 @@
                                 <ng-container
                                     *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="thrown-card-img cursor-pointer"
-                                        src="/assets/images/game/s.png" (click)="chooseHokm('s')">
+                                        src="/assets/images/game/{{gameInfo.blue2Card}}.png"
+                                        (click)="chooseHokm(gameInfo.blue2Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.blue1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.red1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.blue2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.red2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red1Card}}.png">
                                     </ng-container>
                                 </ng-container>
@@ -127,24 +148,34 @@
                                 <ng-container
                                     *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="thrown-card-img cursor-pointer"
-                                        src="/assets/images/game/c.png" (click)="chooseHokm('c')">
+                                        src="/assets/images/game/{{gameInfo.blue1Card}}.png"
+                                        (click)="chooseHokm(gameInfo.blue1Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.blue1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.red1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.blue2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.red2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red2Card}}.png">
                                     </ng-container>
                                 </ng-container>
@@ -158,24 +189,34 @@
                                 <ng-container
                                     *ngIf="gameInfo.gs == GS.HakemChooseHokm && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="thrown-card-img cursor-pointer"
-                                        src="/assets/images/game/d.png" (click)="chooseHokm('d')">
+                                        src="/assets/images/game/{{gameInfo.red1Card}}.png"
+                                        (click)="chooseHokm(gameInfo.red1Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
+                                <ng-container
+                                    *ngIf="gameInfo.gs == GS.InTheMiddleOfGame || gameInfo.gs == GS.DetermineHakem">
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.playersIndex.blue1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red1Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.playersIndex.red1Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.playersIndex.blue2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.red2Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.red2Card}}.png">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.playersIndex.red2Index == 1">
-                                        <img class="thrown-card-img"
+                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                        <img class="thrown-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
                                             src="/assets/images/game/{{gameInfo.blue1Card}}.png">
                                     </ng-container>
                                 </ng-container>
@@ -200,7 +241,7 @@
                         </div>
 
                         <div class="player-cards-box">
-                            <app-player-card [cards]="gameInfo.myCards" (cardOutPut)="playerPlayedCard($event)">
+                            <app-player-card [cards]="gameInfo.myCards" (cardBeingPlayed)="playerPlayedTheCard($event)">
                             </app-player-card>
                         </div>
                     </section>
@@ -251,6 +292,3 @@
         </div>
     </div>
 </div>
-
-<!-- blinking arrow for turning
-<i class="h4 bi bi-arrow-up-circle-fill blinking-span"></i> -->

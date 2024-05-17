@@ -88,7 +88,7 @@ namespace Engine.Repository
 
                 if (cards != null)
                 {
-                    var firstFiveCards = new string[]
+                    var firstFiveCards = new List<string>()
                     {
                         cards.Card1,
                         cards.Card2,
@@ -99,6 +99,40 @@ namespace Engine.Repository
 
                     gameInfo.MyCards = firstFiveCards;
                 }
+            }
+            else if (gameInfo.GS == SD.GS.InTheMiddleOfGame)
+            {
+                Card cards = null;
+                if (gameInfo.MyIndex == 1)
+                {
+                    if (gameInfo.Blue1 == playerName)
+                    {
+                        cards = _unity.CardRepo.GetFirstOrDefault(x => x.Name == gameInfo.Blue1);
+                    }
+                }
+                else if (gameInfo.MyIndex == 2)
+                {
+                    if (gameInfo.Red1 == playerName)
+                    {
+                        cards = _unity.CardRepo.GetFirstOrDefault(x => x.Name == gameInfo.Red1);
+                    }
+                }
+                else if (gameInfo.MyIndex == 3)
+                {
+                    if (gameInfo.Blue2 == playerName)
+                    {
+                        cards = _unity.CardRepo.GetFirstOrDefault(x => x.Name == gameInfo.Blue2);
+                    }
+                }
+                else if (gameInfo.MyIndex == 4)
+                {
+                    if (gameInfo.Red2 == playerName)
+                    {
+                        cards = _unity.CardRepo.GetFirstOrDefault(x => x.Name == gameInfo.Red2);
+                    }
+                }
+
+                gameInfo.MyCards = _unity.CardRepo.GetCardsAsList(cards);
             }
 
             return gameInfo;

@@ -1,5 +1,7 @@
 <ng-container *ngFor="let card of cards; let i = index">
     <img class="cursor-pointer" #jumpingImg [style.left.%]="(i * 5.5) + 8" [src]="'./assets/images/game/' + card + '.png'"
-        (mouseover)="onMouseOver(card)" (mouseout)="onMouseOut(card)" 
+        
         (dblclick)="onDoubleClick(card, $event)">
 </ng-container>
+
+<!-- (mouseover)="onMouseOver(card)" (mouseout)="onMouseOut(card)"  -->

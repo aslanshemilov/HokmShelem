@@ -12,7 +12,7 @@
             _mapper = mapper;
         }
 
-        public Card SetPlayerCards(string playerName,List<string> cards)
+        public Card SetPlayerCards(string playerName, List<string> cards)
         {
             var cardToAdd = new Card()
             {
@@ -33,6 +33,62 @@
             };
 
             return cardToAdd;
+        }
+
+        public List<string> GetCardsAsList(Card card)
+        {
+            List<string> cards = new List<string>();
+
+            if (!string.IsNullOrEmpty(card.Card1)) cards.Add(card.Card1);
+            if (!string.IsNullOrEmpty(card.Card2)) cards.Add(card.Card2);
+            if (!string.IsNullOrEmpty(card.Card3)) cards.Add(card.Card3);
+            if (!string.IsNullOrEmpty(card.Card4)) cards.Add(card.Card4);
+            if (!string.IsNullOrEmpty(card.Card5)) cards.Add(card.Card5);
+            if (!string.IsNullOrEmpty(card.Card6)) cards.Add(card.Card6);
+            if (!string.IsNullOrEmpty(card.Card7)) cards.Add(card.Card7);
+            if (!string.IsNullOrEmpty(card.Card8)) cards.Add(card.Card8);
+            if (!string.IsNullOrEmpty(card.Card9)) cards.Add(card.Card9);
+            if (!string.IsNullOrEmpty(card.Card10)) cards.Add(card.Card10);
+            if (!string.IsNullOrEmpty(card.Card11)) cards.Add(card.Card11);
+            if (!string.IsNullOrEmpty(card.Card12)) cards.Add(card.Card12);
+            if (!string.IsNullOrEmpty(card.Card13)) cards.Add(card.Card13);
+
+            return cards;
+        }
+        public void RemoveCardFromPlayerHand(Card card, string cardToRemove)
+        {
+            if (card.Card1 == cardToRemove) card.Card1 = null;
+            else if (card.Card2 == cardToRemove) card.Card2 = null;
+            else if (card.Card3 == cardToRemove) card.Card3 = null;
+            else if (card.Card4 == cardToRemove) card.Card4 = null;
+            else if (card.Card5 == cardToRemove) card.Card5 = null;
+            else if (card.Card6 == cardToRemove) card.Card6 = null;
+            else if (card.Card7 == cardToRemove) card.Card7 = null;
+            else if (card.Card8 == cardToRemove) card.Card8 = null;
+            else if (card.Card9 == cardToRemove) card.Card9 = null;
+            else if (card.Card10 == cardToRemove) card.Card10 = null;
+            else if (card.Card11 == cardToRemove) card.Card11 = null;
+            else if (card.Card12 == cardToRemove) card.Card12 = null;
+            else card.Card13 = null;
+        }
+        public List<string> GetPlayerCardsAsList(Game game, string playerName)
+        {
+            if (game.Blue1 == playerName)
+            {
+                return GetCardsAsList(game.Blue1Cards);
+            }
+            else if (game.Red1.Equals(playerName))
+            {
+                return GetCardsAsList(game.Red1Cards);
+            }
+            else if (game.Blue2.Equals(playerName))
+            {
+                return GetCardsAsList(game.Blue2Cards);
+            }
+            else
+            {
+                return GetCardsAsList(game.Red2Cards);
+            }
         }
     }
 }
