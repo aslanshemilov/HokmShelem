@@ -145,22 +145,16 @@ namespace Engine.Data.Migrations
                     b.Property<int>("GS")
                         .HasColumnType("int");
 
-                    b.Property<int>("GameRound")
-                        .HasColumnType("int");
-
                     b.Property<string>("GameType")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<int?>("HakemIndex")
+                    b.Property<int>("HakemIndex")
                         .HasColumnType("int");
 
                     b.Property<string>("HokmSuit")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NthCardIsPlaying")
-                        .HasColumnType("int");
 
                     b.Property<string>("Red1")
                         .HasColumnType("nvarchar(max)");

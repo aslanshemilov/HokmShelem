@@ -12,14 +12,15 @@
             _context = context;
         }
 
-        public string AddUpdatePlayer(Player player)
+        public string AddUpdatePlayer(Player model, string connectionId)
         {
-            var fetchedPlayer = FindByName(player.Name);
+            var fetchedPlayer = FindByName(model.Name);
             
             if (fetchedPlayer == null)
             {
-                Add(player);
-                _unity.ConnectionTrackerRepo.AddConnectionTracker(player.Name, player.ConnectionId);
+                model.ConnectionId = connectionId;
+                Add(model);
+                _unity.ConnectionTrackerRepo.AddConnectionTracker(model.Name, connectionId);
 
                 return null;
             }
@@ -32,20 +33,31 @@
                     oldConnectionId = fetchedPlayer.ConnectionId;
                 }
 
-                var fetchedTracker = _unity.ConnectionTrackerRepo.FindByName(player.Name);
+                var fetchedTracker = _unity.ConnectionTrackerRepo.FindByName(model.Name);
                 if (fetchedTracker == null)
                 {
-                    _unity.ConnectionTrackerRepo.AddConnectionTracker(player.Name, player.ConnectionId);
+                    _unity.ConnectionTrackerRepo.AddConnectionTracker(model.Name, connectionId);
                 }
                 else
                 {
                     fetchedTracker.OldId = oldConnectionId;
-                    fetchedTracker.CurrentId = player.ConnectionId;
+                    fetchedTracker.CurrentId = connectionId;
                 }
-                player.RoomName = fetchedPlayer.RoomName;
-                _context.Entry(fetchedPlayer).CurrentValues.SetValues(player);
+
+                model.ConnectionId = connectionId;
+                model.RoomName = fetchedPlayer.RoomName;
+                model.GameName = fetchedPlayer.GameName;
+
+                _context.Entry(fetchedPlayer).CurrentValues.SetValues(model);
                 return oldConnectionId;
             }
+        }
+        public string GetPlayerConnectionId(string playerName)
+        {
+            return _context.Player
+                .Where(p => p.Name == playerName)
+                .Select(x => x.ConnectionId)
+                .FirstOrDefault();
         }
         public string GetGameName(string playerName)
         {

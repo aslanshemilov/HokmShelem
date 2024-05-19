@@ -34,26 +34,30 @@
 
             return cardToAdd;
         }
-
         public List<string> GetCardsAsList(Card card)
         {
-            List<string> cards = new List<string>();
+            if (card != null)
+            {
+                List<string> cards = new List<string>();
 
-            if (!string.IsNullOrEmpty(card.Card1)) cards.Add(card.Card1);
-            if (!string.IsNullOrEmpty(card.Card2)) cards.Add(card.Card2);
-            if (!string.IsNullOrEmpty(card.Card3)) cards.Add(card.Card3);
-            if (!string.IsNullOrEmpty(card.Card4)) cards.Add(card.Card4);
-            if (!string.IsNullOrEmpty(card.Card5)) cards.Add(card.Card5);
-            if (!string.IsNullOrEmpty(card.Card6)) cards.Add(card.Card6);
-            if (!string.IsNullOrEmpty(card.Card7)) cards.Add(card.Card7);
-            if (!string.IsNullOrEmpty(card.Card8)) cards.Add(card.Card8);
-            if (!string.IsNullOrEmpty(card.Card9)) cards.Add(card.Card9);
-            if (!string.IsNullOrEmpty(card.Card10)) cards.Add(card.Card10);
-            if (!string.IsNullOrEmpty(card.Card11)) cards.Add(card.Card11);
-            if (!string.IsNullOrEmpty(card.Card12)) cards.Add(card.Card12);
-            if (!string.IsNullOrEmpty(card.Card13)) cards.Add(card.Card13);
+                if (!string.IsNullOrEmpty(card.Card1)) cards.Add(card.Card1);
+                if (!string.IsNullOrEmpty(card.Card2)) cards.Add(card.Card2);
+                if (!string.IsNullOrEmpty(card.Card3)) cards.Add(card.Card3);
+                if (!string.IsNullOrEmpty(card.Card4)) cards.Add(card.Card4);
+                if (!string.IsNullOrEmpty(card.Card5)) cards.Add(card.Card5);
+                if (!string.IsNullOrEmpty(card.Card6)) cards.Add(card.Card6);
+                if (!string.IsNullOrEmpty(card.Card7)) cards.Add(card.Card7);
+                if (!string.IsNullOrEmpty(card.Card8)) cards.Add(card.Card8);
+                if (!string.IsNullOrEmpty(card.Card9)) cards.Add(card.Card9);
+                if (!string.IsNullOrEmpty(card.Card10)) cards.Add(card.Card10);
+                if (!string.IsNullOrEmpty(card.Card11)) cards.Add(card.Card11);
+                if (!string.IsNullOrEmpty(card.Card12)) cards.Add(card.Card12);
+                if (!string.IsNullOrEmpty(card.Card13)) cards.Add(card.Card13);
 
-            return cards;
+                return cards;
+            }
+
+            return null;
         }
         public void RemoveCardFromPlayerHand(Card card, string cardToRemove)
         {
@@ -71,24 +75,13 @@
             else if (card.Card12 == cardToRemove) card.Card12 = null;
             else card.Card13 = null;
         }
-        public List<string> GetPlayerCardsAsList(Game game, string playerName)
+        public void RemovePlayerCards(string playerName)
         {
-            if (game.Blue1 == playerName)
+            var card = _context.Card.Where(p => p.Name == playerName).FirstOrDefault();
+            if (card != null)
             {
-                return GetCardsAsList(game.Blue1Cards);
+                _context.Card.Remove(card);
             }
-            else if (game.Red1.Equals(playerName))
-            {
-                return GetCardsAsList(game.Red1Cards);
-            }
-            else if (game.Blue2.Equals(playerName))
-            {
-                return GetCardsAsList(game.Blue2Cards);
-            }
-            else
-            {
-                return GetCardsAsList(game.Red2Cards);
-            }
-        }
+        } 
     }
 }

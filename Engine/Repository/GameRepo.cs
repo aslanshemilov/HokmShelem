@@ -34,7 +34,6 @@ namespace Engine.Repository
             if (gameInfo == null) return null;
 
             gameInfo.MyPlayerName = playerName;
-            gameInfo.PlayersIndex = GetIndex(gameInfo, playerName);
 
             if (gameInfo.Blue1 == playerName)
             {
@@ -100,7 +99,7 @@ namespace Engine.Repository
                     gameInfo.MyCards = firstFiveCards;
                 }
             }
-            else if (gameInfo.GS == SD.GS.InTheMiddleOfGame)
+            else if (gameInfo.GS == SD.GS.GameHasStarted)
             {
                 Card cards = null;
                 if (gameInfo.MyIndex == 1)
@@ -137,6 +136,47 @@ namespace Engine.Repository
 
             return gameInfo;
         }
+        public void UpdatePlayerStatusOfTheGame(Game game, string playerName, SD.PlayerInGameStatus status)
+        {
+            if (game.Blue1.Equals(playerName))
+            {
+                game.Blue1Status = status;
+            }
+            else if (game.Red1.Equals(playerName))
+            {
+                game.Red1Status = status;
+            }
+            else if (game.Blue2.Equals(playerName))
+            {
+                game.Blue2Status = status;
+            }
+            else if (game.Red2.Equals(playerName))
+            {
+                game.Red2Status = status;
+            }
+        }
+        public void UpdateGame(Game game, GameUpdateDto model)
+        {
+            if (model.HakemIndex > 0)
+            {
+                game.HakemIndex = model.HakemIndex;
+            }
+
+            if (model.WhosTurnIndex > 0)
+            {
+                game.WhosTurnIndex = model.WhosTurnIndex;
+            }
+
+            if (model.RoundStartsByIndex > 0)
+            {
+                game.RoundStartsByIndex = model.RoundStartsByIndex;
+            }
+
+            if (!string.IsNullOrEmpty(model.HokmSuit))
+            {
+                game.HokmSuit = model.HokmSuit;
+            }
+        }
         public void AssignPlayersCards(Game game)
         {
             var deckOfCard = SD.GetShuffledDeckOfCards();
@@ -169,37 +209,77 @@ namespace Engine.Repository
             }
             game.Red2Cards = _unity.CardRepo.SetPlayerCards(game.Red2, cards);
         }
-
-        #region Private Methods
-        private PlayersIndexDto GetIndex(GameInfoDto game, string playerName)
+        public bool EndOfRoundGame(Game game)
         {
-            PlayersIndexDto index;
-            // 1 2 3 4 -> 
-            // 1 2 3 4
-            if (game.Blue1 == playerName)
+            // Blue won the round game
+            if (game.BlueRoundScore == SD.HokmEndOfRoundScore)
             {
-                index = new PlayersIndexDto(1, 2, 3, 4);
+                game.BlueTotalScore++;
+                game.BlueRoundScore = 0;
+
+                if (game.HakemIndex == 2)
+                {
+                    game.HakemIndex = 3;
+                }
+
+                if (game.HakemIndex == 4)
+                {
+                    game.HakemIndex = 1;
+                }
+
+                game.RoundStartsByIndex = game.HakemIndex;
+                game.WhosTurnIndex = game.HakemIndex;
+
+                return true;
             }
-            // 2 3 4 1 ->  
-            // 1 2 3 4
-            else if (game.Red1 == playerName)
+
+            // Red won the round game
+            if (game.RedRoundScore == SD.HokmEndOfRoundScore)
             {
-                index = new PlayersIndexDto(4, 1, 2, 3);
+                game.RedTotalScore++;
+                game.RedRoundScore = 0;
+
+                if (game.HakemIndex == 3)
+                {
+                    game.HakemIndex = 4;
+                }
+
+                if (game.HakemIndex == 1)
+                {
+                    game.HakemIndex = 2;
+                }
+
+                game.RoundStartsByIndex = game.HakemIndex;
+                game.WhosTurnIndex = game.HakemIndex;
+
+                return true;
             }
-            // 3 4 1 2 -> 
-            // 1 2 3 4
-            else if (game.Blue2 == playerName)
-            {
-                index = new PlayersIndexDto(3, 4, 1, 2);
-            }
-            // 4 1 2 3 ->
-            // 1 2 3 4
-            else
-            {
-                index = new PlayersIndexDto(2, 3, 4, 1);
-            }
-            return index;
+
+            return false;
         }
-        #endregion
+        public bool EndOfTheGame(Game game)
+        {
+            if (game.BlueTotalScore == game.TargetScore)
+            {
+                return true;
+            }
+
+            if (game.RedTotalScore == game.TargetScore)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void EmptyRoundCardsAndSuit(Game game)
+        {
+            game.Blue1Card = null;
+            game.Red1Card = null;
+            game.Blue2Card = null;
+            game.Red2Card = null;
+            game.RoundSuit = null;
+            game.HokmSuit = null;
+        }
     }
 }

@@ -7,8 +7,8 @@ export interface GameInfo {
     blue2: string;
     red2: string;
     gs: GS;
-    hakemIndex?: number;
-    hokmSuit: string;
+    hakemIndex: number;
+    hokmSuit: string | null;
     roundSuit: string;
     blue1Card: string | null;
     red1Card: string | null;
@@ -45,9 +45,9 @@ export interface SitSetting {
     sitFormat: number;
 }
 
-export const enum GS {
-    GameHasNotStarted,
-    DetermineHakem,
-    HakemChooseHokm,
-    InTheMiddleOfGame
+export enum GS {
+    GameHasNotStarted,        // 0
+    DetermineTheFirstHakem,   // 1
+    HakemChooseHokm,          // 2
+    GameHasStarted            // 3
 }

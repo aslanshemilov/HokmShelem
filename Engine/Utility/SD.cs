@@ -9,12 +9,13 @@
         public const int HokmMaxScore = 7;
         public const int ShelemMinScore = 300;
         public const int ShelemMaxScore = 1200;
+        public const int HokmEndOfRoundScore = 1;
         public enum GS // GS -> GameStage
         {
-            GameHasNotStarted,
-            DetermineHakem,
-            HakemChooseHokm,
-            InTheMiddleOfGame
+            GameHasNotStarted,        // 0
+            DetermineTheFirstHakem,   // 1
+            HakemChooseHokm,          // 2
+            GameHasStarted            // 3
         }
         public enum PlayerInGameStatus
         {
@@ -52,7 +53,7 @@
 
             return cards;
         }
-        public static List<string> CardsToDetermineHakem()
+        public static List<string> CardsToDetermineTheFirstHakem()
         {
             List<string> DeckOfCard = new List<string>()
             {
@@ -75,7 +76,7 @@
 
             return cards;
         }
-        public static int SpecifyHakemIndex(List<string> cards)
+        public static int GetTheFirstHakemIndex(List<string> cards)
         {
             var max = GetValueOfCard(cards.ElementAt(0));
             int hakemIndex = 0;
@@ -88,7 +89,7 @@
                 }
             }
 
-            return 1;// hakemIndex + 1;
+            return hakemIndex + 1;
         }
         public static int GetValueOfCard(string card)
         {
@@ -96,7 +97,11 @@
         }
         public static string GetSuitOfCard(string card)
         {
-            return card.Split('-').Last();
+            if (card != null)
+            {
+                return card.Split('-').Last();
+            }
+            return null;
         }
     }
 }

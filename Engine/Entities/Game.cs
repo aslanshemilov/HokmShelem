@@ -17,7 +17,7 @@
         public string Blue2 { get; set; }
         public string Red2 { get; set; }
         public SD.GS GS { get; set; } = SD.GS.GameHasNotStarted;
-        public int? HakemIndex { get; set; }
+        public int HakemIndex { get; set; }
         public string HokmSuit { get; set; }
         public string RoundSuit { get; set; }
         public string Blue1Card { get; set; }
@@ -28,10 +28,8 @@
         public int BlueRoundScore { get; set; }
         public int RedTotalScore { get; set; }
         public int BlueTotalScore { get; set; }
-        public int GameRound { get; set; } = 1;
         public int WhosTurnIndex { get; set; }
         public int RoundStartsByIndex { get; set; }
-        public int NthCardIsPlaying { get; set; }
         public int VoteToEndCount { get; set; }
 
         public SD.PlayerInGameStatus Blue1Status { get; set; }

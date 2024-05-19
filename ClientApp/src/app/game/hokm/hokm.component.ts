@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { GameService } from '../game.service';
 import { AccountService } from 'src/app/account/account.service';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import * as gs from '../../shared/models/engine/game';
+import { GameInfo } from '../../shared/models/engine/game';
 
 @Component({
   selector: 'app-hokm',
@@ -10,9 +11,9 @@ import * as gs from '../../shared/models/engine/game';
   styleUrls: ['./hokm.component.scss']
 })
 export class HokmComponent implements OnInit, AfterViewInit {
+  game$?: Observable<GameInfo | null>;
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   gameName: string | undefined;
-  GS = (gs as any).GS;
 
   constructor(public gameService: GameService,
     private accountService: AccountService
@@ -21,6 +22,7 @@ export class HokmComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.gameService.getGameInfo().subscribe({
       next: _ => {
+        this.game$ = this.gameService.gameInfo$;
         this.connectToGame();
       }
     })
@@ -58,6 +60,7 @@ export class HokmComponent implements OnInit, AfterViewInit {
   }
 
   playerPlayedTheCard(card: string) {
+    console.log(card);
     this.gameService.playerPlayedTheCard(card);
   }
 

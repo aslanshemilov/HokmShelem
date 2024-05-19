@@ -10,7 +10,7 @@
         public string Blue2 { get; set; }
         public string Red2 { get; set; }
         public SD.GS GS { get; set; }
-        public int? HakemIndex { get; set; }
+        public int HakemIndex { get; set; }
         public string HokmSuit { get; set; }
         public string RoundSuit { get; set; }
         public string Blue1Card { get; set; }
@@ -27,7 +27,5 @@
         public string MyPlayerName { get; set; }
         public int MyIndex { get; set; }
         public List<string> MyCards { get; set; }
-
-        public PlayersIndexDto PlayersIndex { get; set; }
     }
 }

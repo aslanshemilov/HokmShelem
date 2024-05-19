@@ -20,34 +20,35 @@ export class PlayerCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onMouseOver(card: string) {
-    if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
-        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
-        const imgElement = this.getCardElement(card);
-        if (imgElement) {
-          this.renderer.addClass(imgElement.nativeElement, 'jump');
-        }
-      }
-    }
-  }
+  // onMouseOver(card: string) {
+  //   if (this.gameService.gameInfo) {
+  //     if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
+  //       this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
+  //       const imgElement = this.getCardElement(card);
+  //       if (imgElement) {
+  //         this.renderer.addClass(imgElement.nativeElement, 'jump');
+  //       }
+  //     }
+  //   }
+  // }
 
-  onMouseOut(card: string) {
-    if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
-        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
-        const imgElement = this.getCardElement(card);
-        if (imgElement) {
-          this.renderer.removeClass(imgElement.nativeElement, 'jump');
-        }
-      }
-    }
-  }
+  // onMouseOut(card: string) {
+  //   if (this.gameService.gameInfo) {
+  //     if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
+  //       this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
+  //       const imgElement = this.getCardElement(card);
+  //       if (imgElement) {
+  //         this.renderer.removeClass(imgElement.nativeElement, 'jump');
+  //       }
+  //     }
+  //   }
+  // }
 
   onDoubleClick(card: string, event: MouseEvent) {
-    if (this.gameService.gameInfo) {
-      if (this.gameService.gameInfo.gs == GS.InTheMiddleOfGame && 
-        this.gameService.gameInfo.whosTurnIndex == this.gameService.gameInfo.myIndex) {
+    const gameInfo = this.gameService.getGameInfoSourceValue();
+    if (gameInfo) {
+      if (gameInfo.gs == GS.GameHasStarted && 
+        gameInfo.whosTurnIndex == gameInfo.myIndex) {
         event.stopPropagation();
         if (this.clickTimeout) {
           clearTimeout(this.clickTimeout);

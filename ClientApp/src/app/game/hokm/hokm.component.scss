@@ -56,7 +56,7 @@
     grid-template-rows: 2fr 1fr 2fr;
 }
 
-.thrown-card-img {
+.played-card-img {
     width: 100px;
 }
 
@@ -94,9 +94,8 @@
 }
 
 .badge {
-    margin: 0px;
-    padding: 3px 2px;
-    font-size: large;
+    padding: 5px;
+    font-size: medium;
 }
 
 .blinking-span {
@@ -127,8 +126,8 @@
 }
 
 @media (max-width: 768px) {
-    .thrown-card-img {
-        width: 40%;
+    .played-card-img {
+        width: 60%;
     }
 
     .hokm-suit {
@@ -147,19 +146,10 @@
         height: 300px;
         min-height: 300px;
     }
-
-    .thrown-card-img {
-        width: 60%;
-    }
-
-    .badge {
-        margin: 0px;
-        padding: 3px 2px;
-        font-size: small;
-    }
-
+    
     .player-label {
         font-size: xx-small;
+
         & img {
             width: 25px;
         }

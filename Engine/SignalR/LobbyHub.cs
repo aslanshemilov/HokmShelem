@@ -18,16 +18,15 @@
         public override async Task OnConnectedAsync()
         {
             var playerFromApi = _mapper.Map<Player>(await _apiService.GetPlayerInfoAsync());
-            playerFromApi.ConnectionId = Context.ConnectionId;
             playerFromApi.LobbyName = SD.HSLobby;
-            var oldConnectionId = _unity.PlayerRepo.AddUpdatePlayer(playerFromApi);
+            var oldConnectionId = _unity.PlayerRepo.AddUpdatePlayer(playerFromApi, Context.ConnectionId);
 
             // handle on multiple device connection
             if (!string.IsNullOrEmpty(oldConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(oldConnectionId, SD.HSLobby);
                 var notification = new NotificationMessage(SM.MultipleDeviceTitle, SM.MultipleDeviceMessage, false, false);
-                await NotificationForPlayerAsync(oldConnectionId, notification);
+                await NotificationAsync(oldConnectionId, notification);
                 var player = _unity.PlayerRepo.FindByName(PlayerName());
                 if (player.RoomName != null)
                 {
@@ -102,13 +101,13 @@
             {
                 _unity.Complete();
                 await Groups.AddToGroupAsync(ConnectionId(), model.RoomName);
-                await NotificationForPlayerAsync(Context.ConnectionId, new NotificationMessage(SM.RoomCreated));
+                await NotificationAsync(Context.ConnectionId, new NotificationMessage(SM.RoomCreated));
                 await Clients.Caller.SendAsync("JoinTheRoom", _mapper.Map<RoomDto>(room));
                 await UpdateLobbyRoomPlayerInfoAsync();
             }
             else
             {
-                await NotificationForPlayerAsync(Context.ConnectionId, new NotificationMessage("Unable to create room"));
+                await NotificationAsync(Context.ConnectionId, new NotificationMessage("Unable to create room"));
             }
         }
         public async Task JoinTheRoom(string roomName)
@@ -136,12 +135,12 @@
                 }
                 else
                 {
-                    await NotificationForPlayerAsync(Context.ConnectionId, new NotificationMessage($"{roomName} is already full."));
+                    await NotificationAsync(Context.ConnectionId, new NotificationMessage($"{roomName} is already full."));
                 }
             }
             else
             {
-                await NotificationForPlayerAsync(Context.ConnectionId, new NotificationMessage("Unable to join the room"));
+                await NotificationAsync(Context.ConnectionId, new NotificationMessage("Unable to join the room"));
             }
         }
         public async Task LeaveTheRoom(string roomName)
@@ -225,7 +224,7 @@
             }
             else
             {
-                await NotificationForPlayerAsync(ConnectionId(), new NotificationMessage(SM.SitIsTakenMessage, isSuccess: false));
+                await NotificationAsync(ConnectionId(), new NotificationMessage(SM.SitIsTakenMessage, isSuccess: false));
             }
         }
         public async Task ReadyButtonClicked(string roomName)
@@ -269,7 +268,7 @@
         {
             return Context.ConnectionId;
         }
-        private async Task NotificationForPlayerAsync(string connectionId, NotificationMessage notification)
+        private async Task NotificationAsync(string connectionId, NotificationMessage notification)
         {
             await Clients.Client(connectionId).SendAsync("NotificationMessage", notification);
         }
@@ -316,7 +315,7 @@
                 await Groups.RemoveFromGroupAsync(p.ConnectionId, room.Name);
                 if (!p.Name.Equals(hostName))
                 {
-                    await NotificationForPlayerAsync(p.ConnectionId, new NotificationMessage("Host Left", "Host has left the room!", isSuccess: false, useToastr: false));
+                    await NotificationAsync(p.ConnectionId, new NotificationMessage("Host Left", "Host has left the room!", isSuccess: false, useToastr: false));
                 }
             }
 
