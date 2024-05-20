@@ -9,6 +9,7 @@ import { ApplicationUser } from './shared/models/account/applicationUser';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
   constructor(private accountService: AccountService) { 
   }
 

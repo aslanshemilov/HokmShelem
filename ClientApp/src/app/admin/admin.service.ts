@@ -55,7 +55,6 @@ export class AdminService {
     return this.http.get<MemberAddEdit>(this.apiUrl + 'admin/get-member/' + id);
   }
   addEditMember(model: MemberAddEdit) {
-    console.log("works");
     return this.http.put<ApiResponse>(this.apiUrl + 'admin/update-member/', model);
   }
 }

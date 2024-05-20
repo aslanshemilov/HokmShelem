@@ -11,12 +11,12 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService, private accountService: AccountService) { }
 
   ngOnInit(): void {
-    // if (!this.homeService.visited) {
-    //   this.homeService.visitor().subscribe({
-    //     next: _ => {
-    //       this.homeService.visited = true;
-    //     }
-    //   });
-    // }
+    if (!this.homeService.visited) {
+      this.homeService.visitor().subscribe({
+        next: _ => {
+          this.homeService.visited = true;
+        }
+      });
+    }
   }
 }

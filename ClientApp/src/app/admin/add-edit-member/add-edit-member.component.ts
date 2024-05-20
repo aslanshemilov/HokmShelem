@@ -36,7 +36,6 @@ export class AddEditMemberComponent implements OnInit {
   getMember(id: string) {
     this.adminService.getMember(id).subscribe({
       next: member => {
-        console.log(member);
        this.initializeForm(member);
       }
     })
@@ -75,8 +74,6 @@ export class AddEditMemberComponent implements OnInit {
 
 
     if (this.memberForm.valid) {
-      console.log('here');
-      console.log(this.memberForm.value);
       this.adminService.addEditMember(this.memberForm.value).subscribe({
         next: (response: any) => {
           this.sharedService.showNotification(true, response.title, response.message);

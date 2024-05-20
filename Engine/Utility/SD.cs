@@ -9,13 +9,15 @@
         public const int HokmMaxScore = 7;
         public const int ShelemMinScore = 300;
         public const int ShelemMaxScore = 1200;
-        public const int HokmEndOfRoundScore = 1;
+        public const int HokmEndOfRoundScore = 2;
+        public const string Blue = "blue";
+        public const string Red = "red";
         public enum GS // GS -> GameStage
         {
             GameHasNotStarted,        // 0
             DetermineTheFirstHakem,   // 1
             HakemChooseHokm,          // 2
-            GameHasStarted            // 3
+            RoundGameStarted          // 3
         }
         public enum PlayerInGameStatus
         {
@@ -102,6 +104,19 @@
                 return card.Split('-').Last();
             }
             return null;
+        }
+        public static int FourthPLayerIndex(int roundStartIndex)
+        {
+            if (roundStartIndex == 1)
+                return 4;
+            else if (roundStartIndex == 2)
+                return 1;
+            else if (roundStartIndex == 3)
+                return 2;
+            else if (roundStartIndex == 4)
+                return 3;
+
+            return -1;
         }
     }
 }

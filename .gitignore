@@ -477,3 +477,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+/Engine/appsettings.Release.json
+/Api/appsettings.Release.json

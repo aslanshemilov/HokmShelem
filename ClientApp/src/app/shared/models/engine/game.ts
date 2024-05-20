@@ -49,5 +49,5 @@ export enum GS {
     GameHasNotStarted,        // 0
     DetermineTheFirstHakem,   // 1
     HakemChooseHokm,          // 2
-    GameHasStarted            // 3
+    RoundGameStarted          // 3
 }

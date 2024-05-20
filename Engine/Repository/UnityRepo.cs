@@ -17,7 +17,7 @@
         public ILobbyRepo LobbyRepo => new LobbyRepo(_context, _mapper);
         public IRoomRepo RoomRepo => new RoomRepo(_context, _mapper);
         public IGameRepo GameRepo => new GameRepo(this, _context, _mapper);
-        public ICardRepo CardRepo => new CardRepo(_context, _mapper);
+        public ICardRepo CardRepo => new CardRepo(_context);
         public void Dispose()
         {
             _context.Dispose();

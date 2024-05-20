@@ -1,6 +1,4 @@
-﻿using Engine.Entities;
-
-namespace Engine.Repository
+﻿namespace Engine.Repository
 {
     public class GameRepo : BaseRepo<Game>, IGameRepo
     {
@@ -23,7 +21,6 @@ namespace Engine.Repository
                 .Select(x => x.Name)
                 .FirstOrDefault();
         }
-
         public GameInfoDto GetGameInfo(string gameName, string playerName)
         {
             var gameInfo = _context.Game
@@ -99,7 +96,7 @@ namespace Engine.Repository
                     gameInfo.MyCards = firstFiveCards;
                 }
             }
-            else if (gameInfo.GS == SD.GS.GameHasStarted)
+            else if (gameInfo.GS == SD.GS.RoundGameStarted)
             {
                 Card cards = null;
                 if (gameInfo.MyIndex == 1)
@@ -135,6 +132,37 @@ namespace Engine.Repository
             }
 
             return gameInfo;
+        }
+        public bool AllPlayersAreConnected(Game game)
+        {
+            return (game.Blue1Status == SD.PlayerInGameStatus.Connected &&
+                game.Red1Status == SD.PlayerInGameStatus.Connected &&
+                game.Blue2Status == SD.PlayerInGameStatus.Connected &&
+                game.Red2Status == SD.PlayerInGameStatus.Connected) ? true : false;
+        }
+        public int GetPlayerIndex(Game game, string playerName)
+        {
+            if (game != null)
+            {
+                if (game.Blue1 == playerName)
+                {
+                    return 1;
+                }
+                else if (game.Red1 == playerName)
+                {
+                    return 2;
+                }
+                else if (game.Blue2 == playerName)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 4;
+                }
+            }
+
+            return 0;
         }
         public void UpdatePlayerStatusOfTheGame(Game game, string playerName, SD.PlayerInGameStatus status)
         {
@@ -209,6 +237,82 @@ namespace Engine.Repository
             }
             game.Red2Cards = _unity.CardRepo.SetPlayerCards(game.Red2, cards);
         }
+        public HakemCardsToHokm GetHakemCardsToHokm(Game game)
+        {
+            Card cards;
+            string hakemConnectionId = "";
+
+            if (game.HakemIndex == 1)
+            {
+                cards = game.Blue1Cards;
+                hakemConnectionId = _unity.PlayerRepo.GetPlayerConnectionId(game.Blue1);
+            }
+            else if (game.HakemIndex == 2)
+            {
+                cards = game.Red1Cards;
+                hakemConnectionId = _unity.PlayerRepo.GetPlayerConnectionId(game.Red1);
+            }
+            else if (game.HakemIndex == 3)
+            {
+                cards = game.Blue2Cards;
+                hakemConnectionId = _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
+            }
+            else
+            {
+                cards = game.Red2Cards;
+                hakemConnectionId = _unity.PlayerRepo.GetPlayerConnectionId(game.Red2);
+            }
+
+            var firstFiveCards = new string[]
+            {
+                cards.Card1,
+                cards.Card2,
+                cards.Card3,
+                cards.Card4,
+                cards.Card5
+            };
+
+            return new HakemCardsToHokm(hakemConnectionId, firstFiveCards);
+        }
+        public bool HandlePlayerPlayedTheCard(Game game, string card, string playerName, int playerIndex)
+        {
+            var playerCards = _unity.CardRepo.FindByName(playerName);
+            // if the played card by the player is the first round card
+            if (game.RoundSuit == null)
+            {
+                game.RoundSuit = SD.GetSuitOfCard(card);
+                SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(game, playerCards, card, playerIndex);
+                return true;
+            }
+            else
+            {
+                var playerHasRoundSuitCard = false;
+                var playerCardsAsList = _unity.CardRepo.GetCardsAsList(playerCards);
+
+                for (int i = 0; i < playerCardsAsList.Count; i++)
+                {
+                    if (SD.GetSuitOfCard(playerCardsAsList[i]).Equals(game.RoundSuit))
+                    {
+                        playerHasRoundSuitCard = true;
+                        i = playerCardsAsList.Count;
+                    }
+                }
+
+                //  check if player has card of current round suit
+                if (playerHasRoundSuitCard)
+                {
+                    // check if the played card is not the same kind as round suit
+                    if (SD.GetSuitOfCard(card) != game.RoundSuit)
+                    {
+                        return false;
+                    }
+                }
+
+                SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(game, playerCards, card, playerIndex);
+
+                return true;
+            }
+        }
         public bool EndOfRoundGame(Game game)
         {
             // Blue won the round game
@@ -257,21 +361,70 @@ namespace Engine.Repository
 
             return false;
         }
-        public bool EndOfTheGame(Game game)
+        public void RoundCalculation(Game game)
         {
-            if (game.BlueTotalScore == game.TargetScore)
+            int blueTotal = 0;
+            int redTotal = 0;
+
+            int blue1Value = GetValueOfPlayedCard(game, game.Blue1Card, game.RoundSuit, game.HokmSuit);
+            int blue2Value = GetValueOfPlayedCard(game, game.Blue2Card, game.RoundSuit, game.HokmSuit);
+            int red1Value = GetValueOfPlayedCard(game, game.Red1Card, game.RoundSuit, game.HokmSuit);
+            int red2Value = GetValueOfPlayedCard(game, game.Red2Card, game.RoundSuit, game.HokmSuit);
+
+            if (blue1Value > blue2Value)
             {
-                return true;
+                blueTotal = blue1Value;
+            }
+            else
+            {
+                blueTotal = blue2Value;
             }
 
-            if (game.RedTotalScore == game.TargetScore)
+            if (red1Value > red2Value)
             {
-                return true;
+                redTotal = red1Value;
+            }
+            else
+            {
+                redTotal = red2Value;
             }
 
-            return false;
+            if (blueTotal > redTotal)
+            {
+                if (blue1Value > blue2Value)
+                {
+                    game.WhosTurnIndex = 1;
+                    game.RoundStartsByIndex = 1;
+                }
+                else
+                {
+                    game.WhosTurnIndex = 3;
+                    game.RoundStartsByIndex = 3;
+                }
+                game.BlueRoundScore++;
+            }
+            else
+            {
+                if (red1Value > red2Value)
+                {
+                    game.WhosTurnIndex = 2;
+                    game.RoundStartsByIndex = 2;
+                }
+                else
+                {
+                    game.WhosTurnIndex = 4;
+                    game.RoundStartsByIndex = 4;
+                }
+                game.RedRoundScore++;
+            }
+
+            // empty the cards
+            game.Blue1Card = null;
+            game.Red1Card = null;
+            game.Blue2Card = null;
+            game.Red2Card = null;
+            game.RoundSuit = null;
         }
-
         public void EmptyRoundCardsAndSuit(Game game)
         {
             game.Blue1Card = null;
@@ -281,5 +434,68 @@ namespace Engine.Repository
             game.RoundSuit = null;
             game.HokmSuit = null;
         }
+        public string EndOfTheGame(Game game)
+        {
+            if (game.BlueTotalScore == game.TargetScore)
+            {
+                // more work here but for now
+                _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
+                Remove(game);
+                return SD.Blue;
+            }
+
+            if (game.RedTotalScore == game.TargetScore)
+            {
+                // more work here but for now
+                _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
+                Remove(game);
+                return SD.Red;
+            }
+
+            return null;
+        }
+        #region Private Methods
+        private void SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(Game game, Card playerCards, string card, int playerIndex)
+        {
+            if (playerIndex == 1)
+            {
+                game.Blue1Card = card;
+                game.WhosTurnIndex = 2;
+            }
+            else if (playerIndex == 2)
+            {
+                game.Red1Card = card;
+                game.WhosTurnIndex = 3;
+            }
+            else if (playerIndex == 3)
+            {
+                game.Blue2Card = card;
+                game.WhosTurnIndex = 4;
+            }
+            else
+            {
+                game.Red2Card = card;
+                game.WhosTurnIndex = 1;
+            }
+
+            _unity.CardRepo.RemoveCardFromPlayerHand(playerCards, card);
+        }
+        private int GetValueOfPlayedCard(Game game, string card, string roundSuit, string hokmSuit)
+        {
+            int value = 0;
+
+            if (SD.GetSuitOfCard(card).Equals(roundSuit))
+            {
+                value = SD.GetValueOfCard(card);
+            }
+
+            if (SD.GetSuitOfCard(card).Equals(hokmSuit))
+            {
+                value = SD.GetValueOfCard(card) + 13;
+            }
+
+            return value;
+        }
+        #endregion
     }
 }

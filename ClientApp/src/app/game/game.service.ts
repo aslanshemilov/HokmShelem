@@ -11,6 +11,7 @@ import { MessageThread } from '../shared/models/engine/messageThread';
 import { NotificationMessage } from '../shared/models/engine/notificationMessage';
 import { PlayedCards } from '../shared/models/engine/playedCards';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +50,7 @@ export class GameService {
             } else {
               this.handlePlayedCards(new PlayedCards());
             }
-          } else if (gameInfo.gs == GS.GameHasStarted) {
+          } else if (gameInfo.gs == GS.RoundGameStarted) {
             this.handleWhosTurnFlag(gameInfo.whosTurnIndex);
           }
         }
@@ -73,14 +74,14 @@ export class GameService {
       });
     });
 
-    this.hubConnection.on('DetermineTheFirstHakem', (cards: string[]) => {
+    this.hubConnection.on('DetermineTheFirstHakem', (gs: GS, cards: string[]) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
+        gameInfo.gs = gs;
         gameInfo.blue1Card = cards[0];
         gameInfo.red1Card = cards[1];
         gameInfo.blue2Card = cards[2];
         gameInfo.red2Card = cards[3];
-        gameInfo.gs = GS.DetermineTheFirstHakem;
         this.setGameInfo(gameInfo);
       }
     });
@@ -110,8 +111,6 @@ export class GameService {
     this.hubConnection.on('HakemChooseHokm', (cards: string[]) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
-        console.log('jjj');
-        this.setGameInfo(gameInfo);
         this.hakemChooseHokm(cards);
       }
     });
@@ -125,7 +124,6 @@ export class GameService {
         gameInfo.red1Card = null;
         gameInfo.blue2Card = null;
         gameInfo.red2Card = null;
-        gameInfo.hokmSuit = null;
         this.setGameInfo(gameInfo);
         this.handleWhosTurnFlag(whosTurnIndex);
       }
@@ -178,6 +176,29 @@ export class GameService {
       }
     });
 
+    this.hubConnection.on('EndOfTheGame', (winnerTeam: string) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo) {
+        if (winnerTeam == 'blue') {
+          Swal.fire({
+            title: 'Blue Won!',
+            text: gameInfo.blue1 + ' and ' + gameInfo.blue2 + ' won the game.',
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
+        } else {
+          Swal.fire({
+            title: 'Red Won!',
+            text: gameInfo.red1 + ' and ' + gameInfo.red2 + ' won the game.',
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
+        }
+
+        this.router.navigateByUrl('/');
+      }
+    });
+
     this.hubConnection.on('NotificationMessage', (notification: NotificationMessage) => {
       this.sharedService.displayHubNotification(notification);
       if (notification.title.includes('Multiple device detected')) {
@@ -210,7 +231,6 @@ export class GameService {
 
   async playerPlayedTheCard(card: string) {
     if (this.hubConnection) {
-      console.log(card);
       return this.hubConnection.invoke('PlayerPlayedTheCard', this.gameName, card);
     }
   }

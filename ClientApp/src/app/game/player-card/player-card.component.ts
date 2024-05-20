@@ -47,7 +47,7 @@ export class PlayerCardComponent implements OnInit {
   onDoubleClick(card: string, event: MouseEvent) {
     const gameInfo = this.gameService.getGameInfoSourceValue();
     if (gameInfo) {
-      if (gameInfo.gs == GS.GameHasStarted && 
+      if (gameInfo.gs == GS.RoundGameStarted && 
         gameInfo.whosTurnIndex == gameInfo.myIndex) {
         event.stopPropagation();
         if (this.clickTimeout) {
@@ -98,7 +98,7 @@ export class PlayerCardComponent implements OnInit {
 
     // setTimeout(() => {
     //   if (this.clickCount === 2) {
-    //     console.log(card);
+      
     //     this.cardOutPut.emit(card);
     //   } else  {
 

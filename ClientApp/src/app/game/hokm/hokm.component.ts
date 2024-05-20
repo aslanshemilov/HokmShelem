@@ -60,7 +60,6 @@ export class HokmComponent implements OnInit, AfterViewInit {
   }
 
   playerPlayedTheCard(card: string) {
-    console.log(card);
     this.gameService.playerPlayedTheCard(card);
   }
 
