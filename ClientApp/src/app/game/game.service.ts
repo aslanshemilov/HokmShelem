@@ -11,7 +11,6 @@ import { MessageThread } from '../shared/models/engine/messageThread';
 import { NotificationMessage } from '../shared/models/engine/notificationMessage';
 import { PlayedCards } from '../shared/models/engine/playedCards';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -180,19 +179,9 @@ export class GameService {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
         if (winnerTeam == 'blue') {
-          Swal.fire({
-            title: 'Blue Won!',
-            text: gameInfo.blue1 + ' and ' + gameInfo.blue2 + ' won the game.',
-            icon: 'success',
-            confirmButtonText: 'Cool'
-          });
+          this.sharedService.showWinner('blue', 'Blue Won!', `${gameInfo.blue1} and ${gameInfo.blue2} won the game.`);
         } else {
-          Swal.fire({
-            title: 'Red Won!',
-            text: gameInfo.red1 + ' and ' + gameInfo.red2 + ' won the game.',
-            icon: 'success',
-            confirmButtonText: 'Cool'
-          });
+          this.sharedService.showWinner('red', 'Red Won!', `${gameInfo.red1} and ${gameInfo.red2} won the game.`);
         }
 
         this.router.navigateByUrl('/');

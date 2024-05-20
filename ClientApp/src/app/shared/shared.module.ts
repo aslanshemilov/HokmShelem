@@ -28,8 +28,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { RoomToJoinComponent } from './components/engine/room-to-join/room-to-join.component';
 import { CountDownToStartComponent } from './components/engine/count-down-to-start/count-down-to-start.component';
-import { DndModule } from 'ngx-drag-drop';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { WinnerTeamComponent } from './components/modals/winner-team/winner-team.component';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -55,6 +54,7 @@ const maskConfig: Partial<IConfig> = {
     ConnectedPlayersComponent,
     RoomToJoinComponent,
     CountDownToStartComponent,
+    WinnerTeamComponent,
   ],
   imports: [
     CommonModule,
@@ -71,8 +71,6 @@ const maskConfig: Partial<IConfig> = {
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     NgxMaskModule.forRoot(maskConfig),
-    DndModule,
-    SweetAlert2Module.forRoot()
   ],
   exports: [
     RouterModule,
@@ -97,8 +95,6 @@ const maskConfig: Partial<IConfig> = {
     NgxMaskModule,
     RoomToJoinComponent,
     CountDownToStartComponent,
-    DndModule,
-    SweetAlert2Module
   ]
 })
 export class SharedModule { }

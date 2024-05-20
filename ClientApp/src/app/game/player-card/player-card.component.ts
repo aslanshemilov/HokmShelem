@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { GameService } from '../game.service';
 import { GS } from 'src/app/shared/models/engine/game';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-player-card',
@@ -8,10 +9,11 @@ import { GS } from 'src/app/shared/models/engine/game';
   styleUrls: ['./player-card.component.scss']
 })
 export class PlayerCardComponent implements OnInit {
+  @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   @Input() cards: string[] | undefined;
   @Output() cardBeingPlayed = new EventEmitter();
+  gameImageUrl = environment.azureContainerUrl + 'game';
   clickCount = 0;
-  @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   currentJumpedCard: string | null = null;
   clickTimeout: any = null;
 

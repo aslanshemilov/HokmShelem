@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AccountService } from './account/account.service';
 import { take } from 'rxjs';
 import { ApplicationUser } from './shared/models/account/applicationUser';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,8 @@ import { ApplicationUser } from './shared/models/account/applicationUser';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
-  constructor(private accountService: AccountService) { 
+  
+  constructor(private accountService: AccountService, private toastService: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
     const jwt = this.accountService.getJwt();
     if (jwt) {
       this.accountService.refreshApplicationUser(jwt).subscribe({
-        next: _ => {},
+        next: _ => { },
         error: _ => {
           this.accountService.logout();
         }

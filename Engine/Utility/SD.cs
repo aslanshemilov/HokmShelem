@@ -9,7 +9,7 @@
         public const int HokmMaxScore = 7;
         public const int ShelemMinScore = 300;
         public const int ShelemMaxScore = 1200;
-        public const int HokmEndOfRoundScore = 2;
+        public const int HokmEndOfRoundScore = 7;
         public const string Blue = "blue";
         public const string Red = "red";
         public enum GS // GS -> GameStage

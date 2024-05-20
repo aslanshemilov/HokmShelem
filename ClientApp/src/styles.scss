@@ -58,10 +58,6 @@ html {
 
 
 @media (max-width: 960px) {
-    .wrapper {
-        max-width: 100%;
-    }
-
     .hs-layout {
         display: flex;
         flex-direction: column-reverse;
@@ -93,3 +89,5 @@ html {
         margin-top: 0px;
     }
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -12,7 +12,7 @@
                     <!-- hokm suit -->
                     <section class="hs-xy-center">
                         <ng-container *ngIf="gameInfo.hokmSuit">
-                            <img class="hokm-suit" src="./assets/images/game/{{gameInfo.hokmSuit}}.png" />
+                            <img class="hokm-suit" src="{{gameImageUrl}}/{{gameInfo.hokmSuit}}.png" />
                         </ng-container>
                     </section>
                     <!-- sit four -->
@@ -23,7 +23,7 @@
                         (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 3) ||
                         (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 4) ||
                         (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 1)">
-                            <img class="crown" src="./assets/images/game/crown.png">
+                            <img class="crown" src="{{gameImageUrl}}/crown.png">
                         </div>
                     </section>
                     <section class="hs-xy-center">
@@ -38,7 +38,7 @@
                         (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 4) ||
                         (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 1) ||
                         (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 2)">
-                            <img class="crown" src="./assets/images/game/crown.png">
+                            <img class="crown" src="{{gameImageUrl}}/crown.png">
                         </div>
                         <div class="text-center">
                             <label>{{gameInfo.sitSetting.sitThree}}</label>
@@ -52,7 +52,7 @@
                                 <!-- card 4 -->
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
-                                        src="/assets/images/game/{{gameInfo.red2Card}}.png"
+                                        src="{{gameImageUrl}}/{{gameInfo.red2Card}}.png"
                                         (click)="chooseHokm(gameInfo.red2Card)">
                                 </ng-container>
 
@@ -61,25 +61,25 @@
                                         <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
                                             *ngIf="gameInfo.red2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 2">
                                         <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 3">
                                         <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
                                             *ngIf="gameInfo.red1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 4">
                                         <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue2Card}}.jpg">
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -91,7 +91,7 @@
                                 <!-- card 3 -->
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
-                                        src="/assets/images/game/{{gameInfo.blue2Card}}.png"
+                                        src="{{gameImageUrl}}/{{gameInfo.blue2Card}}.png"
                                         (click)="chooseHokm(gameInfo.blue2Card)">
                                 </ng-container>
 
@@ -100,25 +100,25 @@
                                         <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 2">
                                         <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
                                             *ngIf="gameInfo.red2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 3">
                                         <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 4">
                                         <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
                                             *ngIf="gameInfo.red1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red1Card}}.jpg">
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -130,14 +130,14 @@
                                     <span *ngIf="gameInfo.gs == 2 && gameInfo.hakemIndex != gameInfo.myIndex">
                                         Hakem is choosing Hokm
                                     </span>
-                                    <img class="back-deck" src="/assets/images/game/back.png" *ngIf="gameInfo.gs == 1">
+                                    <img class="back-deck" src="{{gameImageUrl}}/back.png" *ngIf="gameInfo.gs == 1">
                                 </div>
                             </div>
                             <div class="hs-xy-center">
                                 <!-- card 1 -->
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
-                                        src="/assets/images/game/{{gameInfo.blue1Card}}.png"
+                                        src="{{gameImageUrl}}/{{gameInfo.blue1Card}}.png"
                                         (click)="chooseHokm(gameInfo.blue1Card)">
                                 </ng-container>
 
@@ -146,25 +146,25 @@
                                         <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 2">
                                         <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
                                             *ngIf="gameInfo.red1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 3">
                                         <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 4">
                                         <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
                                             *ngIf="gameInfo.red2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -176,7 +176,7 @@
                                 <!-- card 2 -->
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
-                                        src="/assets/images/game/{{gameInfo.red1Card}}.png"
+                                        src="{{gameImageUrl}}/{{gameInfo.red1Card}}.png"
                                         (click)="chooseHokm(gameInfo.red1Card)">
                                 </ng-container>
 
@@ -185,25 +185,25 @@
                                         <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
                                             *ngIf="gameInfo.red1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red1Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 2">
                                         <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 3">
                                         <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
                                             *ngIf="gameInfo.red2Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.red2Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                     </ng-container>
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 4">
                                         <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue1Card == 'turn'"></i>
                                         <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="/assets/images/game/{{gameInfo.blue1Card}}.png">
+                                            src="{{gameImageUrl}}/{{gameInfo.blue1Card}}.jpg">
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -221,7 +221,7 @@
                                 (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 2) ||
                                 (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 3) ||
                                 (gameInfo.hakemIndex == 4 && gameInfo.sitSetting.sitFormat == 4)">
-                                    <img class="crown" src="./assets/images/game/crown.png">
+                                    <img class="crown" src="{{gameImageUrl}}/crown.png">
                                 </ng-container>
                             </div>
                         </div>
@@ -257,7 +257,7 @@
                         (gameInfo.hakemIndex === 2 && gameInfo.sitSetting.sitFormat === 1) ||
                         (gameInfo.hakemIndex === 3 && gameInfo.sitSetting.sitFormat === 2) ||
                         (gameInfo.hakemIndex === 4 && gameInfo.sitSetting.sitFormat === 3)">
-                            <img class="crown" src="./assets/images/game/crown.png">
+                            <img class="crown" src="{{gameImageUrl}}/crown.png">
                         </div>
                     </section>
                     <section class="hs-xy-center">

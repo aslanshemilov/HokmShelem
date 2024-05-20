@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { GameService } from '../game.service';
 import { AccountService } from 'src/app/account/account.service';
 import { Observable, take } from 'rxjs';
-import * as gs from '../../shared/models/engine/game';
 import { GameInfo } from '../../shared/models/engine/game';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-hokm',
@@ -11,6 +11,7 @@ import { GameInfo } from '../../shared/models/engine/game';
   styleUrls: ['./hokm.component.scss']
 })
 export class HokmComponent implements OnInit, AfterViewInit {
+  gameImageUrl = environment.azureContainerUrl + 'game';
   game$?: Observable<GameInfo | null>;
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   gameName: string | undefined;

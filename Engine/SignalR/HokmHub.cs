@@ -63,6 +63,7 @@
             await Clients.Group(game.Name).SendAsync("DetermineTheFirstHakem", SD.GS.DetermineTheFirstHakem, cards);
 
             var hakemIndex = SD.GetTheFirstHakemIndex(cards);
+            hakemIndex = 1;
             _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex, hakemIndex, hakemIndex));
             _unity.Complete();
             PauseGame(3);
@@ -148,10 +149,11 @@
                         _unity.Complete();
                         PauseGame(2);
                         await Clients.Group(game.Name).SendAsync("UpdateRoundResult", game.BlueRoundScore, game.RedRoundScore);
+                        var newHakemIndex = _unity.GameRepo.GetNewHakemIndex(game);
 
-                        if (_unity.GameRepo.EndOfRoundGame(game))
+                        if (newHakemIndex > 0)
                         {
-                            _unity.GameRepo.EmptyRoundCardsAndSuit(game);
+                            _unity.GameRepo.ResetRoundGame(game, newHakemIndex);
                             _unity.Complete();
                             await Clients.Group(game.Name).SendAsync("UpdateTotalResult", game.BlueTotalScore, game.RedTotalScore);
 

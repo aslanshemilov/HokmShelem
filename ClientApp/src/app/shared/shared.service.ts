@@ -9,6 +9,7 @@ import { ExpiringSessionCountdownComponent } from './components/modals/expiring-
 import { ConfirmBoxComponent } from './components/modals/confirm-box/confirm-box.component';
 import { NotificationMessage } from './models/engine/notificationMessage';
 import { ToastrService } from 'ngx-toastr';
+import { WinnerTeamComponent } from './components/modals/winner-team/winner-team.component';
 
 @Injectable({
   providedIn: 'root'
@@ -100,6 +101,18 @@ export class SharedService {
     } else {
       this.showNotification(notification.isSuccess, notification.title, notification.message);
     }
+  }
+
+  showWinner(winnerTeam: string, title: string, message: string) {
+    const initalState: ModalOptions = {
+      initialState: {
+        winnerTeam,
+        title,
+        message
+      }
+    };
+
+    this.bsModalRef = this.modalService.show(WinnerTeamComponent, initalState);
   }
 
   private getResult() {

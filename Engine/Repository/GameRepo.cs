@@ -313,54 +313,6 @@
                 return true;
             }
         }
-        public bool EndOfRoundGame(Game game)
-        {
-            // Blue won the round game
-            if (game.BlueRoundScore == SD.HokmEndOfRoundScore)
-            {
-                game.BlueTotalScore++;
-                game.BlueRoundScore = 0;
-
-                if (game.HakemIndex == 2)
-                {
-                    game.HakemIndex = 3;
-                }
-
-                if (game.HakemIndex == 4)
-                {
-                    game.HakemIndex = 1;
-                }
-
-                game.RoundStartsByIndex = game.HakemIndex;
-                game.WhosTurnIndex = game.HakemIndex;
-
-                return true;
-            }
-
-            // Red won the round game
-            if (game.RedRoundScore == SD.HokmEndOfRoundScore)
-            {
-                game.RedTotalScore++;
-                game.RedRoundScore = 0;
-
-                if (game.HakemIndex == 3)
-                {
-                    game.HakemIndex = 4;
-                }
-
-                if (game.HakemIndex == 1)
-                {
-                    game.HakemIndex = 2;
-                }
-
-                game.RoundStartsByIndex = game.HakemIndex;
-                game.WhosTurnIndex = game.HakemIndex;
-
-                return true;
-            }
-
-            return false;
-        }
         public void RoundCalculation(Game game)
         {
             int blueTotal = 0;
@@ -425,7 +377,53 @@
             game.Red2Card = null;
             game.RoundSuit = null;
         }
-        public void EmptyRoundCardsAndSuit(Game game)
+        public int GetNewHakemIndex(Game game)
+        {
+            // Blue won the round game
+            if (game.BlueRoundScore == SD.HokmEndOfRoundScore)
+            {
+                game.BlueTotalScore++;
+                // in case of Kot
+                if (game.RedRoundScore == 0)
+                {
+                    game.BlueTotalScore++;
+
+                    // Hakem Kot
+                    if (game.HakemIndex == 2 || game.HakemIndex == 4)
+                    {
+                        game.BlueTotalScore++;
+                    }
+                }
+              
+
+                if (game.HakemIndex == 2) return 3;
+                else if (game.HakemIndex == 4) return 1;
+                else return game.HakemIndex;
+            }
+
+            // Red won the round game
+            if (game.RedRoundScore == SD.HokmEndOfRoundScore)
+            {
+                game.RedTotalScore++;
+                // in case of Kot
+                if (game.BlueRoundScore == 0)
+                {
+                    game.RedTotalScore++;
+                    // Hakem Kot
+                    if (game.HakemIndex == 1 || game.HakemIndex == 2)
+                    {
+                        game.RedTotalScore++;
+                    }
+                }
+
+                if (game.HakemIndex == 3) return 4;
+                else if (game.HakemIndex == 1) return 2;
+                else return game.HakemIndex;
+            }
+
+            return 0;
+        }
+        public void ResetRoundGame(Game game, int hakemIndex)
         {
             game.Blue1Card = null;
             game.Red1Card = null;
@@ -433,10 +431,15 @@
             game.Red2Card = null;
             game.RoundSuit = null;
             game.HokmSuit = null;
+            game.RedRoundScore = 0;
+            game.BlueRoundScore = 0;
+            game.HakemIndex = hakemIndex;
+            game.RoundStartsByIndex = hakemIndex;
+            game.WhosTurnIndex = hakemIndex;
         }
         public string EndOfTheGame(Game game)
         {
-            if (game.BlueTotalScore == game.TargetScore)
+            if (game.BlueTotalScore >= game.TargetScore)
             {
                 // more work here but for now
                 _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
@@ -444,7 +447,7 @@
                 return SD.Blue;
             }
 
-            if (game.RedTotalScore == game.TargetScore)
+            if (game.RedTotalScore >= game.TargetScore)
             {
                 // more work here but for now
                 _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);

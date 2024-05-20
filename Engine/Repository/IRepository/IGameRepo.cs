@@ -11,9 +11,9 @@
         void AssignPlayersCards(Game game);
         HakemCardsToHokm GetHakemCardsToHokm(Game game);
         bool HandlePlayerPlayedTheCard(Game game, string card, string playerName, int playerIndex);
-        bool EndOfRoundGame(Game game);
         void RoundCalculation(Game game);
-        void EmptyRoundCardsAndSuit(Game game);
+        int GetNewHakemIndex(Game game);
+        void ResetRoundGame(Game game, int hakemIndex);
         string EndOfTheGame(Game game);       
     }
 }
