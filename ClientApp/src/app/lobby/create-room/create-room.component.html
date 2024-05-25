@@ -48,9 +48,9 @@
                 <input class="form-check-input" type="radio" value='hokm' formControlName='gameType' [checked]="true"
                     (click)="onGameTypeSelected('hokm')" />
 
-                <label class="form-check-label mx-2">Shelem</label>
+                <!-- <label class="form-check-label mx-2">Shelem</label>
                 <input class="form-check-input" type="radio" value='shelem' formControlName='gameType'
-                    (click)="onGameTypeSelected('shelem')" />
+                    (click)="onGameTypeSelected('shelem')" /> -->
             </div>
         </div>
 
@@ -61,15 +61,22 @@
                 </label>
             </div>
             <div class="offset-4 col-4">
-                <input [class.is-invalid]="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.errors"
-                    class="form-control" type="number" formControlName='targetScore' mask="{{createRoomForm.controls['gameType'].value === 'hokm' ? '0' : '0000'}}" />
+                <input
+                    [class.is-invalid]="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.errors"
+                    class="form-control" type="number" formControlName='targetScore'
+                    mask="{{createRoomForm.controls['gameType'].value === 'hokm' ? '0' : '0000'}}" />
                 <span
                     *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('required')"
                     class="text-danger">
                     Please enter a value
                 </span>
+                <span *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern') && 
+                    createRoomForm.controls['gameType'].value === 'hokm'" class="text-danger">
+                    (3 or 5 or 7)
+                </span>
                 <span
-                    *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern')"
+                    *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern') &&
+                    createRoomForm.controls['gameType'].value === 'shelem'"
                     class="text-danger">
                     ({{minScore}} - {{maxScore}})
                 </span>

@@ -27,6 +27,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           apiResponse = error.error;
 
           if (error.status === 401) {
+            console.log('401 here');
             this.sharedService.showNotification(false, error.error.title, error.error.message, error.error.isHtmlEnabled);
           }
 

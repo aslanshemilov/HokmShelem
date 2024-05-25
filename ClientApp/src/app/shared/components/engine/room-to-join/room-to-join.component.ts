@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LobbyService } from 'src/app/lobby/lobby.service';
 import { RoomToJoin } from 'src/app/shared/models/engine/room';
 
@@ -9,6 +9,7 @@ import { RoomToJoin } from 'src/app/shared/models/engine/room';
 })
 export class RoomToJoinComponent {
   @Input() rooms: RoomToJoin[] | undefined | null;
+  @Output() playerJoinedRoom = new EventEmitter();
 
   constructor(public lobbyService: LobbyService) {}
 
@@ -24,5 +25,6 @@ export class RoomToJoinComponent {
 
   join(roomName: string) {
     this.lobbyService.joinTheRoom(roomName);
+    this.playerJoinedRoom.emit(true);
   }
 }

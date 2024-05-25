@@ -4,10 +4,13 @@
     public class HokmHub : Hub
     {
         private readonly IUnityRepo _unity;
+        private readonly IGameTrackerService _tracker;
 
-        public HokmHub(IUnityRepo unity)
+        public HokmHub(IUnityRepo unity,
+            IGameTrackerService tracker)
         {
             _unity = unity;
+            _tracker = tracker;
         }
         public override async Task OnConnectedAsync()
         {
@@ -22,22 +25,25 @@
             }
 
             var game = _unity.GameRepo.FindByName(player.GameName, includeProperties: "Players");
-            if (game != null)
+            if (game != null && _tracker.PlayerConnectedToGame(game.Name, player.Name))
             {
+                await Groups.AddToGroupAsync(Context.ConnectionId, game.Name);
                 _unity.GameRepo.UpdatePlayerStatusOfTheGame(game, player.Name, SD.PlayerInGameStatus.Connected);
                 _unity.Complete();
-                await Groups.AddToGroupAsync(Context.ConnectionId, game.Name);
-
-                if (_unity.GameRepo.AllPlayersAreConnected(game) && game.GS == SD.GS.GameHasNotStarted)
+                var connectedPlayers = _tracker.GetConnectedPlayersOfGame(game.Name);
+                if (connectedPlayers.Count == 4 && game.GS == SD.GS.GameHasNotStarted)
                 {
-                    PauseGame(1);
-                    await DetermineTheFirstHakemAsync(game);
+                    if (PlayerName().Equals(connectedPlayers.LastOrDefault()))
+                    {
+                        await AllPlayersConnected(game);
+                    }
                 }
             }
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var player = _unity.PlayerRepo.FindByName(Context.User.GetPlayerName(), includeProperties: "ConnectionTracker,Game");
+            var player = _unity.PlayerRepo.FindByName(PlayerName(), includeProperties: "ConnectionTracker,Game");
+            _tracker.PlayerDisconnected(player.GameName, player.Name);
 
             if (Context.ConnectionId.Equals(player.ConnectionTracker.OldId))
             {
@@ -56,26 +62,11 @@
 
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task DetermineTheFirstHakemAsync(Game game)
-        {
-            game.GS = SD.GS.DetermineTheFirstHakem;
-            var cards = SD.CardsToDetermineTheFirstHakem();
-            await Clients.Group(game.Name).SendAsync("DetermineTheFirstHakem", SD.GS.DetermineTheFirstHakem, cards);
-
-            var hakemIndex = SD.GetTheFirstHakemIndex(cards);
-            hakemIndex = 1;
-            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex, hakemIndex, hakemIndex));
-            _unity.Complete();
-            PauseGame(3);
-
-            await ShowHakemAsync(game.Name, hakemIndex);
-            await HakemChoosingHokmAsync(game);
-        }
         public async Task ShowHakemAsync(string gameName, int hakemIndex, bool roundGameEnded = false)
         {
             await Clients.Group(gameName).SendAsync("ShowHakem", SD.GS.HakemChooseHokm, hakemIndex, roundGameEnded);
         }
-        public async Task HakemChoosingHokmAsync(Game game)
+        public async Task HakemGetsCardsToChooseHokmAsync(Game game)
         {
             game.GS = SD.GS.HakemChooseHokm;
             _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
@@ -119,6 +110,20 @@
 
                 await Clients.Group(gameName).SendAsync("NewMessageReceived", messageThread);
             }
+        }
+        public async Task AllPlayersConnected(Game game)
+        {
+            game.GS = SD.GS.DetermineTheFirstHakem;
+            var cards = SD.CardsToDetermineTheFirstHakem();
+            var hakemIndex = SD.GetTheFirstHakemIndex(cards);
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex, hakemIndex, hakemIndex));
+            game.GS = SD.GS.HakemChooseHokm;
+            _unity.Complete();
+
+            await Clients.Group(game.Name).SendAsync("DetermineTheFirstHakem", SD.GS.DetermineTheFirstHakem, cards);
+            PauseGame(3);
+            await ShowHakemAsync(game.Name, hakemIndex);
+            await HakemGetsCardsToChooseHokmAsync(game);
         }
         public async Task HakemChoseHokmSuit(string gameName, string suit)
         {
@@ -166,7 +171,7 @@
                             else
                             {
                                 await ShowHakemAsync(game.Name, game.HakemIndex, true);
-                                await HakemChoosingHokmAsync(game);
+                                await HakemGetsCardsToChooseHokmAsync(game);
                             }
                         }
                         else

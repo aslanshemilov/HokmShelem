@@ -102,7 +102,14 @@ export class GameService {
           gameInfo.redRoundScore = 0;
           gameInfo.myCards = [];
         }
-        
+
+        if (gameInfo.hakemIndex == gameInfo.myIndex) {
+          gameInfo.blue1Card = 'h';
+          gameInfo.red1Card = 'c';
+          gameInfo.blue2Card = 'd';
+          gameInfo.red2Card = 's';
+        } 
+
         this.setGameInfo(gameInfo);
       }
     });

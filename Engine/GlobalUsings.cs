@@ -43,3 +43,4 @@ global using Microsoft.AspNetCore.Authorization;
 global using Engine.Dtos.Game;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using AutoMapper.QueryableExtensions;
+global using Engine.Services;

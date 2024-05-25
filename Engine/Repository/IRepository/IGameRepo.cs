@@ -2,9 +2,11 @@
 {
     public interface IGameRepo : IBaseRepo<Game>
     {
+        void CreateGame(Room room);
         string GetGameName(string playerName);
         GameInfoDto GetGameInfo(string gameName, string playerName);
         bool AllPlayersAreConnected(Game game);
+        string HakemConnectionId(Game game);
         int GetPlayerIndex(Game game, string playerName);
         void UpdatePlayerStatusOfTheGame(Game game, string playerName, SD.PlayerInGameStatus status);
         void UpdateGame(Game game, GameUpdateDto model);

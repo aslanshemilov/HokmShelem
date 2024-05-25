@@ -22,6 +22,7 @@
                 .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Name));
 
             // Game
+            CreateMap<Room, Game>();
             CreateMap<Game, GameInfoDto>()
                 .ForMember(dest => dest.GameName, opt => opt.MapFrom(src => src.Name));
         }

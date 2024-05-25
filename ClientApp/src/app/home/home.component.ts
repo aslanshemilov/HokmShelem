@@ -3,6 +3,7 @@ import { HomeService } from './home.service';
 import { ApplicationUser } from '../shared/models/account/applicationUser';
 import { SharedService } from '../shared/shared.service';
 import { AccountService } from '../account/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,8 @@ import { AccountService } from '../account/account.service';
 export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService,
     public accountService: AccountService,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService,
+    private router: Router) { }
 
   ngOnInit(): void {
     if (!this.homeService.visited) {
@@ -28,19 +30,10 @@ export class HomeComponent implements OnInit {
     this.accountService.registerAsGuest().subscribe({
       next: (user: ApplicationUser | null) => {
         if (user) {
-          this.sharedService.showNotification(true, 'Guest Player', 'Your name is <strong>' + user.playerName + '</strong>', true);
+          //this.sharedService.showNotification(true, 'Guest Player', 'Your name is <strong>' + user.playerName + '</strong>', true);
+          this.router.navigateByUrl('/lobby');
         }
       }
     });
-    // this.homeService.registerAsGuest().subscribe({
-    //   next: (user: ApplicationUser | null) => {
-    //     if (user) {
-    //       this.sharedService.showNotification(true, 'Guest Player', 'Your name is <strong>' + user.playerName + '</strong>', true);
-    //     }
-    //   }
-    // });
   }
 }
-
-// this.router.navigateByUrl('/lobby');
-// 

@@ -1,4 +1,6 @@
-﻿namespace Engine.SignalR
+﻿using Engine.Entities;
+
+namespace Engine.SignalR
 {
     [Authorize]
     public class LobbyHub : Hub
@@ -247,14 +249,11 @@
         public async Task StartTheGame(string roomName)
         {
             var room = _unity.RoomRepo.FindByName(roomName, includeProperties: "Players");
-            foreach (var player in room.Players)
-            {
-                player.RoomName = null;
-            }
-
+            _unity.GameRepo.CreateGame(room);
             _unity.RoomRepo.Remove(room);
             _unity.Complete();
-            await Clients.Group(roomName).SendAsync("GameAboutToStart", 5);
+           
+            await Clients.Group(roomName).SendAsync("GameAboutToStart", 3);
         }
         #endregion
 

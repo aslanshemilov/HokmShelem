@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { timer, switchMap, of, map } from 'rxjs';
-import { LobbyService } from '../../lobby.service';
+import { LobbyService } from '../lobby.service';
 import { RoomToCreate } from 'src/app/shared/models/engine/room';
 
 @Component({
@@ -30,9 +30,11 @@ export class CreateRoomComponent implements OnInit {
   ) {
     this.createRoomForm = this.formBuilder.group({
       roomName: [roomName, [Validators.required, Validators.minLength(3), Validators.maxLength(15)], [this.checkRoomNameNotTaken()]],
-      gameType: ['', Validators.required],
-      targetScore: [{ value: null, disabled: true }]
+      gameType: ['hokm', Validators.required],
+      targetScore: [{ value: null, disabled: false }]
     });
+
+    this.onGameTypeSelected('hokm');
   }
 
   onGameTypeSelected(gameType: string) {
@@ -45,7 +47,7 @@ export class CreateRoomComponent implements OnInit {
         this.minScore = 3;
         this.maxScore = 7;
         this.createRoomForm.controls['targetScore'].setValidators(
-          [Validators.required, Validators.pattern('[3-7]')]);
+          [Validators.required, Validators.pattern('(3|5|7)')]);
         this.createRoomForm.controls["targetScore"].updateValueAndValidity();
         break;
       case 'shelem':

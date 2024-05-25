@@ -1,6 +1,4 @@
-﻿using Engine.Services;
-
-namespace Engine.Extensions
+﻿namespace Engine.Extensions
 {
     public static class WebApplicationBuilderExtensions
     {
@@ -18,6 +16,7 @@ namespace Engine.Extensions
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<IUnityRepo, UnityRepo>();
             builder.Services.AddScoped<IApiService, ApiService>();
+            builder.Services.AddSingleton<IGameTrackerService, GameTrackerService>();
             builder.Services.AddSignalR();
 
             builder.Services.AddScoped<JWTHttpClientHandlerInterceptor>();

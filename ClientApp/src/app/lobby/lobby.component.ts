@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LobbyService } from './lobby.service';
 import { AccountService } from '../account/account.service';
 import { take } from 'rxjs';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./lobby.component.scss']
 })
 export class LobbyComponent implements OnInit, OnDestroy {
+  @ViewChild('divplayerbox') divplayerbox: ElementRef | undefined;
   message?: string;
 
   constructor(public lobbyService: LobbyService,
@@ -44,6 +45,15 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   createRoom() {
     this.lobbyService.createRoomModal(this.lobbyService.myPlayerName);
+    setTimeout(() => {
+      this.scrollToDivPlayerBox();
+    }, 500);
+  }
+
+  playerJoinedRoom(event: any) {
+    setTimeout(() => {
+      this.scrollToDivPlayerBox();
+    }, 500);
   }
 
   lobbyButtonToggle(target: number) {
@@ -77,5 +87,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   start() {
     this.lobbyService.startTheGame();
+  }
+
+  private scrollToDivPlayerBox(): void {
+    if (this.divplayerbox) {
+      this.divplayerbox.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

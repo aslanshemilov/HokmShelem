@@ -9,7 +9,7 @@ import { SharedService } from '../shared/shared.service';
 import { NotificationMessage } from '../shared/models/engine/notificationMessage';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { CreateRoomComponent } from './modals/create-room/create-room.component';
+import { CreateRoomComponent } from './create-room/create-room.component';
 import { HttpClient } from '@angular/common/http';
 import { Room, RoomToCreate, RoomToJoin } from '../shared/models/engine/room';
 import { LobbyRoomMode } from '../shared/models/engine/lobbyRoomMode';
@@ -98,7 +98,7 @@ export class LobbyService {
         complete: () => {
           this.gameAboutToStartInNumberOfSeconds = undefined;
           this.leaveLobby();
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('/game/hokm');
         }});
     });
 
@@ -125,6 +125,8 @@ export class LobbyService {
     if (this.hubConnection) {
       this.setLobbyMode();
       this.lobbyChatsSource.next([]);
+      this.roomChatsSource.next([]);
+      this.roomsSource.next([]);
       this.hubConnection.stop();
     }
   }

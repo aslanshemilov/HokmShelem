@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Engine.Utility
+﻿namespace Engine.Utility
 {
     public static class SD
     {
@@ -82,18 +80,31 @@ namespace Engine.Utility
         }
         public static int GetTheFirstHakemIndex(List<string> cards)
         {
-            var max = GetValueOfCard(cards.ElementAt(0));
-            int hakemIndex = 0;
-            for (int i = 1; i < cards.Count; i++)
+            List<int> values = new List<int>();
+            foreach(var card in cards)
             {
-                if (GetValueOfCard(cards.ElementAt(i)) > max)
+                values.Add(GetValueOfCard(card));
+            }
+
+            int hakemIndex = GetMaxValue(values);
+
+            return hakemIndex + 1;
+        }
+        public static int GetMaxValue(List<int> values)
+        {
+            int max = values[0];
+            int maxIndex = 0;
+
+            for (int i = 1; i < values.Count; i++)
+            {
+                if (values[i] > max)
                 {
-                    max = GetValueOfCard(cards.ElementAt(i));
-                    hakemIndex = i;
+                    max = values[i];
+                    maxIndex = i;
                 }
             }
 
-            return hakemIndex + 1;
+            return maxIndex;
         }
         public static int GetValueOfCard(string card)
         {

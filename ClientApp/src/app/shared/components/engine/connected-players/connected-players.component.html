@@ -1,9 +1,9 @@
-<ng-container *ngIf="players">
+<ng-container *ngIf="players && myName">
     <div *ngFor="let player of players">
 
         <button type="button" class="btn" [tooltip]="playerProfile" placement="right">
             <img style="width: 20px; height: 20px;" src="{{gameImageUrl}}badges/{{player.badge}}.png">
-            <span class="fw-bold mx-2">{{player.playerName}}</span>
+            <span class="fw-bold mx-2" [class.text-warning]="player.playerName === myName">{{player.playerName}}</span>
             <span *ngIf="lobbyService.connectedRoom?.hostName === player.playerName">
                 <i class="bi bi-star-fill"></i>
             </span>

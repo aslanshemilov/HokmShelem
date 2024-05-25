@@ -14,6 +14,27 @@
             _unity = unity;
             _mapper = mapper;
         }
+
+        public void CreateGame(Room room)
+        {
+            var gameToAdd = new Game
+            {
+                Name = room.Name,
+                GameType = room.GameType,
+                TargetScore = room.TargetScore,
+                Blue1 = room.Blue1,
+                Red1 = room.Red1,
+                Blue2 = room.Blue2,
+                Red2 = room.Red2
+            };
+
+            foreach (var player in room.Players)
+            {
+                player.Game = gameToAdd;
+                player.RoomName = null;
+            }
+            _context.Game.Add(gameToAdd);
+        }
         public string GetGameName(string playerName)
         {
             return _context.Game
@@ -140,6 +161,25 @@
                 game.Blue2Status == SD.PlayerInGameStatus.Connected &&
                 game.Red2Status == SD.PlayerInGameStatus.Connected) ? true : false;
         }
+        public string HakemConnectionId(Game game)
+        {
+            if (game.HakemIndex == 1)
+            {
+                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue1);
+            }
+            else if (game.HakemIndex == 2)
+            {
+                return _unity.PlayerRepo.GetPlayerConnectionId(game.Red1);
+            }
+            else if (game.HakemIndex == 3)
+            {
+                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
+            }
+            else
+            {
+                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
+            }
+        }
         public int GetPlayerIndex(Game game, string playerName)
         {
             if (game != null)
@@ -207,6 +247,8 @@
         }
         public void AssignPlayersCards(Game game)
         {
+            if (!string.IsNullOrEmpty(game.Blue1CardsName)) return;
+
             var deckOfCard = SD.GetShuffledDeckOfCards();
             List<string> cards = new List<string>();
 
@@ -394,7 +436,7 @@
                         game.BlueTotalScore++;
                     }
                 }
-              
+
 
                 if (game.HakemIndex == 2) return 3;
                 else if (game.HakemIndex == 4) return 1;
@@ -410,7 +452,7 @@
                 {
                     game.RedTotalScore++;
                     // Hakem Kot
-                    if (game.HakemIndex == 1 || game.HakemIndex == 2)
+                    if (game.HakemIndex == 1 || game.HakemIndex == 3)
                     {
                         game.RedTotalScore++;
                     }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LobbyComponent } from './lobby.component';
 import { LobbyRoutingModule } from './lobby-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { CreateRoomComponent } from './modals/create-room/create-room.component';
+import { CreateRoomComponent } from './create-room/create-room.component';
 
 @NgModule({
   declarations: [

@@ -47,7 +47,7 @@
                 <app-chat-input (messageToSend)="sendMessage($event)"></app-chat-input>
             </div>
         </div>
-        <section class="player-room-box">
+        <section class="player-room-box" #divplayerbox>
             <div class="card border-success">
                 <div class="card-header">
                     <ng-container *ngIf="lobbyService.mode.showLobbyPlayers">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="card-body side-box scroller" style="position: relative;">
                     <ng-container *ngIf="lobbyService.mode.showLobbyRooms">
-                        <app-room-to-join [rooms]="(lobbyService.rooms$ | async)"></app-room-to-join>
+                        <app-room-to-join [rooms]="(lobbyService.rooms$ | async)" (playerJoinedRoom)="playerJoinedRoom($event)"></app-room-to-join>
                     </ng-container>
                     <ng-container *ngIf="!lobbyService.mode.showLobbyRooms && lobbyService.connectedRoom">
                         <div class="room">
