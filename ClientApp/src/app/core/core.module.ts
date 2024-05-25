@@ -4,6 +4,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { UserHasRoleDirective } from './directives/user-has-role.directive';
+import { IsNonLoggedinUserOrGuestDirective } from './directives/is-non-loggedin-user-or-guest.directive';
 
 
 
@@ -11,7 +12,8 @@ import { UserHasRoleDirective } from './directives/user-has-role.directive';
   declarations: [
     NavbarComponent,
     FooterComponent,
-    UserHasRoleDirective
+    UserHasRoleDirective,
+    IsNonLoggedinUserOrGuestDirective
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { UserHasRoleDirective } from './directives/user-has-role.directive';
   exports: [
     NavbarComponent,
     FooterComponent,
-    UserHasRoleDirective
+    UserHasRoleDirective,
+    IsNonLoggedinUserOrGuestDirective
   ]
 })
 export class CoreModule { }

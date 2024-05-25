@@ -28,8 +28,8 @@ export class SendEmailComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.applicationUser$.pipe((take(1))).subscribe({
-      next: (applicationUser: ApplicationUser | null) => {
-        if (applicationUser) {
+      next: (user: ApplicationUser | null) => {
+        if (user && user.roles.length > 0) {
           this.router.navigateByUrl('/');
         } else {
           const mode = this.activatedRoute.snapshot.paramMap.get('mode');

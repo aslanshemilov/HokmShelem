@@ -1,6 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { take } from 'rxjs';
 import { AccountService } from 'src/app/account/account.service';
+import { HomeService } from 'src/app/home/home.service';
+import { ApplicationUser } from 'src/app/shared/models/account/applicationUser';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -13,6 +16,7 @@ export class NavbarComponent implements OnInit {
   darkMode: boolean | undefined;
 
   constructor(public accountService: AccountService,
+    public homeService: HomeService,
     @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {

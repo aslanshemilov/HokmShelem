@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MessageAdd } from '../shared/models/hokmshelem/messageAdd';
 import { ApiResponse } from '../shared/models/apiResponse';
+import { ApplicationUser } from '../shared/models/account/applicationUser';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,9 @@ import { ApiResponse } from '../shared/models/apiResponse';
 export class HomeService {
   apiUrl = environment.apiUrl;
   visited = false;
+
+  private guestUserSource = new ReplaySubject<ApplicationUser | null>(1);
+  guestUser$ = this.guestUserSource.asObservable();
 
   constructor(private http: HttpClient) { }
 

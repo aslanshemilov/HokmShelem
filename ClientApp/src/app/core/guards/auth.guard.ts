@@ -10,8 +10,9 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   return accountService.applicationUser$.pipe(
     map((user: ApplicationUser | null) => {
-      if (user) return true;
-      else {
+      if (user && user.roles.length > 0) {
+        return true;
+      } else {
         router.navigate(['account/login'], { queryParams: { returnUrl: state.url } });
         return false;
       }

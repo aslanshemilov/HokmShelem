@@ -17,7 +17,7 @@
         }
         public override async Task OnConnectedAsync()
         {
-            var playerFromApi = _mapper.Map<Player>(await _apiService.GetPlayerInfoAsync());
+            var playerFromApi = _mapper.Map<Player>(await _apiService.GetPlayerInfoAsync(IsGuestUser()));
             playerFromApi.LobbyName = SD.HSLobby;
             var oldConnectionId = _unity.PlayerRepo.AddUpdatePlayer(playerFromApi, Context.ConnectionId);
 
@@ -247,7 +247,7 @@
         public async Task StartTheGame(string roomName)
         {
             var room = _unity.RoomRepo.FindByName(roomName, includeProperties: "Players");
-            foreach(var player in room.Players)
+            foreach (var player in room.Players)
             {
                 player.RoomName = null;
             }
@@ -260,6 +260,10 @@
 
 
         #region Private Helper Methods
+        private bool IsGuestUser()
+        {
+            return Context.User.GetProfileId() == 0;
+        }
         private string PlayerName()
         {
             return Context.User.GetPlayerName();

@@ -29,6 +29,20 @@
             var roles = await _userManager.GetRolesAsync(user);
             userClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
+            return GenerateJWT(userClaims);
+        }
+        public string CreateGuestJWT(Guest guest)
+        {
+            var userClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.GivenName, guest.PlayerName),
+            };
+
+            return GenerateJWT(userClaims);
+        }
+
+        private string GenerateJWT(List<Claim> userClaims)
+        {
             var credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor
             {

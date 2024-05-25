@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AccountService } from './account/account.service';
 import { take } from 'rxjs';
 import { ApplicationUser } from './shared/models/account/applicationUser';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +9,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  
-  constructor(private accountService: AccountService, private toastService: ToastrService) {
+
+  constructor(private accountService: AccountService) {
   }
 
   ngOnInit(): void {

@@ -1,4 +1,6 @@
-﻿namespace Engine.Utility
+﻿using System;
+
+namespace Engine.Utility
 {
     public static class SD
     {

@@ -1,15 +1,26 @@
 <div class="container">
-    <div class="row home mt-4">
-        <div class="text-center col-md-6">
-            <p style="font-size: 1.5rem;">Play Persian Card Games for <span style="color:#cf3723">FREE</span></p>
-            <p class="pt-2">
-                <i class="bi bi-people-fill me-1"></i>0 Online users
-            </p>
-            <p>
-                <i class="bi bi-suit-spade-fill me-1"></i>0 Games Today
-            </p>
+    <h1 class="text-center text-warning" style="margin-bottom: 5rem;">You can play <strong>Hokm</strong> NOW</h1>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <p class="text-center" style="font-size: 1.5rem;">Play Persian Card Games for <span
+                    style="color:#cf3723">FREE</span></p>
+            <div class="row mb-1">
+                <div class="col-7 offset-5">
+                    <i class="bi bi-people-fill me-1"></i>0 Online Users
+                </div>
 
-            <button class="btn">Play Online</button>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7 offset-5">
+                    <i class="bi bi-suit-spade-fill me-1"></i>0 Games Today
+                </div>
+            </div>
+
+            <ng-container *ngIf="(accountService.applicationUser$ | async) === null">
+                <button class="btn" (click)="registerAsGuest()" *appIsNonLoggedinUserOrGuestDirective>
+                    Play as Guest
+                </button>
+            </ng-container>
         </div>
         <div class="col-md-6">
             <app-demo></app-demo>

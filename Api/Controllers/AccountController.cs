@@ -8,22 +8,19 @@ namespace Api.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailService;
-        private readonly IEngineService _engineService;
         private readonly HttpClient _facebookHttpClient;
 
         public AccountController(
             IJWTService jwtService,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            IEmailService emailService,
-            IEngineService engineService
+            IEmailService emailService
             )
         {
             _jwtService = jwtService;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
-            _engineService = engineService;
             _facebookHttpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://graph.facebook.com")

@@ -1,7 +1,4 @@
-﻿using Mailjet.Client.Resources;
-using System.Collections.Generic;
-
-namespace Api.Controllers
+﻿namespace Api.Controllers
 {
     [Authorize(Roles = SD.Admin)]
     public class AdminController : ApiCoreController

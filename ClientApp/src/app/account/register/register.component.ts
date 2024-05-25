@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
     @Inject(DOCUMENT) private _document: Document) {
     this.accountService.applicationUser$.pipe(take(1)).subscribe({
       next: (user: ApplicationUser | null) => {
-        if (user) {
+        if (user && user.roles.length > 0) {
           this.router.navigateByUrl('/');
         }
       }

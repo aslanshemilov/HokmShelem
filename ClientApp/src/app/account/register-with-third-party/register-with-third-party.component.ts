@@ -32,8 +32,8 @@ export class RegisterWithThirdPartyComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.applicationUser$.pipe(take(1)).subscribe({
-      next: (applicationUser: ApplicationUser | null) => {
-        if (applicationUser) {
+      next: (user: ApplicationUser | null) => {
+        if (user && user.roles.length > 0) {
           this.router.navigateByUrl('/');
         } else {
           this.activatedRoute.queryParamMap.subscribe({

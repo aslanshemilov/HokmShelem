@@ -21,6 +21,6 @@
         public static int GetProfileId(this ClaimsPrincipal user)
         {
             return int.Parse(user.FindFirst(ClaimTypes.Sid)?.Value);
-        }       
+        }
     }
 }

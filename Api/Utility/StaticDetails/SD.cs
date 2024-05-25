@@ -198,6 +198,21 @@
         {
             return GetBadges().FirstOrDefault(c => c.MaxValue >= rate && rate >= c.MinValue).Color;
         }
+
+        public static string GetRandomName(int length = 6)
+        {
+            string result = string.Empty;
+            string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            int charactersLength = characters.Length;
+            Random random = new Random();
+
+            for (int counter = 0; counter < length; counter++)
+            {
+                result += characters[random.Next(charactersLength)];
+            }
+
+            return result;
+        }
     }
 
     public class BadgeModel

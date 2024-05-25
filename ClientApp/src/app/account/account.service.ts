@@ -20,6 +20,7 @@ import { SharedService } from '../shared/shared.service';
 export class AccountService {
   apiUrl = environment.apiUrl;
   engineUrl = environment.engineUrl;
+  isGuestUser = false;
 
   private applicationUserSource = new ReplaySubject<ApplicationUser | null>(1);
   applicationUser$ = this.applicationUserSource.asObservable();
@@ -32,7 +33,7 @@ export class AccountService {
     private sharedService: SharedService) { }
 
   refreshToken = async () => {
-    this.http.get<ApplicationUser>(this.apiUrl + 'account/refresh-applicationUser')
+    this.http.get<ApplicationUser>(this.apiUrl + (this.isGuestUser === false ? 'account/refresh-applicationUser' : 'guest'))
       .subscribe({
         next: (user: ApplicationUser) => {
           if (user) {
@@ -51,16 +52,24 @@ export class AccountService {
       return of(undefined);
     }
 
+    const decodedToken: any = jwt_decode(jwt);
+    const roles = decodedToken.role;
+
+    if (!roles) {
+      this.isGuestUser = true;
+    }
+
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', 'Bearer ' + jwt);
 
-    return this.http.get<ApplicationUser>(this.apiUrl + 'account/refresh-applicationUser', { headers }).pipe(
-      map((user: ApplicationUser) => {
-        if (user) {
-          this.setApplicationUser(user);
-        }
-      })
-    )
+    return this.http.get<ApplicationUser>(this.apiUrl + (this.isGuestUser === false ? 'account/refresh-applicationUser' : 'guest')
+      , { headers }).pipe(
+        map((user: ApplicationUser) => {
+          if (user) {
+            this.setApplicationUser(user);
+          }
+        })
+      )
   }
 
   login(model: Login) {
@@ -85,6 +94,7 @@ export class AccountService {
 
   logout() {
     localStorage.removeItem(environment.applicationUserKey);
+    this.isGuestUser = false;
     this.applicationUserSource.next(null);
     this.router.navigateByUrl('/');
     this.stopRefreshTokenTimer();
@@ -135,17 +145,30 @@ export class AccountService {
     return null;
   }
 
+  registerAsGuest() {
+    return this.http.post<ApplicationUser | null>(this.apiUrl + 'guest', {}).pipe(
+      map((user: ApplicationUser | null) => {
+        if (user) {
+          this.isGuestUser = true;
+          this.setApplicationUser(user);
+          return user;
+        }
+
+        return null;
+      })
+    );
+  }
+
   checkUserIdleTimout() {
     this.applicationUser$.pipe(take(1)).subscribe({
       next: (user: ApplicationUser | null) => {
-        // the user is logged in
         if (user) {
           // if not currently dipsplaying expiring session modal
           if (!this.sharedService.displayingExpiringSessionModal) {
             this.timeoutId = setTimeout(() => {
               this.sharedService.displayingExpiringSessionModal = true;
               this.sharedService.openExpiringSessionCountdown();
-              // in 10 minutes of user incativity
+              // in some minutes of user incativity
             }, environment.allowedInactivityTimeInMinutes * 60 * 1000);
           }
         }
@@ -154,22 +177,22 @@ export class AccountService {
   }
 
   private setApplicationUser(user: ApplicationUser) {
-    this.http.get(this.engineUrl + 'environment/engine-ready', {responseType: 'text'}).subscribe();
+    this.http.get(this.engineUrl + 'environment/engine-ready', { responseType: 'text' }).subscribe();
+    const decodedToken: any = jwt_decode(user.jwt);
+    const roles = decodedToken.role;
+    let userToAdd = new ApplicationUser(user.playerName, user.photoUrl, roles, user.jwt);
+    localStorage.setItem(environment.applicationUserKey, JSON.stringify(userToAdd));
+    this.applicationUserSource.next(userToAdd)
     this.stopRefreshTokenTimer();
-    this.startRefreshTokenTimer(user.jwt);
-    localStorage.setItem(environment.applicationUserKey, JSON.stringify(user));
-    this.applicationUserSource.next(user);
-
+    this.startRefreshTokenTimer(decodedToken.exp);
     this.sharedService.displayingExpiringSessionModal = false;
     this.checkUserIdleTimout();
   }
 
-  private startRefreshTokenTimer(jwt: string) {
-    const decodedToken: any = jwt_decode(jwt);
-    // expires in seconds
-    const expires = new Date(decodedToken.exp * 1000);
+  private startRefreshTokenTimer(exp: number) {
+    const expiresInSeconds = new Date(exp * 1000).getTime();
     // 60 seconds before the expiration calls refreshToken
-    const timeout = expires.getTime() - Date.now() - (60 * 1000);
+    const timeout = expiresInSeconds - Date.now() - (60 * 1000);
     this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
   }
 

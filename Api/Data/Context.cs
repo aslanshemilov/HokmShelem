@@ -7,6 +7,7 @@
         public DbSet<Country> Country { get; set; }
         public DbSet<Badge> Badge { get; set; }
         public DbSet<UserStatus> UserStatus { get; set; }
+        public DbSet<Guest> Guest { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -26,7 +26,7 @@ export class ConfirmEmailComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.applicationUser$.pipe(take(1)).subscribe({
       next: (user: ApplicationUser | null) => {
-        if (user) {
+        if (user && user.roles.length > 0) {
           this.router.navigateByUrl('/');
         } else {
           this.activatedRoute.queryParamMap.subscribe({

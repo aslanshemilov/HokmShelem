@@ -2,6 +2,6 @@
 {
     public interface IApiService
     {
-        Task<PlayerDto> GetPlayerInfoAsync();
+        Task<PlayerDto> GetPlayerInfoAsync(bool isGuestUser);
     }
 }

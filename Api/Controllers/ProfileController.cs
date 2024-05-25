@@ -1,6 +1,6 @@
 ﻿namespace Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin,player,moderator")]
     public class ProfileController : ApiCoreController
     {
         private ApiResult _response;
@@ -36,7 +36,7 @@
             if (player == null)
             {
                 _response.IsSuccess = false;
-                _response.Message = "Player not found";
+                _response.Message = "Player was not found";
             }
             else
             {

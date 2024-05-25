@@ -9,6 +9,7 @@ import { PolicyComponent } from './policy/policy.component';
 import { TemsOfServiceComponent } from './tems-of-service/tems-of-service.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { RulesComponent } from './rules/rules.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -18,12 +19,13 @@ import { RulesComponent } from './rules/rules.component';
     PolicyComponent,
     TemsOfServiceComponent,
     AboutUsComponent,
-    RulesComponent
+    RulesComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    CoreModule
   ]
 })
 export class HomeModule { }
