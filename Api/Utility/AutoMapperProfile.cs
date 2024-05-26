@@ -42,6 +42,9 @@
                 .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photo.PhotoUrl))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name));
 
+            // GameHistory
+            CreateMap<GameHistoryDto, GameHistory>().ReverseMap();
+
             // fixing DateTime.Utc in Utc format to have Z
             CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
             CreateMap<DateTime?, DateTime?>().ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);

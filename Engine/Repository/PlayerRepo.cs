@@ -63,5 +63,9 @@
         {
             return _context.Player.Where(p => p.Name.Equals(playerName)).Select(r => r.GameName).FirstOrDefault();
         }
+        //public int CountOfActivePlayers()
+        //{
+        //    return _context.Player.Where(p => p.LobbyName != null || p.GameName != null || p.RoomName != null).Count();
+        //}
     }
 }

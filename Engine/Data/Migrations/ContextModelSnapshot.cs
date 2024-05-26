@@ -99,6 +99,9 @@ namespace Engine.Data.Migrations
                     b.Property<string>("OldId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PlayerName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Name");
 
                     b.ToTable("ConnectionTracker");
@@ -241,6 +244,9 @@ namespace Engine.Data.Migrations
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("GameName")
                         .HasColumnType("nvarchar(20)");

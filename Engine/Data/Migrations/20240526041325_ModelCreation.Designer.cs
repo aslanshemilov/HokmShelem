@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Engine.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240519043827_ModelCreation")]
+    [Migration("20240526041325_ModelCreation")]
     partial class ModelCreation
     {
         /// <inheritdoc />
@@ -100,6 +100,9 @@ namespace Engine.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OldId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlayerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Name");
@@ -244,6 +247,9 @@ namespace Engine.Data.Migrations
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("GameName")
                         .HasColumnType("nvarchar(20)");

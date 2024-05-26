@@ -149,6 +149,7 @@ namespace Engine.Data.Migrations
                     GamesLeft = table.Column<int>(type: "int", nullable: false),
                     PhotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LobbyName = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     RoomName = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     GameName = table.Column<string>(type: "nvarchar(20)", nullable: true)
@@ -182,7 +183,8 @@ namespace Engine.Data.Migrations
                 {
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CurrentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OldId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OldId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PlayerName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

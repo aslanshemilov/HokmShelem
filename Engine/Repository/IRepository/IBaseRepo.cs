@@ -11,7 +11,7 @@
            Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null);
         T GetFirstOrDefault(Expression<Func<T, bool>> filter = null,
             string includeProperties = null);
-        int Count();
+        int Count(Expression<Func<T, bool>> filter = null);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
     }

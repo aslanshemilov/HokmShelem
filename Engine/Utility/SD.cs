@@ -9,9 +9,15 @@
         public const int HokmMaxScore = 7;
         public const int ShelemMinScore = 300;
         public const int ShelemMaxScore = 1200;
-        public const int HokmEndOfRoundScore = 7;
+        public const int HokmEndOfRoundScore = 2;
+
+        // Game history status
+        public const string Completed = "complete";
+        public const string Abandoned = "abandoned";
+        public const string VotedToEnd = "voted to end";
         public const string Blue = "blue";
         public const string Red = "red";
+
         public enum GS // GS -> GameStage
         {
             GameHasNotStarted,        // 0

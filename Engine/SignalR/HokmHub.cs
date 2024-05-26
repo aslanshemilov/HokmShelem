@@ -5,12 +5,15 @@
     {
         private readonly IUnityRepo _unity;
         private readonly IGameTrackerService _tracker;
+        private readonly IApiService _apiService;
 
         public HokmHub(IUnityRepo unity,
-            IGameTrackerService tracker)
+            IGameTrackerService tracker,
+            IApiService apiService)
         {
             _unity = unity;
             _tracker = tracker;
+            _apiService = apiService;
         }
         public override async Task OnConnectedAsync()
         {
@@ -167,6 +170,7 @@
                             {
                                 _unity.Complete();
                                 await Clients.Group(game.Name).SendAsync("EndOfTheGame", winnerTeam);
+                                await _apiService.CreateGameHistoryAsync(GetGameHistory(game));
                             }
                             else
                             {
@@ -213,6 +217,20 @@
                 return 42;
             });
             t.Wait();
+        }
+        private GameHistory GetGameHistory(Game game)
+        {
+            return new GameHistory()
+            {
+                GameType = game.GameType,
+                TargetScore = game.TargetScore,
+                Blue1 = game.Blue1,
+                Red1 = game.Red1,
+                Blue2 = game.Blue2,
+                Red2 = game.Red2,
+                Status = SD.Completed,
+                Winner = game.RedTotalScore >= game.TargetScore ? SD.Red : SD.Blue
+            };
         }
         #endregion
     }

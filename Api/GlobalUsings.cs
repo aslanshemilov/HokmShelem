@@ -60,3 +60,4 @@ global using Api.Services.IServices;
 global using Microsoft.AspNetCore.Authentication;
 global using System.Net.Http.Headers;
 global using System.Threading;
+global using Api.Dtos.GameHistory;

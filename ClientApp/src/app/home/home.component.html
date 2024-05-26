@@ -1,20 +1,25 @@
 <div class="container">
-    <h1 class="text-center text-warning" style="margin-bottom: 5rem;">You can play <strong>Hokm</strong> as Guest NOW</h1>
+    <h1 class="text-center text-warning" style="margin-bottom: 5rem;">You can play <strong>Hokm</strong> as Guest NOW
+    </h1>
     <div class="row mt-4">
         <div class="col-md-6">
-            <p class="text-center" style="font-size: 1.5rem;">Play Persian Card Games for <span
-                    style="color:#cf3723">FREE</span></p>
-            <div class="row mb-1">
-                <div class="col-7 offset-5">
-                    <i class="bi bi-people-fill me-1"></i>0 Online Users
+            <p class="text-center" style="font-size: 1.5rem;">Play Persian Card Games for
+                <span style="color:#cf3723">FREE</span>
+            </p>
+            <ng-container *ngIf="(homeService.homePageInfo$ | async) as homePageInfo">
+                <div class="row mb-1">
+                    <div class="col-7 offset-5">
+                        <i class="bi bi-people-fill me-1"></i>
+                        {{homePageInfo.playersCount}} Online Players
+                    </div>
                 </div>
-
-            </div>
-            <div class="row mb-2">
-                <div class="col-7 offset-5">
-                    <i class="bi bi-suit-spade-fill me-1"></i>0 Games Today
+                <div class="row mb-2">
+                    <div class="col-7 offset-5">
+                        <i class="bi bi-suit-spade-fill me-1"></i>
+                        {{homePageInfo.gamesCount}} Active Games
+                    </div>
                 </div>
-            </div>
+            </ng-container>
 
             <ng-container *ngIf="(accountService.applicationUser$ | async) === null">
                 <button class="btn" (click)="registerAsGuest()" *appIsNonLoggedinUserOrGuestDirective>

@@ -24,5 +24,21 @@ namespace Engine.Services
 
             return null;
         }
+        public async Task<bool> CreateGameHistoryAsync(GameHistory model)
+        {
+            var client = _clientFactory.CreateClient("Api");
+            HttpRequestMessage message = new();
+            message.Headers.Add("Accept", "application/json");
+            message.RequestUri = new Uri(client.BaseAddress + "api/gameHistory/");
+            message.Content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            message.Method = HttpMethod.Post;
+
+            var apiResponse = await client.SendAsync(message);
+            if (apiResponse.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

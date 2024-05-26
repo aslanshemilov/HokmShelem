@@ -2,6 +2,7 @@
 {
     public interface IGameRepo : IBaseRepo<Game>
     {
+        //int CountOfActiveGames();
         void CreateGame(Room room);
         string GetGameName(string playerName);
         GameInfoDto GetGameInfo(string gameName, string playerName);

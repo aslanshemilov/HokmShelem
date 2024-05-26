@@ -7,6 +7,7 @@
         public DbSet<Country> Country { get; set; }
         public DbSet<Badge> Badge { get; set; }
         public DbSet<UserStatus> UserStatus { get; set; }
+        public DbSet<GameHistory> GameHistory { get; set; }
         public DbSet<Guest> Guest { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,24 +30,6 @@
              .WithMany(x => x.UserProfiles)
              .HasForeignKey(x => x.StatusId)
              .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<GameHistoryUserProfileBridge>()
-               .HasKey(x => new { x.GameHistoryId, x.UserProfileId });
-
-            modelBuilder.Entity<UserProfile>()
-                .HasMany(x => x.GameHistories)
-                .WithOne(x => x.UserProfile)
-                .HasForeignKey(x => x.UserProfileId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<GameHistory>()
-                .HasMany(x => x.UserProfiles)
-                .WithOne(x => x.GameHistory)
-                .HasForeignKey(x => x.GameHistoryId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

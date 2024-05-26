@@ -9,8 +9,6 @@
         public static readonly List<string> Roles = new List<string> { Admin, Player, Moderator };
 
         public const int MaximumLoginAttempts = 5;
-        public const string Dark = "Dark";
-        public const string Light = "Light";
 
         // External login Providers
         public const string Facebook = "facebook";
@@ -26,6 +24,12 @@
         public const string Offline = "offline";
         public const string InGame = "in-game";
         public const string Banned = "banned";
+
+        // Game history status
+        public const string Completed = "complete";
+        public const string Abandoned = "abandoned";
+        public const string VotedToEnd = "voted to end";
+
         public static readonly List<string> Statuses = new List<string> { Online, Offline, InGame, Banned };
 
         public const string DefaultPassword = "Password123";

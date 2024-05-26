@@ -1,7 +1,4 @@
-﻿using Engine.Entities;
-using System.Numerics;
-
-namespace Engine.Repository
+﻿namespace Engine.Repository
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     {
@@ -82,9 +79,16 @@ namespace Engine.Repository
 
             return query.FirstOrDefault();
         }
-        public int Count()
+        public int Count(Expression<Func<T, bool>> filter = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = contextSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return query.Count();
         }
         public void Remove(T entity)
         {

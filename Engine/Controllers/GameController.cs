@@ -11,5 +11,14 @@
 
             return gameInfo == null ? NotFound() : gameInfo;
         }
+
+        [AllowAnonymous]
+        [HttpGet("homepage-info")]
+        public ActionResult<HomePageInfoDto> GetHomeInfo()
+        {
+            var activePlayersCount = Unity.PlayerRepo.Count(p => p.LobbyName != null || p.GameName != null || p.RoomName != null);
+            var gamesCount = Unity.GameRepo.Count();
+            return Ok(new HomePageInfoDto(activePlayersCount, gamesCount));
+        }
     }
 }

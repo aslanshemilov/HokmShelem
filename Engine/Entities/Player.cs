@@ -12,6 +12,7 @@
         public int GamesLeft { get; set; }
         public string PhotoUrl { get; set; }
         public string Country { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
 
         public string LobbyName { get; set; }
         public Lobby Lobby { get; set; }

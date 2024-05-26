@@ -9,6 +9,7 @@
         ICountryRepository CountryRepository { get; }
         IUserStatusRepository UserStatusRepository { get; }
         IUserProfileRepository UserProfileRepository { get; }
+        IGameHistoryRepository GameHistoryRepository { get; }
         Task<bool> CompleteAsync();
         bool HasChanges();
     }

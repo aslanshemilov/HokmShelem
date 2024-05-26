@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Api.Repository
+﻿namespace Api.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -35,6 +33,7 @@ namespace Api.Repository
         public ICountryRepository CountryRepository => new CountryRepository(_context);
         public IUserStatusRepository UserStatusRepository => new UserStatusRepository(_context);
         public IUserProfileRepository UserProfileRepository => new UserProfileRepository(_context, this, _mapper);
+        public IGameHistoryRepository GameHistoryRepository => new GameHistoryRepository(_context, _mapper);
 
         public async Task<bool> CompleteAsync()
         {

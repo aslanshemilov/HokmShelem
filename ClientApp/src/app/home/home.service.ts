@@ -3,18 +3,22 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MessageAdd } from '../shared/models/hokmshelem/messageAdd';
 import { ApiResponse } from '../shared/models/apiResponse';
-import { ApplicationUser } from '../shared/models/account/applicationUser';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, map } from 'rxjs';
+import { HomePageInfo } from '../shared/models/engine/homePageInfo';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeService {
   apiUrl = environment.apiUrl;
+  engineUrl = environment.engineUrl;
   visited = false;
 
-  private guestUserSource = new ReplaySubject<ApplicationUser | null>(1);
-  guestUser$ = this.guestUserSource.asObservable();
+  private homePageInfoSource = new ReplaySubject<HomePageInfo | null>(1);
+  homePageInfo$ = this.homePageInfoSource.asObservable();
+  
+  // private homePageInfoSource = new BehaviorSubject<HomePageInfo | null>(null);
+  // homePageInfo$ = this.homePageInfoSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -24,5 +28,15 @@ export class HomeService {
 
   addMessage(model: MessageAdd) {
     return this.http.post<ApiResponse>(this.apiUrl + 'hokmshelem/add-message', model);
+  }
+
+  getHomePageInfo() {
+    return this.http.get<HomePageInfo>(this.engineUrl + 'game/homepage-info').pipe(
+      map((homePageInfo: HomePageInfo | null) => {
+        if (homePageInfo) {
+          this.homePageInfoSource.next(homePageInfo);
+        }
+      })
+    )
   }
 }

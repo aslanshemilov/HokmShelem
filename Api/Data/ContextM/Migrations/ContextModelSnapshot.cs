@@ -147,11 +147,11 @@ namespace Api.Data.ContextM.Migrations
                     b.Property<string>("Blue2")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("GameType")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RateLostGained")
-                        .HasColumnType("int");
 
                     b.Property<string>("Red1")
                         .HasColumnType("nvarchar(max)");
@@ -171,21 +171,6 @@ namespace Api.Data.ContextM.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GameHistory");
-                });
-
-            modelBuilder.Entity("Api.Models.GameHistoryUserProfileBridge", b =>
-                {
-                    b.Property<int>("GameHistoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GameHistoryId", "UserProfileId");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("GameHistoryUserProfileBridge");
                 });
 
             modelBuilder.Entity("Api.Models.Guest", b =>
@@ -446,25 +431,6 @@ namespace Api.Data.ContextM.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Models.GameHistoryUserProfileBridge", b =>
-                {
-                    b.HasOne("Api.Models.GameHistory", "GameHistory")
-                        .WithMany("UserProfiles")
-                        .HasForeignKey("GameHistoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Api.Models.UserProfile", "UserProfile")
-                        .WithMany("GameHistories")
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GameHistory");
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("Api.Models.Photo", b =>
                 {
                     b.HasOne("Api.Models.UserProfile", "UserProfile")
@@ -566,11 +532,6 @@ namespace Api.Data.ContextM.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("Api.Models.GameHistory", b =>
-                {
-                    b.Navigation("UserProfiles");
-                });
-
             modelBuilder.Entity("Api.Models.HokmShelem.Badge", b =>
                 {
                     b.Navigation("UserProfiles");
@@ -588,8 +549,6 @@ namespace Api.Data.ContextM.Migrations
 
             modelBuilder.Entity("Api.Models.UserProfile", b =>
                 {
-                    b.Navigation("GameHistories");
-
                     b.Navigation("Photo");
                 });
 #pragma warning restore 612, 618

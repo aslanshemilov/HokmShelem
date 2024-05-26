@@ -95,7 +95,6 @@ namespace Api.Data.ContextM.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RateLostGained = table.Column<int>(type: "int", nullable: false),
                     GameType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TargetScore = table.Column<int>(type: "int", nullable: false),
                     Blue1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -103,7 +102,8 @@ namespace Api.Data.ContextM.Migrations
                     Blue2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Red2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Winner = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -296,30 +296,6 @@ namespace Api.Data.ContextM.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GameHistoryUserProfileBridge",
-                columns: table => new
-                {
-                    GameHistoryId = table.Column<int>(type: "int", nullable: false),
-                    UserProfileId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameHistoryUserProfileBridge", x => new { x.GameHistoryId, x.UserProfileId });
-                    table.ForeignKey(
-                        name: "FK_GameHistoryUserProfileBridge_GameHistory_GameHistoryId",
-                        column: x => x.GameHistoryId,
-                        principalTable: "GameHistory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_GameHistoryUserProfileBridge_UserProfile_UserProfileId",
-                        column: x => x.UserProfileId,
-                        principalTable: "UserProfile",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Photo",
                 columns: table => new
                 {
@@ -379,11 +355,6 @@ namespace Api.Data.ContextM.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameHistoryUserProfileBridge_UserProfileId",
-                table: "GameHistoryUserProfileBridge",
-                column: "UserProfileId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Photo_UserProfileId",
                 table: "Photo",
                 column: "UserProfileId",
@@ -430,7 +401,7 @@ namespace Api.Data.ContextM.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "GameHistoryUserProfileBridge");
+                name: "GameHistory");
 
             migrationBuilder.DropTable(
                 name: "Guest");
@@ -440,9 +411,6 @@ namespace Api.Data.ContextM.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "GameHistory");
 
             migrationBuilder.DropTable(
                 name: "UserProfile");

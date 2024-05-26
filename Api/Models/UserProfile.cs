@@ -28,8 +28,6 @@
         public UserStatus Status { get; set; }
 
         public Photo Photo { get; set; }
-
-        public ICollection<GameHistoryUserProfileBridge> GameHistories { get; set; }
     }
 
 }

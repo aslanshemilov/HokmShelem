@@ -15,6 +15,10 @@
             _mapper = mapper;
         }
 
+        //public int CountOfActiveGames()
+        //{
+        //    return _context.Game.Count();
+        //}
         public void CreateGame(Room room)
         {
             var gameToAdd = new Game
