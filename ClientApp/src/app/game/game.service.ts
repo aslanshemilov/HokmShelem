@@ -32,6 +32,14 @@ export class GameService {
     private sharedService: SharedService,
     private router: Router) { }
 
+  getCurrentGame() {
+    return this.http.get(this.engineUrl + 'game/current-game', { responseType: 'text' })
+  }
+
+  leaveTheGameApi(gameName: string) {
+    return this.http.get(this.engineUrl + 'game/leave-the-game-api/' + gameName)
+  }
+
   getGameInfo() {
     return this.http.get<GameInfo>(this.engineUrl + 'game').pipe(
       map((gameInfo: GameInfo) => {
@@ -109,7 +117,7 @@ export class GameService {
           gameInfo.red1Card = 'c';
           gameInfo.blue2Card = 'd';
           gameInfo.red2Card = 's';
-        } 
+        }
 
         this.setGameInfo(gameInfo);
       }
@@ -268,6 +276,17 @@ export class GameService {
     return this.gameInfoSource.value;
   }
 
+  closeTheGame(navigateUrl: string) {
+    if (this.hubConnection) {
+      this.unsetGameInfo();
+      this.gameName = undefined;
+      this.gameChatsSource.next([]);
+      this.hubConnection.stop();
+      this.canExit = true;
+      this.router.navigateByUrl(navigateUrl);
+    }
+  }
+
   private handleWhosTurnFlag(whosTurnIndex: number) {
     const gameInfo = this.getGameInfoSourceValue();
     if (gameInfo) {
@@ -302,17 +321,6 @@ export class GameService {
       }
 
       this.setGameInfo(gameInfo);
-    }
-  }
-
-  private closeTheGame(navigateUrl: string) {
-    if (this.hubConnection) {
-      this.unsetGameInfo();
-      this.gameName = undefined;
-      this.gameChatsSource.next([]);
-      this.hubConnection.stop();
-      this.canExit = true;
-      this.router.navigateByUrl(navigateUrl);
     }
   }
 }

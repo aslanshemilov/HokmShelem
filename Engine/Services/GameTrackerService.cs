@@ -39,6 +39,21 @@
 
             return players;
         }
+        public bool GameTrackerHasPlayer(string gameName, string playerName)
+        {
+            lock (RunningGames)
+            {
+                if (RunningGames.ContainsKey(gameName))
+                {
+                    if (RunningGames[gameName].Contains(playerName))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
         public void RemovePlayerFromGameTracker(string gameName, string playerName)
         {
             lock (RunningGames)

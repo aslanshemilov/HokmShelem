@@ -137,5 +137,20 @@
 
             return -1;
         }
+        public static GameHistory GetGameHistory(Game game, string status = null, string leftBy = null)
+        {
+            return new GameHistory()
+            {
+                GameType = game.GameType,
+                TargetScore = game.TargetScore,
+                Blue1 = game.Blue1,
+                Red1 = game.Red1,
+                Blue2 = game.Blue2,
+                Red2 = game.Red2,
+                Status = string.IsNullOrEmpty(status) ? SD.Completed : status,
+                Winner = string.IsNullOrEmpty(status) ? (game.RedTotalScore >= game.TargetScore ? SD.Red : SD.Blue) : null,
+                LeftBy = leftBy
+            };
+        }
     }
 }

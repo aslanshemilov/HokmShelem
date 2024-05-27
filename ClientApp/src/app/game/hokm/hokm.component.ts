@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { GameService } from '../game.service';
 import { AccountService } from 'src/app/account/account.service';
 import { Observable, take } from 'rxjs';
@@ -15,7 +15,6 @@ export class HokmComponent implements OnInit, AfterViewInit {
   blobImageUrl = environment.azureContainerUrl + 'game';
   game$?: Observable<GameInfo | null>;
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
-  gameName: string | undefined;
 
   constructor(public gameService: GameService,
     private accountService: AccountService,
@@ -50,7 +49,9 @@ export class HokmComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.gameService.leaveTheGame();
+    this.gameService.leaveTheGame().then(_ => {
+      this.gameService.closeTheGame('/lobby');
+    }).catch();
   }
 
   sendMessage(message: string) {

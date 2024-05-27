@@ -11,6 +11,7 @@
         public string Red2 { get; set; }
         public string Winner { get; set; }
         public string Status { get; set; }
+        public string LeftBy { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }

@@ -8,9 +8,8 @@ export const preventLeaveGuard: CanDeactivateFn<unknown> = () => {
   const sharedService = inject(SharedService);
 
   if (gameService.gameName && !gameService.canExit) {
-    console.log('here');
     return sharedService.confirmBox(
-      false,
+      'danger',
       'Confirmation',
       `Are you sure you want to leave the game?`
     );

@@ -1,4 +1,5 @@
-<div class="modal-header text-white" [ngClass]="{'bg-success': isSuccess, 'bg-danger': !isSuccess}">
+<div class="modal-header text-white"
+    [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger', 'bg-warning': type === 'warning' }">
     <h4 class="modal-title pull-left">{{title}}</h4>
 </div>
 <div class="modal-body">

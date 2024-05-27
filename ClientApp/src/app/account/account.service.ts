@@ -13,6 +13,7 @@ import { RegisterWithExternal } from '../shared/models/account/registerWithExter
 import { LoginWithExternal } from '../shared/models/account/loginWithExternal';
 import jwt_decode from 'jwt-decode';
 import { SharedService } from '../shared/shared.service';
+import { GameService } from '../game/game.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,8 @@ export class AccountService {
 
   constructor(private http: HttpClient,
     private router: Router,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService,
+    private gameService: GameService) { }
 
   refreshToken = async () => {
     this.http.get<ApplicationUser>(this.apiUrl + (this.isGuestUser === false ? 'account/refresh-applicationUser' : 'guest'))
@@ -191,6 +193,7 @@ export class AccountService {
     this.startRefreshTokenTimer(decodedToken.exp);
     this.sharedService.displayingExpiringSessionModal = false;
     this.checkUserIdleTimout();
+    this.handleGameLostConnectionIfAny();
   }
 
   private startRefreshTokenTimer(exp: number) {
@@ -202,5 +205,32 @@ export class AccountService {
 
   private stopRefreshTokenTimer() {
     clearTimeout(this.refreshTokenTimeout);
+  }
+
+  private handleGameLostConnectionIfAny() {
+    this.gameService.getCurrentGame().subscribe({
+      next: gameName => {
+        if (gameName) {
+          if (this.router.url != '/game/hokm') {
+            var result = this.sharedService.confirmBox('warning', 'Lost Connection', 'You have an ongoing game. Would you like to reconnect?');
+            result.subscribe({
+              next: (answer) => {
+                if (answer) {
+                  this.router.navigateByUrl('/game/hokm');
+                } else {
+                   this.gameService.leaveTheGameApi(gameName).subscribe({
+                    next: _ => {
+
+                    },
+                    error: error => {
+                    }
+                   })
+                }
+              }
+            })
+          }
+        }
+      }
+    })
   }
 }
