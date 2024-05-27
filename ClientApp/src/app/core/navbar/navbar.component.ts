@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 export class NavbarComponent implements OnInit {
   collapsed = true;
   darkMode: boolean | undefined;
+  blobImageUrl = environment.azureContainerUrl + 'site';
 
   constructor(public accountService: AccountService,
     public homeService: HomeService,

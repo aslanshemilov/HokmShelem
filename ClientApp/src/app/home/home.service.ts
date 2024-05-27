@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MessageAdd } from '../shared/models/hokmshelem/messageAdd';
 import { ApiResponse } from '../shared/models/apiResponse';
-import { BehaviorSubject, ReplaySubject, map } from 'rxjs';
+import { ReplaySubject, map } from 'rxjs';
 import { HomePageInfo } from '../shared/models/engine/homePageInfo';
 
 @Injectable({
@@ -16,9 +16,6 @@ export class HomeService {
 
   private homePageInfoSource = new ReplaySubject<HomePageInfo | null>(1);
   homePageInfo$ = this.homePageInfoSource.asObservable();
-  
-  // private homePageInfoSource = new BehaviorSubject<HomePageInfo | null>(null);
-  // homePageInfo$ = this.homePageInfoSource.asObservable();
 
   constructor(private http: HttpClient) { }
 

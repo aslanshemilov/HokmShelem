@@ -17,6 +17,7 @@
         void RoundCalculation(Game game);
         int GetNewHakemIndex(Game game);
         void ResetRoundGame(Game game, int hakemIndex);
-        string EndOfTheGame(Game game);       
+        string EndOfTheGame(Game game);     
+        void CloseTheGame(Game game);
     }
 }

@@ -6,7 +6,7 @@
         private static readonly Dictionary<string, List<string>> RunningGames
                    = new Dictionary<string, List<string>>();
 
-        public bool PlayerConnectedToGame(string gameName, string playerName)
+        public bool PlayerConnectedToGameTracker(string gameName, string playerName)
         {
             lock (RunningGames)
             {
@@ -29,7 +29,17 @@
                 }
             }
         }
-        public void PlayerDisconnected(string gameName, string playerName)
+        public List<string> GetGameTrackerConnectedPlayers(string gameName)
+        {
+            List<string> players;
+            lock (RunningGames)
+            {
+                players = RunningGames.GetValueOrDefault(gameName);
+            }
+
+            return players;
+        }
+        public void RemovePlayerFromGameTracker(string gameName, string playerName)
         {
             lock (RunningGames)
             {
@@ -45,16 +55,15 @@
             }
 
             return;
-        }
-        public List<string> GetConnectedPlayersOfGame(string gameName)
+        }     
+        public void RemoveGameTracker(string gameName)
         {
-            List<string> players;
             lock (RunningGames)
             {
-                players = RunningGames.GetValueOrDefault(gameName);
+                RunningGames.Remove(gameName);
             }
 
-            return players;
+            return;
         }
     }
 }

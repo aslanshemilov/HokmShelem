@@ -69,9 +69,13 @@ export class SharedService {
     this.bsModalRef = this.modalService.show(ExpiringSessionCountdownComponent, config);
   }
 
-  confirmBox(title: string, message: string): Observable<boolean> {
-    const config = {
+  confirmBox(isSuccess: boolean, title: string, message: string): Observable<boolean> {
+    const config: ModalOptions = {
+      backdrop: 'static',
+      keyboard: false,
+      ignoreBackdropClick: true,
       initialState: {
+        isSuccess,
         title,
         message
       }

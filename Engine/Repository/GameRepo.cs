@@ -15,10 +15,6 @@
             _mapper = mapper;
         }
 
-        //public int CountOfActiveGames()
-        //{
-        //    return _context.Game.Count();
-        //}
         public void CreateGame(Room room)
         {
             var gameToAdd = new Game
@@ -485,23 +481,29 @@
         }
         public string EndOfTheGame(Game game)
         {
+            string winner = null;
             if (game.BlueTotalScore >= game.TargetScore)
             {
-                // more work here but for now
-                _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
-                Remove(game);
-                return SD.Blue;
+                winner = SD.Blue;
             }
 
             if (game.RedTotalScore >= game.TargetScore)
             {
-                // more work here but for now
-                _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
-                Remove(game);
-                return SD.Red;
+                winner = SD.Red;
             }
 
-            return null;
+            CloseTheGame(game);
+
+            return winner;
+        }
+        public void CloseTheGame(Game game)
+        {
+            _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
+            Remove(game);
+            foreach(var player in game.Players)
+            {
+                player.RoomName = null;
+            }
         }
         #region Private Methods
         private void SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(Game game, Card playerCards, string card, int playerIndex)

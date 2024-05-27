@@ -74,21 +74,24 @@
         }
         public void RemoveAllPlayersCardsFromTheGame(Game game)
         {
-            if (!string.IsNullOrEmpty(game.Blue1CardsName))
+            if (game != null)
             {
-                RemovePlayerCards(game.Blue1);
-            }
-            if (!string.IsNullOrEmpty(game.Red1CardsName))
-            {
-                RemovePlayerCards(game.Red1);
-            }
-            if (!string.IsNullOrEmpty(game.Blue2CardsName))
-            {
-                RemovePlayerCards(game.Blue2);
-            }
-            if (!string.IsNullOrEmpty(game.Red2CardsName))
-            {
-                RemovePlayerCards(game.Red2);
+                if (!string.IsNullOrEmpty(game.Blue1CardsName))
+                {
+                    RemovePlayerCards(game.Blue1);
+                }
+                if (!string.IsNullOrEmpty(game.Red1CardsName))
+                {
+                    RemovePlayerCards(game.Red1);
+                }
+                if (!string.IsNullOrEmpty(game.Blue2CardsName))
+                {
+                    RemovePlayerCards(game.Blue2);
+                }
+                if (!string.IsNullOrEmpty(game.Red2CardsName))
+                {
+                    RemovePlayerCards(game.Red2);
+                }
             }
         }
 

@@ -18,45 +18,52 @@
         public override async Task OnConnectedAsync()
         {
             var player = _unity.PlayerRepo.FindByName(PlayerName());
-            var oldConnectionId = _unity.PlayerRepo.AddUpdatePlayer(player, ConnectionId());
-            // handle duplicate browser connection ....
-            if (!string.IsNullOrEmpty(oldConnectionId))
+            if (player != null)
             {
-                await Groups.RemoveFromGroupAsync(oldConnectionId, player.GameName);
-                var notification = new NotificationMessage(SM.MultipleDeviceTitle, SM.MultipleDeviceMessage, false, false);
-                await NotificationAsync(oldConnectionId, notification);
-            }
-
-            var game = _unity.GameRepo.FindByName(player.GameName, includeProperties: "Players");
-            if (game != null && _tracker.PlayerConnectedToGame(game.Name, player.Name))
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, game.Name);
-                _unity.GameRepo.UpdatePlayerStatusOfTheGame(game, player.Name, SD.PlayerInGameStatus.Connected);
-                _unity.Complete();
-                var connectedPlayers = _tracker.GetConnectedPlayersOfGame(game.Name);
-                if (connectedPlayers.Count == 4 && game.GS == SD.GS.GameHasNotStarted)
+                var oldConnectionId = _unity.PlayerRepo.AddUpdatePlayer(player, ConnectionId());
+                // handle duplicate browser connection ....
+                if (!string.IsNullOrEmpty(oldConnectionId))
                 {
-                    if (PlayerName().Equals(connectedPlayers.LastOrDefault()))
+                    await Groups.RemoveFromGroupAsync(oldConnectionId, player.GameName);
+                    var notification = new NotificationMessage(SM.MultipleDeviceTitle, SM.MultipleDeviceMessage, false, false);
+                    await NotificationAsync(oldConnectionId, notification);
+                }
+
+                var game = _unity.GameRepo.FindByName(player.GameName, includeProperties: "Players");
+                if (game != null && _tracker.PlayerConnectedToGameTracker(game.Name, player.Name))
+                {
+                    await Groups.AddToGroupAsync(Context.ConnectionId, game.Name);
+                    _unity.GameRepo.UpdatePlayerStatusOfTheGame(game, player.Name, SD.PlayerInGameStatus.Connected);
+                    _unity.Complete();
+                    var connectedPlayers = _tracker.GetGameTrackerConnectedPlayers(game.Name);
+                    if (connectedPlayers.Count == 4 && game.GS == SD.GS.GameHasNotStarted)
                     {
-                        await AllPlayersConnected(game);
+                        if (PlayerName().Equals(connectedPlayers.LastOrDefault()))
+                        {
+                            await AllPlayersConnected(game);
+                        }
                     }
                 }
+            }
+            else
+            {
+                await NotificationAsync(ConnectionId(), new NotificationMessage("Unexpected Error", "Please try again.", false, false));
             }
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var player = _unity.PlayerRepo.FindByName(PlayerName(), includeProperties: "ConnectionTracker,Game");
-            _tracker.PlayerDisconnected(player.GameName, player.Name);
+            if (player != null && !string.IsNullOrEmpty(player.GameName))
+            {
+                _tracker.RemovePlayerFromGameTracker(player.GameName, player.Name);
 
-            if (Context.ConnectionId.Equals(player.ConnectionTracker.OldId))
-            {
-                await Groups.RemoveFromGroupAsync(player.ConnectionTracker.OldId, player.GameName);
-                player.ConnectionTracker.OldId = null;
-                _unity.Complete();
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(player.GameName))
+                if (Context.ConnectionId.Equals(player.ConnectionTracker.OldId))
+                {
+                    await Groups.RemoveFromGroupAsync(player.ConnectionTracker.OldId, player.GameName);
+                    player.ConnectionTracker.OldId = null;
+                    _unity.Complete();
+                }
+                else
                 {
                     _unity.GameRepo.UpdatePlayerStatusOfTheGame(player.Game, player.Name, SD.PlayerInGameStatus.Disconnected);
                     _unity.Complete();
@@ -198,6 +205,14 @@
                 await NotificationAsync(Context.ConnectionId, new NotificationMessage("Not your turn", isSuccess: false));
             }
         }
+        public async Task LeaveTheGame(string gameName, string playerName)
+        {
+            var game = _unity.GameRepo.FindByName(gameName, includeProperties: "Players");
+            await _apiService.CreateGameHistoryAsync(GetGameHistory(game, SD.Left, playerName));
+            _unity.GameRepo.CloseTheGame(game);
+            _unity.Complete();
+            await Clients.Group(gameName).SendAsync("PlayerLeftTheGame", playerName);
+        }
         #endregion
 
         #region Private Helper Methods
@@ -218,7 +233,7 @@
             });
             t.Wait();
         }
-        private GameHistory GetGameHistory(Game game)
+        private GameHistory GetGameHistory(Game game, string status = null, string leftBy = null)
         {
             return new GameHistory()
             {
@@ -228,8 +243,9 @@
                 Red1 = game.Red1,
                 Blue2 = game.Blue2,
                 Red2 = game.Red2,
-                Status = SD.Completed,
-                Winner = game.RedTotalScore >= game.TargetScore ? SD.Red : SD.Blue
+                Status = string.IsNullOrEmpty(status) ? SD.Completed : status,
+                Winner = string.IsNullOrEmpty(status) ? (game.RedTotalScore >= game.TargetScore ? SD.Red : SD.Blue) : null,
+                LeftBy = leftBy
             };
         }
         #endregion

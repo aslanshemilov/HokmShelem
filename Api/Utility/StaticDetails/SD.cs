@@ -26,8 +26,8 @@
         public const string Banned = "banned";
 
         // Game history status
-        public const string Completed = "complete";
-        public const string Abandoned = "abandoned";
+        public const string Completed = "completed";
+        public const string Left = "left";
         public const string VotedToEnd = "voted to end";
 
         public static readonly List<string> Statuses = new List<string> { Online, Offline, InGame, Banned };

@@ -25,6 +25,8 @@ export class AccountService {
   private applicationUserSource = new ReplaySubject<ApplicationUser | null>(1);
   applicationUser$ = this.applicationUserSource.asObservable();
 
+  playerName: string | undefined;
+
   refreshTokenTimeout: any;
   timeoutId: any;
 
@@ -96,6 +98,7 @@ export class AccountService {
     localStorage.removeItem(environment.applicationUserKey);
     this.isGuestUser = false;
     this.applicationUserSource.next(null);
+    this.playerName = undefined;
     this.router.navigateByUrl('/');
     this.stopRefreshTokenTimer();
   }
@@ -183,6 +186,7 @@ export class AccountService {
     let userToAdd = new ApplicationUser(user.playerName, user.photoUrl, roles, user.jwt);
     localStorage.setItem(environment.applicationUserKey, JSON.stringify(userToAdd));
     this.applicationUserSource.next(userToAdd)
+    this.playerName = user.playerName;
     this.stopRefreshTokenTimer();
     this.startRefreshTokenTimer(decodedToken.exp);
     this.sharedService.displayingExpiringSessionModal = false;

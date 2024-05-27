@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 export class GameService {
   engineUrl = environment.engineUrl;
   hubUrl = environment.hubUrl;
+  canExit = false;
   private hubConnection?: HubConnection;
 
   private gameInfoSource = new BehaviorSubject<GameInfo | null>(null);
@@ -191,25 +192,21 @@ export class GameService {
           this.sharedService.showWinner('red', 'Red Won!', `${gameInfo.red1} and ${gameInfo.red2} won the game.`);
         }
 
-        this.router.navigateByUrl('/');
+        this.closeTheGame('/lobby');
       }
     });
 
     this.hubConnection.on('NotificationMessage', (notification: NotificationMessage) => {
       this.sharedService.displayHubNotification(notification);
-      if (notification.title.includes('Multiple device detected')) {
-        this.router.navigateByUrl('/');
+      if (notification.title.includes('Multiple device detected') || notification.title.includes('Unexpected Error')) {
+        this.closeTheGame('/')
       }
     });
-  }
 
-  leaveGame() {
-    if (this.hubConnection) {
-      this.hubConnection.stop();
-      this.unsetGameInfo();
-      this.gameName = undefined;
-      this.gameChatsSource.next([]);
-    }
+    this.hubConnection.on('PlayerLeftTheGame', (playerName: string) => {
+      this.sharedService.showNotification(false, 'Game Ended', `${playerName} has left the Game.`);
+      this.closeTheGame('/');
+    });
   }
 
   // invoking server methods start
@@ -228,6 +225,13 @@ export class GameService {
   async playerPlayedTheCard(card: string) {
     if (this.hubConnection) {
       return this.hubConnection.invoke('PlayerPlayedTheCard', this.gameName, card);
+    }
+  }
+
+  async leaveTheGame() {
+    const gameInfo = this.getGameInfoSourceValue();
+    if (this.hubConnection && gameInfo) {
+      return this.hubConnection.invoke('LeaveTheGame', this.gameName, gameInfo.myPlayerName);
     }
   }
   // invoking server methods end
@@ -298,6 +302,17 @@ export class GameService {
       }
 
       this.setGameInfo(gameInfo);
+    }
+  }
+
+  private closeTheGame(navigateUrl: string) {
+    if (this.hubConnection) {
+      this.unsetGameInfo();
+      this.gameName = undefined;
+      this.gameChatsSource.next([]);
+      this.hubConnection.stop();
+      this.canExit = true;
+      this.router.navigateByUrl(navigateUrl);
     }
   }
 }

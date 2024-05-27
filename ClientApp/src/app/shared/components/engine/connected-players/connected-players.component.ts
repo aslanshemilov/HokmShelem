@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./connected-players.component.scss']
 })
 export class ConnectedPlayersComponent implements OnInit {
-  gameImageUrl = environment.azureContainerUrl;
+  blobImageUrl = environment.azureContainerUrl;
   @Input() players: Player[] | undefined | null;
   myName: string | undefined;
   isPopupVisible = false;

@@ -1,14 +1,12 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">Are you sure</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close"
-        (click)="bsModalRef.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-    </button>
+<div class="modal-header text-white" [ngClass]="{'bg-success': isSuccess, 'bg-danger': !isSuccess}">
+    <h4 class="modal-title pull-left">{{title}}</h4>
 </div>
 <div class="modal-body">
-    Are you sure 
+    <p style="font-size: 1.5rem;">
+        {{message}}
+    </p>
 </div>
 <div class="modal-footer d-flex justify-content-center">
-    <button type="button" class="btn btn-success" (click)="confirm()">Yes</button>
-    <button type="button" class="btn btn-danger" (click)="decline()">No</button>
+    <button type="button" class="btn btn-success" (click)="yes()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="no()">No</button>
 </div>

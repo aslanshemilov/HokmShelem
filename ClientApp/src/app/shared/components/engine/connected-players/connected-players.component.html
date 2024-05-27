@@ -2,7 +2,7 @@
     <div *ngFor="let player of players">
 
         <button type="button" class="btn" [tooltip]="playerProfile" placement="right">
-            <img style="width: 20px; height: 20px;" src="{{gameImageUrl}}badges/{{player.badge}}.png">
+            <img style="width: 20px; height: 20px;" src="{{blobImageUrl}}badges/{{player.badge}}.png">
             <span class="fw-bold mx-2" [class.text-warning]="player.playerName === myName">{{player.playerName}}</span>
             <span *ngIf="lobbyService.connectedRoom?.hostName === player.playerName">
                 <i class="bi bi-star-fill"></i>
@@ -18,7 +18,7 @@
                 Games won: {{player.gamesWon}}<br>
                 Games lost: {{player.gamesLost}}<br>
                 Games left: {{player.gamesLeft}}<br><br>
-                <img class="country" src="{{gameImageUrl}}countries/{{player.country}}.jpg" />
+                <img class="country" src="{{blobImageUrl}}countries/{{player.country}}.jpg" />
             </p>
 
         </ng-template>

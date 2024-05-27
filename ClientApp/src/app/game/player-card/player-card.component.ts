@@ -12,7 +12,7 @@ export class PlayerCardComponent implements OnInit {
   @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   @Input() cards: string[] | undefined;
   @Output() cardBeingPlayed = new EventEmitter();
-  gameImageUrl = environment.azureContainerUrl + 'game';
+  blobImageUrl = environment.azureContainerUrl + 'game';
   clickCount = 0;
   currentJumpedCard: string | null = null;
   clickTimeout: any = null;

@@ -1,7 +1,7 @@
 <ng-container *ngIf="cards && cards.length > 0">
     <ng-container *ngFor="let card of cards; let i = index">
         <img class="cursor-pointer" #jumpingImg [style.left.%]="(i * 6.0) + 3 + ((13 - cards.length) * 3)"
-            src="{{gameImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)">
+            src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)">
     </ng-container>
 </ng-container>
 

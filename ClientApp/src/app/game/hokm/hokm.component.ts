@@ -4,6 +4,7 @@ import { AccountService } from 'src/app/account/account.service';
 import { Observable, take } from 'rxjs';
 import { GameInfo } from '../../shared/models/engine/game';
 import { environment } from 'src/environments/environment';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-hokm',
@@ -11,19 +12,21 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./hokm.component.scss']
 })
 export class HokmComponent implements OnInit, AfterViewInit {
-  gameImageUrl = environment.azureContainerUrl + 'game';
+  blobImageUrl = environment.azureContainerUrl + 'game';
   game$?: Observable<GameInfo | null>;
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   gameName: string | undefined;
 
   constructor(public gameService: GameService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
     this.gameService.getGameInfo().subscribe({
       next: _ => {
         this.game$ = this.gameService.gameInfo$;
+        this.gameService.canExit = false;
         this.connectToGame();
       }
     })
@@ -47,7 +50,7 @@ export class HokmComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.gameService.leaveGame();
+    this.gameService.leaveTheGame();
   }
 
   sendMessage(message: string) {

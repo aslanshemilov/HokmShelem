@@ -7,6 +7,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./confirm-box.component.scss']
 })
 export class ConfirmBoxComponent implements OnInit {
+  isSuccess?: boolean;
   title?: string;
   message?: string;
   result?: boolean;
@@ -16,12 +17,12 @@ export class ConfirmBoxComponent implements OnInit {
     
   }
 
-  confirm() {
+  yes() {
     this.result = true;
     this.bsModalRef.hide();
   }
 
-  decline() {
+  no() {
     this.result = false;
     this.bsModalRef.hide();
   }

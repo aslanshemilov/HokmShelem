@@ -2,8 +2,9 @@
 {
     public interface IGameTrackerService
     {
-        bool PlayerConnectedToGame(string gameName, string playerName);
-        void PlayerDisconnected(string gameName, string playerName);
-        List<string> GetConnectedPlayersOfGame(string gameName);
+        bool PlayerConnectedToGameTracker(string gameName, string playerName);
+        List<string> GetGameTrackerConnectedPlayers(string gameName);
+        void RemovePlayerFromGameTracker(string gameName, string playerName);
+        void RemoveGameTracker(string gameName);
     }
 }
