@@ -42,4 +42,10 @@ export class AppComponent implements OnInit {
       this.accountService.refreshApplicationUser(null).subscribe();
     }
   }
+
+  trappedBoxes = ['Trapped 1', 'Trapped 2'];
+
+  add(): void {
+    this.trappedBoxes.push('New trapped');
+  }
 }

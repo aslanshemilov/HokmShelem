@@ -64,7 +64,7 @@ export class LobbyService {
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.start().catch(_ => this.sharedService.showNotification(false, 'Error', 'Unable to connect to the lobby'));
+    this.hubConnection.start().catch();
 
     this.hubConnection.on('LobbyPlayers', (players: Player[]) => {
       this.lobbyPlayersSource.next([...players]);

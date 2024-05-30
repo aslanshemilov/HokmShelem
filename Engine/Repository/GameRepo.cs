@@ -492,7 +492,10 @@
                 winner = SD.Red;
             }
 
-            CloseTheGame(game);
+            if (!string.IsNullOrEmpty(winner))
+            {
+                CloseTheGame(game);
+            }
 
             return winner;
         }

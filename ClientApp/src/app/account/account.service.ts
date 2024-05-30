@@ -212,6 +212,7 @@ export class AccountService {
       next: gameName => {
         if (gameName) {
           if (this.router.url != '/game/hokm') {
+            this.router.navigateByUrl('/');
             var result = this.sharedService.confirmBox('warning', 'Lost Connection', 'You have an ongoing game. Would you like to reconnect?');
             result.subscribe({
               next: (answer) => {
