@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { GameRoutingModule } from './game-routing.module';
 import { PlayerCardComponent } from './player-card/player-card.component';
 import { GameInterruptionButtonsComponent } from './game-interruption-buttons/game-interruption-buttons.component';
+import { CdkDragHandle } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { GameInterruptionButtonsComponent } from './game-interruption-buttons/ga
   imports: [
     CommonModule,
     GameRoutingModule,
-    SharedModule
+    SharedModule,
+    CdkDragHandle
   ]
 })
 export class GameModule { }

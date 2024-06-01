@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Country } from './models/hokmshelem/country';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { NotificationComponent } from './components/modals/notification/notification.component';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, of } from 'rxjs';
 import { ExpiringSessionCountdownComponent } from './components/modals/expiring-session-countdown/expiring-session-countdown.component';
 import { ConfirmBoxComponent } from './components/modals/confirm-box/confirm-box.component';
 import { NotificationMessage } from './models/engine/notificationMessage';
@@ -28,9 +28,12 @@ export class SharedService {
   resetSortBySource = new BehaviorSubject<string>(this.resetSortByValue);
   resetSortBy$ = this.resetSortBySource.asObservable();
 
+
   constructor(private http: HttpClient,
     private modalService: BsModalService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService) { 
+     
+    }
 
   getCountries() {
     if (this.countries.length > 0) return of(this.countries);
@@ -118,6 +121,8 @@ export class SharedService {
 
     this.bsModalRef = this.modalService.show(WinnerTeamComponent, initalState);
   }
+  
+
 
   private getResult() {
     return (observer: any) => {

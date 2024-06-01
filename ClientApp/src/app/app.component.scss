@@ -14,7 +14,18 @@ main {
   }
 }
 
-.area {
-  background: #C0FFEE;
-  padding: 40px;
+.dropzone {
+  padding: 20px;
+  margin: 20px 0;
+  background: lightgray;
+  min-height: 200px;
+  border: 1px solid black;
+
+  &.dropzone-activated {
+    border: 1px solid red;
+  }
+
+  &.dropzone-entered {
+    background-color: #efefef;
+  }
 }

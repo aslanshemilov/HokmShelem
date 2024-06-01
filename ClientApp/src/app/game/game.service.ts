@@ -28,6 +28,9 @@ export class GameService {
   private gameChatsSource = new BehaviorSubject<MessageThread[]>([]);
   gameChats$ = this.gameChatsSource.asObservable();
 
+  playerCardsDivHeightSource = new BehaviorSubject<number | null>(null);
+  playerCardsDivHeight$ = this.playerCardsDivHeightSource.asObservable();
+
   constructor(private http: HttpClient,
     private sharedService: SharedService,
     private router: Router) { }
@@ -285,6 +288,10 @@ export class GameService {
       this.canExit = true;
       this.router.navigateByUrl(navigateUrl);
     }
+  }
+
+  setPlayerCardsDivHeight(height: number) {
+    this.playerCardsDivHeightSource.next(height);
   }
 
   private handleWhosTurnFlag(whosTurnIndex: number) {

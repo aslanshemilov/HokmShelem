@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener, Input, ViewContainerRef } from '@angular/core';
 import { DraggableDirective } from './draggable.directive';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
@@ -22,8 +22,8 @@ export class MovableDirective extends DraggableDirective {
   position: Position = { x: 0, y: 0 };
   private startPosition: Position | undefined;
   
-  constructor(private sanitizer: DomSanitizer, public element: ElementRef) {
-    super();
+  constructor(private sanitizer: DomSanitizer, public override element: ElementRef) {
+    super(element);
   }
 
   @HostListener('dragStart', ['$event'])

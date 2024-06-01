@@ -33,6 +33,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DraggableDirective } from './directives/draggable.directive';
 import { MovableDirective } from './directives/movable.directive';
 import { MovableAreaDirective } from './directives/movable-area.directive';
+import { DraggableHelperDirective } from './directives/draggable-helper.directive';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { DropzoneDirective } from './directives/dropzone.directive';
+import { DroppableDirective } from './directives/droppable.directive';
+import { DroppableService } from './directives/droppable.service';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -62,6 +67,9 @@ const maskConfig: Partial<IConfig> = {
     DraggableDirective,
     MovableDirective,
     MovableAreaDirective,
+    DraggableHelperDirective,
+    DropzoneDirective,
+    DroppableDirective,
   ],
   imports: [
     CommonModule,
@@ -78,7 +86,8 @@ const maskConfig: Partial<IConfig> = {
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     NgxMaskModule.forRoot(maskConfig),
-    DragDropModule
+    DragDropModule,
+    OverlayModule
   ],
   exports: [
     RouterModule,
@@ -106,7 +115,13 @@ const maskConfig: Partial<IConfig> = {
     DragDropModule,
     DraggableDirective,
     MovableDirective,
-    MovableAreaDirective
+    MovableAreaDirective,
+    DraggableHelperDirective,
+    DropzoneDirective,
+    DroppableDirective
+  ],
+  providers: [
+    DroppableService
   ]
 })
 export class SharedModule { }

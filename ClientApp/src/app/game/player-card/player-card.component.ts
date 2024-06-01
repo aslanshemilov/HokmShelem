@@ -1,27 +1,27 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { GameService } from '../game.service';
 import { GS } from 'src/app/shared/models/engine/game';
 import { environment } from 'src/environments/environment';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-player-card',
   templateUrl: './player-card.component.html',
   styleUrls: ['./player-card.component.scss']
 })
 export class PlayerCardComponent implements OnInit {
-  @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   @Input() cards: string[] | undefined;
   @Output() cardBeingPlayed = new EventEmitter();
   blobImageUrl = environment.azureContainerUrl + 'game';
   clickTimeout: any = null;
-  screenWidth?: number;
-
+  screenWidth: number | undefined;
+  playerCardDivHeight: number | undefined;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
+  onResize(): void {
     this.getScreenWidth();
   }
 
-  constructor(private gameService: GameService) { }
+  constructor(public gameService: GameService) { }
 
   ngOnInit(): void {
     this.getScreenWidth();
@@ -45,6 +45,12 @@ export class PlayerCardComponent implements OnInit {
 
   getScreenWidth(): void {
     this.screenWidth = window.innerWidth;
+  }
+
+  onDragEnded(event: CdkDragEnd) {   
+    const draggedElement = event.source.element.nativeElement;
+    draggedElement.style.transform = 'none';
+    event.source._dragRef.reset();
   }
 
 }

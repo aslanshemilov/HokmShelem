@@ -43,9 +43,8 @@ export class MovableAreaDirective implements OnInit, AfterContentInit {
   }
 
   private measureBoundaries(movable: MovableDirective) {
-    // measure the boundaries here
-    const viewRect = this.element.nativeElement.getBoundingClientRect();
-    const movableClientRect = movable.element.nativeElement.getBoundingClientRect();
+    const viewRect: ClientRect = this.element.nativeElement.getBoundingClientRect();
+    const movableClientRect: ClientRect = movable.element.nativeElement.getBoundingClientRect();
 
     this.boundaries = {
       minX: viewRect.left - movableClientRect.left + movable.position.x,

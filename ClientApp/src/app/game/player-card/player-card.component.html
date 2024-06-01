@@ -1,7 +1,61 @@
-<ng-container *ngIf="cards && cards.length > 0 && screenWidth">
+<!-- <ng-container *ngIf="cards && cards.length > 0 && screenWidth">
   <ng-container *ngFor="let card of cards; let i = index">
-    <img class="cursor-pointer" appMovable [appMovableReset]="true" #jumpingImg
+    <img appMovable [appMovableReset]="true"
       [style.left.%]="(i * 6.8) + (screenWidth <= 576 ? 0 : 3) + ((13 - cards.length) * 3)"
       src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)">
   </ng-container>
+</ng-container> -->
+
+<!-- <div class="example-container">
+  <h2>To do</h2>
+
+  <div
+    cdkDropList
+    [cdkDropListData]="cards"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of cards" cdkDrag>{{item}}</div>
+  </div>
+</div> -->
+
+<!-- <ng-container *ngIf="cards && cards.length > 0 && screenWidth">
+  <ng-container *ngIf="(gameService.playerCardsDivHeight$ | async) as height">
+
+    <ng-container *ngFor="let card of cards; let i = index">
+      <div [style.left.%]="(i * 6.8) + (screenWidth <= 576 ? 0 : 3) + ((13 - cards.length) * 3)" cdkDrag appDraggable appDroppable
+        (cdkDragEnded)="onDragEnded($event)">
+        <img [style.height.px]="height" src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)"
+          cdkDragHandle>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</ng-container> -->
+
+<ng-container *ngIf="cards && cards.length > 0 && screenWidth">
+  <ng-container *ngIf="(gameService.playerCardsDivHeight$ | async) as height">
+    <ng-container *ngFor="let card of cards; let i = index">
+      <div [style.left.%]="(i * 6.8) + (screenWidth <= 576 ? 0 : 3) + ((13 - cards.length) * 3)" cdkDrag 
+         (cdkDragEnded)="onDragEnded($event)">
+        <img [style.height.px]="height" src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)"
+          cdkDragHandle>
+      </div>
+    </ng-container>
+  </ng-container>
 </ng-container>
+
+<!-- appDroppable appDraggable -->
+<!-- 
+<ng-container *ngIf="cards && cards.length > 0 && screenWidth">
+  <ng-container *ngIf="(gameService.playerCardsDivHeight$ | async) as height">
+
+    <ng-container *ngFor="let card of cards; let i = index">
+      <div [style.left.%]="(i * 6.8) + (screenWidth <= 576 ? 0 : 3) + ((13 - cards.length) * 3)" cdkDrag
+        (cdkDragEnded)="onDragEnded($event)">
+        <img [style.height.px]="height" src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)"
+          cdkDragHandle>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</ng-container> -->
