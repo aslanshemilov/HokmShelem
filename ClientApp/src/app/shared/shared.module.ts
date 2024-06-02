@@ -30,10 +30,6 @@ import { RoomToJoinComponent } from './components/engine/room-to-join/room-to-jo
 import { CountDownToStartComponent } from './components/engine/count-down-to-start/count-down-to-start.component';
 import { WinnerTeamComponent } from './components/modals/winner-team/winner-team.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { DraggableDirective } from './directives/draggable.directive';
-import { MovableDirective } from './directives/movable.directive';
-import { MovableAreaDirective } from './directives/movable-area.directive';
-import { DraggableHelperDirective } from './directives/draggable-helper.directive';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { DropzoneDirective } from './directives/dropzone.directive';
 import { DroppableDirective } from './directives/droppable.directive';
@@ -64,10 +60,6 @@ const maskConfig: Partial<IConfig> = {
     RoomToJoinComponent,
     CountDownToStartComponent,
     WinnerTeamComponent,
-    DraggableDirective,
-    MovableDirective,
-    MovableAreaDirective,
-    DraggableHelperDirective,
     DropzoneDirective,
     DroppableDirective,
   ],
@@ -113,10 +105,6 @@ const maskConfig: Partial<IConfig> = {
     RoomToJoinComponent,
     CountDownToStartComponent,
     DragDropModule,
-    DraggableDirective,
-    MovableDirective,
-    MovableAreaDirective,
-    DraggableHelperDirective,
     DropzoneDirective,
     DroppableDirective
   ],

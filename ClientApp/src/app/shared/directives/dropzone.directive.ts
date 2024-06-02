@@ -5,7 +5,7 @@ import { DroppableService } from './droppable.service';
   selector: '[appDropzone]'
 })
 export class DropzoneDirective implements OnInit {
-  @HostBinding('class.dropzone-activated') activated = false;
+  @HostBinding('class.dropzone-activated') dropzoneActivated = false;
   @HostBinding('class.dropzone-entered') entered = false;
 
   @Output() drop = new EventEmitter<PointerEvent>();
@@ -14,29 +14,27 @@ export class DropzoneDirective implements OnInit {
   private clientRect?: ClientRect;
 
   constructor(@SkipSelf() private allDroppableService: DroppableService,
-  private innerDroppableService: DroppableService,
-  private element: ElementRef) { }
+    private innerDroppableService: DroppableService,
+    private element: ElementRef) { }
 
   ngOnInit(): void {
-    this.allDroppableService.dragStart$.subscribe(() => this.onDragStart());
+    this.allDroppableService.dragStart$.subscribe(_ => this.onDragStart());
     this.allDroppableService.dragEnd$.subscribe(event => this.onDragEnd(event));
 
     this.allDroppableService.dragMove$.subscribe(event => {
       if (this.isEventInside(event)) {
-        console.log('inside');
         this.onPointerEnter();
       } else {
-        console.log('no')
         this.onPointerLeave();
       }
     });
 
-    this.innerDroppableService.dragStart$.subscribe(() => this.onInnerDragStart());
+    this.innerDroppableService.dragStart$.subscribe(_ => this.onInnerDragStart());
     this.innerDroppableService.dragEnd$.subscribe(event => this.onInnerDragEnd(event));
   }
 
   private onPointerEnter(): void {
-    if (!this.activated) {
+    if (!this.dropzoneActivated) {
       return;
     }
 
@@ -44,21 +42,17 @@ export class DropzoneDirective implements OnInit {
   }
 
   private onPointerLeave(): void {
-    if (!this.activated) {
-      return;
-    }
-
+    this.dropzoneActivated = true;
     this.entered = false;
   }
 
   private onDragStart(): void {
     this.clientRect = this.element.nativeElement.getBoundingClientRect();
-
-    this.activated = true;
+    this.dropzoneActivated = true;
   }
 
-  private onDragEnd(event: PointerEvent): void {
-    if (!this.activated) {
+  private onDragEnd(event: any): void {
+    if (!this.dropzoneActivated) {
       return;
     }
 
@@ -66,13 +60,12 @@ export class DropzoneDirective implements OnInit {
       this.drop.emit(event);
     }
 
-    this.activated = false;
+    this.dropzoneActivated = false;
     this.entered = false;
   }
 
   private onInnerDragStart() {
-    this.activated = true;
-    this.entered = true;
+   this.dropzoneActivated = false;
   }
 
   private onInnerDragEnd(event: PointerEvent) {
@@ -80,7 +73,7 @@ export class DropzoneDirective implements OnInit {
       this.remove.emit(event);
     }
 
-    this.activated = false;
+    this.dropzoneActivated = false;
     this.entered = false;
   }
 
@@ -90,5 +83,4 @@ export class DropzoneDirective implements OnInit {
       event.clientY >= this.clientRect!.top &&
       event.clientY <= this.clientRect!.bottom;
   }
-
 }

@@ -133,7 +133,7 @@
                                     <img class="back-deck" src="{{blobImageUrl}}/back.png" *ngIf="gameInfo.gs == 1">
                                 </div>
                             </div>
-                            <div class="hs-xy-center" appDropzone>
+                            <div class="hs-xy-center" appDropzone (drop)="playerDroppedTheCard($event)">
                                 <!-- card 1 -->
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
@@ -226,7 +226,7 @@
                             </div>
                             <span style="position: absolute; left: 2px; top: 2px; color: #FFFF00; font-size: x-small;"
                                 *ngIf="gameInfo.gs == 3">
-                                Double-click on the card
+                                Double-click or drag the card
                             </span>
                         </div>
 

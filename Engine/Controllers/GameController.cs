@@ -22,7 +22,7 @@
             var gameName = Unity.GameRepo.GetGameName(User.GetPlayerName());
             var gameInfo = Unity.GameRepo.GetGameInfo(gameName, User.GetPlayerName());
 
-            return gameInfo == null ? NotFound() : gameInfo;
+            return gameInfo == null ? BadRequest(new ApiResponse(400, "Game not found", "The requested game was not found")) : gameInfo;
         }
 
         [AllowAnonymous]

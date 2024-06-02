@@ -38,7 +38,7 @@
       <div [style.left.%]="(i * 6.8) + (screenWidth <= 576 ? 0 : 3) + ((13 - cards.length) * 3)" cdkDrag 
          (cdkDragEnded)="onDragEnded($event)">
         <img [style.height.px]="height" src="{{blobImageUrl}}/{{card}}.jpg" (dblclick)="onDoubleClick(card, $event)"
-          cdkDragHandle>
+          cdkDragHandle appDroppable>
       </div>
     </ng-container>
   </ng-container>

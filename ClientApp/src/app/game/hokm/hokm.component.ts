@@ -6,6 +6,7 @@ import { GameInfo } from '../../shared/models/engine/game';
 import { environment } from 'src/environments/environment';
 import { SharedService } from 'src/app/shared/shared.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hokm',
@@ -18,30 +19,38 @@ export class HokmComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   @ViewChild('playerCardsDiv', { static: false }) playerCardsDiv: ElementRef | undefined;
   divHeight: number | undefined;
-  private resizeObserver!: ResizeObserver;
+  private resizeObserver: ResizeObserver | undefined;
 
   constructor(public gameService: GameService,
     private accountService: AccountService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
     this.gameService.getGameInfo().subscribe({
       next: _ => {
         this.game$ = this.gameService.gameInfo$;
         this.gameService.canExit = false;
         this.connectToGame();
+        setTimeout(() => {
+          this.scrollToGameBox();
+          if (this.playerCardsDiv) {
+            this.initializeResizeObserver();
+          }
+        }, 500);
+
+      },
+      error: error => {
+        this.sharedService.showNotification(false, error.title, error.message);
+        this.router.navigateByUrl('/');
       }
     })
-  }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.scrollToGameBox();
-      if (this.playerCardsDiv) {
-        this.initializeResizeObserver();
-      }
-    }, 500);
   }
 
   private initializeResizeObserver(): void {
@@ -71,7 +80,9 @@ export class HokmComponent implements OnInit, AfterViewInit, OnDestroy {
       this.gameService.closeTheGame('/lobby');
     }).catch();
 
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   sendMessage(message: string) {
@@ -88,9 +99,14 @@ export class HokmComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameService.playerPlayedTheCard(card);
   }
 
-  onCardDropped(event: CdkDragDrop<string[]>) {
-    console.log('dropped');
-    console.log(event);
+  playerDroppedTheCard(event: any) {
+    if (event.target.tagName === 'IMG') {
+      const imgElement = event.target;
+      const imgSrc = imgElement.src;
+      const myArray = imgSrc.split("/").pop();
+      const val = myArray.slice(0, myArray.indexOf('.'));
+      this.gameService.playerPlayedTheCard(val);
+    }
   }
 
   private scrollToGameBox(): void {
