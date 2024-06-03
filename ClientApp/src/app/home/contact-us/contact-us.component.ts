@@ -5,11 +5,11 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { ApiResponse } from 'src/app/shared/models/apiResponse';
 
 @Component({
-  selector: 'app-visitor-message',
-  templateUrl: './visitor-message.component.html',
-  styleUrls: ['./visitor-message.component.scss']
+  selector: 'app-contact-us',
+  templateUrl: './contact-us.component.html',
+  styleUrls: ['./contact-us.component.scss']
 })
-export class VisitorMessageComponent implements OnInit {
+export class ContactUSComponent implements OnInit {
   messageForm: FormGroup = new FormGroup({});
   submitted = false;
   apiResponse: ApiResponse | undefined;

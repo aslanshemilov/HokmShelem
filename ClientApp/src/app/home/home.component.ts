@@ -5,6 +5,7 @@ import { AccountService } from '../account/account.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../shared/shared.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -13,6 +14,7 @@ import { SharedService } from '../shared/shared.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  blobImageUrl = environment.azureContainerUrl + 'site';
   private intervalId: any;
   private subscription: Subscription | undefined;
 

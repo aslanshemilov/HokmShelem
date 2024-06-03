@@ -4,7 +4,7 @@ import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { DemoComponent } from './demo/demo.component';
-import { VisitorMessageComponent } from './visitor-message/visitor-message.component';
+import { ContactUSComponent } from './contact-us/contact-us.component';
 import { PolicyComponent } from './policy/policy.component';
 import { TemsOfServiceComponent } from './tems-of-service/tems-of-service.component';
 import { AboutUsComponent } from './about-us/about-us.component';
@@ -15,7 +15,7 @@ import { CoreModule } from '../core/core.module';
   declarations: [
     HomeComponent,
     DemoComponent,
-    VisitorMessageComponent,
+    ContactUSComponent,
     PolicyComponent,
     TemsOfServiceComponent,
     AboutUsComponent,

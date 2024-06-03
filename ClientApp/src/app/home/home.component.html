@@ -1,30 +1,36 @@
-<div class="container">
-    <h1 class="text-center text-warning">
-        You can play <strong>Hokm</strong> as Guest NOW
-    </h1>
-    <!-- <h4>
-        <span class="text-danger">Note: </span>
-        This website is still under development and not yet complete. Please feel free to report any bugs you may encounter.
-    </h4> -->
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <p class="text-center" style="font-size: 1.5rem;">Play Persian Card Games for
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 text-center">
+            <img class="homepage" src="{{blobImageUrl}}/homepage.jpg" alt="logo">
+        </div>
+        <div class="col-md-4">
+            <h1 class="text-center">Play Hokm and Shelem Card Games for
                 <span style="color:#cf3723">FREE</span>
-            </p>
-            <ng-container *ngIf="(homeService.homePageInfo$ | async) as homePageInfo">
-                <div class="row mb-1">
-                    <div class="col-7 offset-5">
-                        <i class="bi bi-people-fill me-1"></i>
-                        {{homePageInfo.playersCount}} Online Players
-                    </div>
+            </h1>
+            <div class="row mb-1 text-center">
+                <div class="col">
+                    <i class="bi bi-people-fill me-1"></i>
+                    <span *ngIf="!homeService.loadingGameInfo && (homeService.homePageInfo$ | async) as homePageInfo">
+                        {{homePageInfo.playersCount}}
+                    </span>
+                    <span *ngIf="homeService.loadingGameInfo">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                    Online Players
                 </div>
-                <div class="row mb-2">
-                    <div class="col-7 offset-5">
-                        <i class="bi bi-suit-spade-fill me-1"></i>
-                        {{homePageInfo.gamesCount}} Active Games
-                    </div>
+            </div>
+            <div class="row mb-2 text-center">
+                <div class="col">
+                    <i class="bi bi-suit-spade-fill me-1"></i>
+                    <span *ngIf="!homeService.loadingGameInfo && (homeService.homePageInfo$ | async) as homePageInfo">
+                        {{homePageInfo.gamesCount}}
+                    </span>
+                    <span *ngIf="homeService.loadingGameInfo">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                    Active Games
                 </div>
-            </ng-container>
+            </div>
 
             <ng-container *ngIf="(accountService.applicationUser$ | async) === null">
                 <button class="btn" (click)="registerAsGuest()" *appIsNonLoggedinUserOrGuestDirective>
@@ -32,13 +38,14 @@
                 </button>
             </ng-container>
         </div>
-        <div class="col-md-6">
-            <app-demo></app-demo>
-        </div>
     </div>
-    <div class="row mt-5 border-top mb-2">
-        <div class="col">
-            <app-visitor-message></app-visitor-message>
-        </div>
-    </div>
+    <h3 class="my-5">
+        Welcome to HokmShelem! We are a strictly <span class="text-warning">no-gambling</span> platform, dedicated
+        to bringing people from all around
+        the world together to connect, chat, play, and enjoy Iranian card games.
+    </h3>
+
+    <section>
+        <app-demo></app-demo>
+    </section>
 </div>

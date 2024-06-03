@@ -5,13 +5,15 @@ import { PolicyComponent } from './policy/policy.component';
 import { TemsOfServiceComponent } from './tems-of-service/tems-of-service.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { RulesComponent } from './rules/rules.component';
+import { ContactUSComponent } from './contact-us/contact-us.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'policy', component: PolicyComponent },
   { path: 'terms-of-service', component: TemsOfServiceComponent },
   { path: 'rules', component:  RulesComponent},
-  { path: 'about-us', component: AboutUsComponent }
+  { path: 'about-us', component: AboutUsComponent },
+  { path: 'contact-us', component: ContactUSComponent }
 ]
 
 @NgModule({

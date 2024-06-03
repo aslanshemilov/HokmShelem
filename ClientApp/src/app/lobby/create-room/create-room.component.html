@@ -17,7 +17,7 @@
                         [class.is-valid]="createRoomForm.get('roomName')?.status === 'VALID'" />
                     <span class="input-group-text" *ngIf="!createRoomForm.get('roomName')?.errors && checking">
                         <i *ngIf="createRoomForm.get('roomName')?.status === 'PENDING'"
-                            class="fa fa-spinner fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                     </span>
                 </div>
 
