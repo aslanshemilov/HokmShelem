@@ -1,25 +1,25 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { GameService } from '../game.service';
-import { AccountService } from 'src/app/account/account.service';
-import { Observable, take } from 'rxjs';
-import { GameInfo } from '../../shared/models/engine/game';
-import { environment } from 'src/environments/environment';
-import { SharedService } from 'src/app/shared/shared.service';
 import { Router } from '@angular/router';
+import { Observable, take } from 'rxjs';
+import { AccountService } from 'src/app/account/account.service';
+import { GameInfo } from 'src/app/shared/models/engine/game';
+import { SharedService } from 'src/app/shared/shared.service';
+import { environment } from 'src/environments/environment';
+import { GameService } from '../game.service';
 
 @Component({
-  selector: 'app-hokm',
-  templateUrl: './hokm.component.html',
-  styleUrls: ['./hokm.component.scss']
+  selector: 'app-shelem',
+  templateUrl: './shelem.component.html',
+  styleUrls: ['./shelem.component.scss']
 })
-export class HokmComponent implements AfterViewInit, OnDestroy {
+export class ShelemComponent implements AfterViewInit, OnDestroy {
   blobImageUrl = environment.azureContainerUrl + 'game';
   game$?: Observable<GameInfo | null>;
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   @ViewChild('playerCardsDiv', { static: false }) playerCardsDiv: ElementRef | undefined;
   divHeight: number | undefined;
   private resizeObserver: ResizeObserver | undefined;
-
+  
   constructor(public gameService: GameService,
     private accountService: AccountService,
     private sharedService: SharedService,
@@ -64,7 +64,7 @@ export class HokmComponent implements AfterViewInit, OnDestroy {
     this.accountService.applicationUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) {
-          this.gameService.connectGame(user, 'hokm');
+          this.gameService.connectGame(user, 'shelem');
         }
       }
     })

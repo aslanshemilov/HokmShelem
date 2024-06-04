@@ -6,6 +6,7 @@ import { GameRoutingModule } from './game-routing.module';
 import { PlayerCardComponent } from './player-card/player-card.component';
 import { GameInterruptionButtonsComponent } from './game-interruption-buttons/game-interruption-buttons.component';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
+import { ShelemComponent } from './shelem/shelem.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { CdkDragHandle } from '@angular/cdk/drag-drop';
     HokmComponent,
     PlayerCardComponent,
     GameInterruptionButtonsComponent,
+    ShelemComponent,
   ],
   imports: [
     CommonModule,

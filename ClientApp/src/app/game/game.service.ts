@@ -69,9 +69,9 @@ export class GameService {
     );
   }
 
-  connectGame(user: ApplicationUser) {
+  connectGame(user: ApplicationUser, gameType: string) {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(this.hubUrl + 'hokm', {
+      .withUrl(this.hubUrl + gameType, {
         accessTokenFactory: () => user.jwt
       })
       .withAutomaticReconnect()

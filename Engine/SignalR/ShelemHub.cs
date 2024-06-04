@@ -1,13 +1,13 @@
 ﻿namespace Engine.SignalR
 {
     [Authorize]
-    public class HokmHub : Hub
+    public class ShelemHub : Hub
     {
         private readonly IUnityRepo _unity;
         private readonly IGameTrackerService _tracker;
         private readonly IApiService _apiService;
 
-        public HokmHub(IUnityRepo unity,
+        public ShelemHub(IUnityRepo unity,
             IGameTrackerService tracker,
             IApiService apiService)
         {

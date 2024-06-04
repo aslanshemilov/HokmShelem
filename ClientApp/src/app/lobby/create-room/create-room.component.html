@@ -16,8 +16,8 @@
                         [class.is-invalid]="createRoomForm.get('roomName')?.dirty && createRoomForm.get('roomName')?.errors"
                         [class.is-valid]="createRoomForm.get('roomName')?.status === 'VALID'" />
                     <span class="input-group-text" *ngIf="!createRoomForm.get('roomName')?.errors && checking">
-                        <i *ngIf="createRoomForm.get('roomName')?.status === 'PENDING'"
-                            class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <i *ngIf="createRoomForm.get('roomName')?.status === 'PENDING'" class="fa fa-spinner fa-spin"
+                            aria-hidden="true"></i>
                     </span>
                 </div>
 
@@ -48,9 +48,9 @@
                 <input class="form-check-input" type="radio" value='hokm' formControlName='gameType' [checked]="true"
                     (click)="onGameTypeSelected('hokm')" />
 
-                <!-- <label class="form-check-label mx-2">Shelem</label>
+                <label class="form-check-label mx-2">Shelem</label>
                 <input class="form-check-input" type="radio" value='shelem' formControlName='gameType'
-                    (click)="onGameTypeSelected('shelem')" /> -->
+                    (click)="onGameTypeSelected('shelem')" />
             </div>
         </div>
 
@@ -74,10 +74,8 @@
                     createRoomForm.controls['gameType'].value === 'hokm'" class="text-danger">
                     (3 or 5 or 7)
                 </span>
-                <span
-                    *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern') &&
-                    createRoomForm.controls['gameType'].value === 'shelem'"
-                    class="text-danger">
+                <span *ngIf="createRoomForm.get('targetScore')?.touched && createRoomForm.get('targetScore')?.hasError('pattern') &&
+                    createRoomForm.controls['gameType'].value === 'shelem'" class="text-danger">
                     ({{minScore}} - {{maxScore}})
                 </span>
             </div>

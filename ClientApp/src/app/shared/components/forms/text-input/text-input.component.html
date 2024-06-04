@@ -8,7 +8,6 @@
                 placeholder="{{labelOverride ?? label}}" class="form-control"
                 [class.is-invalid]="submitted && control.invalid">
             <label for="{{label}}">{{labelOverride ?? label}}</label>
-
         </div>
         <span class="input-group-text"
             *ngIf="label.toLowerCase().includes('password')"

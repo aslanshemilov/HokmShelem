@@ -40,6 +40,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<LobbyHub>("hubs/lobby");
 app.MapHub<HokmHub>("hubs/hokm");
+app.MapHub<ShelemHub>("hubs/shelem");
 
 await InitializeContextAsync();
 app.Run();

@@ -1,0 +1,32 @@
+<div class="row mt-2">
+    <div class="col-md-2">
+        <i *ngIf="isRequired" class="bi bi-asterisk text-danger"></i>
+        <label for="{{label}}" class="control-label ms-1">{{labelOverride ?? label}}</label>
+    </div>
+    <div class="col-md-10">
+        <input *ngIf="type === 'text'" [formControl]="control" type="{{type}}" class="form-control"
+            [class.is-invalid]="submitted && control.invalid">
+        <textarea *ngIf="type=== 'text-area'"  [formControl]="control"class="form-control"
+            [class.is-invalid]="submitted && control.invalid" 
+            rows="10"></textarea>
+        <span class="text-danger" *ngIf="submitted && control.errors?.['required']">
+            {{label}} is required
+        </span>
+        <span class="text-danger" *ngIf="submitted && control.errors?.['minlength']">
+            {{label}} must be at least
+            {{control.errors?.['minlength'].requiredLength}} characters
+        </span>
+        <span class="text-danger" *ngIf="submitted && control.errors?.['maxlength']">
+            {{label}} must be at most
+            {{control.errors?.['maxlength'].requiredLength}} characters
+        </span>
+        <span class="text-danger" *ngIf="submitted && control.errors?.['pattern']">
+            <ng-container *ngIf="invalidPatternMessage">
+                {{invalidPatternMessage}}
+            </ng-container>
+            <ng-container *ngIf="!invalidPatternMessage">
+                Invalid {{label}}
+            </ng-container>
+        </span>
+    </div>
+</div>

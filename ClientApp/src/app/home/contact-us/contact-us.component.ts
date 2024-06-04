@@ -24,8 +24,8 @@ export class ContactUSComponent implements OnInit {
 
   initializeForm() {
     this.messageForm = this.formBuilder.group({
-      name: ['', [Validators.required], Validators.maxLength(100)],
-      email: ['', [Validators.required, Validators.maxLength(100), Validators.pattern('^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$')]],
+      name: ['', [Validators.required, Validators.maxLength(20)]],
+      email: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$')]],
       message: ['', [Validators.required, Validators.maxLength(5000)]],
     });
   }

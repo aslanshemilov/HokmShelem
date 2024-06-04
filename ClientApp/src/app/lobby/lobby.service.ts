@@ -90,7 +90,7 @@ export class LobbyService {
       this.updateRoomInfo(room);
     });
 
-    this.hubConnection.on('GameAboutToStart', (seconds: number) => {
+    this.hubConnection.on('GameAboutToStart', (gameType: string, seconds: number) => {
       this.gameAboutToStartInNumberOfSeconds = seconds;
       timer$(this.gameAboutToStartInNumberOfSeconds).subscribe({
         next: () => { },
@@ -98,7 +98,7 @@ export class LobbyService {
         complete: () => {
           this.gameAboutToStartInNumberOfSeconds = undefined;
           this.leaveLobby();
-          this.router.navigateByUrl('/game/hokm');
+          this.router.navigateByUrl('/game/' + gameType);
         }});
     });
 

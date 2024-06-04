@@ -34,6 +34,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { DropzoneDirective } from './directives/dropzone.directive';
 import { DroppableDirective } from './directives/droppable.directive';
 import { DroppableService } from './directives/droppable.service';
+import { TextInputF2Component } from './components/forms/text-input-f2/text-input-f2.component';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -62,6 +63,7 @@ const maskConfig: Partial<IConfig> = {
     WinnerTeamComponent,
     DropzoneDirective,
     DroppableDirective,
+    TextInputF2Component,
   ],
   imports: [
     CommonModule,
@@ -106,7 +108,8 @@ const maskConfig: Partial<IConfig> = {
     CountDownToStartComponent,
     DragDropModule,
     DropzoneDirective,
-    DroppableDirective
+    DroppableDirective,
+    TextInputF2Component
   ],
   providers: [
     DroppableService

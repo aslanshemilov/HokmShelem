@@ -253,7 +253,7 @@ namespace Engine.SignalR
             _unity.RoomRepo.Remove(room);
             _unity.Complete();
            
-            await Clients.Group(roomName).SendAsync("GameAboutToStart", 3);
+            await Clients.Group(roomName).SendAsync("GameAboutToStart", room.GameType, 3);
         }
         #endregion
 

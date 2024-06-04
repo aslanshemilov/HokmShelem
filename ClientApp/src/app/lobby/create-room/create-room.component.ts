@@ -30,11 +30,9 @@ export class CreateRoomComponent implements OnInit {
   ) {
     this.createRoomForm = this.formBuilder.group({
       roomName: [roomName, [Validators.required, Validators.minLength(3), Validators.maxLength(15)], [this.checkRoomNameNotTaken()]],
-      gameType: ['hokm', Validators.required],
+      gameType: ['', Validators.required],
       targetScore: [{ value: null, disabled: false }]
     });
-
-    this.onGameTypeSelected('hokm');
   }
 
   onGameTypeSelected(gameType: string) {

@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="hs-layout hs-layout-format">
-        <div class="card border-success">
+        <div class="card border-success mt-1">
             <div class="card-header">
                 <ng-container *ngIf="lobbyService.mode.showLobbyChat">
                     <div class="row">
@@ -47,7 +47,7 @@
                 <app-chat-input (messageToSend)="sendMessage($event)"></app-chat-input>
             </div>
         </div>
-        <section class="player-room-box" #divplayerbox>
+        <section class="player-room-box mt-1" #divplayerbox>
             <div class="card border-success">
                 <div class="card-header">
                     <ng-container *ngIf="lobbyService.mode.showLobbyPlayers">

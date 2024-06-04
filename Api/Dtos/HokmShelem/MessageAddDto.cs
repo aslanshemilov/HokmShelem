@@ -4,10 +4,10 @@
     {
         [Required]
         [Display(Name = "Name")]
-        [StringLength(100)]
+        [StringLength(20)]
         public string Name { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         [RegularExpression("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
         [Required]
