@@ -19,8 +19,9 @@
         [HttpGet]
         public ActionResult<GameInfoDto> GetGameInfo()
         {
-            var gameName = Unity.GameRepo.GetGameName(User.GetPlayerName());
-            var gameInfo = Unity.GameRepo.GetGameInfo(gameName, User.GetPlayerName());
+            var playerName = User.GetPlayerName();
+            var currentGame = Unity.GameRepo.GetCurrentGame(playerName);
+            var gameInfo = Unity.GameRepo.GetGameInfo(currentGame.Name, playerName);
 
             return gameInfo == null ? BadRequest(new ApiResponse(400, "Game not found", "The requested game was not found")) : gameInfo;
         }
@@ -35,9 +36,9 @@
         }
 
         [HttpGet("current-game")]
-        public ActionResult GetCurrentGame()
+        public ActionResult<CurrentGameDto> GetCurrentGame()
         {
-            var currentGame = Unity.GameRepo.GetGameName(User.GetPlayerName());
+            var currentGame = Unity.GameRepo.GetCurrentGame(User.GetPlayerName());
             return Ok(currentGame);
         }
 
@@ -47,6 +48,7 @@
             var playerName = User.GetPlayerName();
 
             var game = Unity.GameRepo.FindByName(gameName, includeProperties: "Players");
+            if (game == null) return BadRequest(new ApiResponse(400, message: "Game was not found", displayByDefault: true));
             await _apiService.CreateGameHistoryAsync(SD.GetGameHistory(game, SD.Left, playerName));
             _tracker.RemoveGameTracker(gameName);
             Unity.GameRepo.CloseTheGame(game);
@@ -54,7 +56,7 @@
 
             foreach (var player in game.Players)
             {
-                if (!player.Name.Equals(playerName))
+                if (!player.Name.Equals(playerName) && !string.IsNullOrEmpty(player.ConnectionId))
                 {
                     await _hokmHub.Clients.Client(player.ConnectionId).SendAsync("PlayerLeftTheGame", playerName);
                 }

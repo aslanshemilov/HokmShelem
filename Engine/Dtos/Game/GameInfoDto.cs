@@ -23,9 +23,15 @@
         public int BlueTotalScore { get; set; }
         public int WhosTurnIndex { get; set; }
         public int RoundStartsByIndex { get; set; }
+        public int WhosTurnToClaimIndex { get; set; }
+        public int Blue1Claimed { get; set; }
+        public int Red1Claimed { get; set; }
+        public int Blue2Claimed { get; set; }
+        public int Red2Claimed { get; set; }
 
         public string MyPlayerName { get; set; }
         public int MyIndex { get; set; }
         public List<string> MyCards { get; set; }
+        public List<string> RemainingCards { get; set; }
     }
 }

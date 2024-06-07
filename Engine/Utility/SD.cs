@@ -21,7 +21,7 @@
         public enum GS // GS -> GameStage
         {
             GameHasNotStarted,        // 0
-            DetermineTheFirstHakem,   // 1
+            DetermineFirstHakem,   // 1
             HakemChooseHokm,          // 2
             RoundGameStarted          // 3
         }

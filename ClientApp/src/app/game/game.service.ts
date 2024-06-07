@@ -11,6 +11,8 @@ import { MessageThread } from '../shared/models/engine/messageThread';
 import { NotificationMessage } from '../shared/models/engine/notificationMessage';
 import { PlayedCards } from '../shared/models/engine/playedCards';
 import { Router } from '@angular/router';
+import { CurrentGame } from '../shared/models/engine/currentGame';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +33,15 @@ export class GameService {
   playerCardsDivHeightSource = new BehaviorSubject<number | null>(null);
   playerCardsDivHeight$ = this.playerCardsDivHeightSource.asObservable();
 
+  bsModalRef?: BsModalRef;
+
   constructor(private http: HttpClient,
     private sharedService: SharedService,
-    private router: Router) { }
+    private router: Router,
+    private modalService: BsModalService) { }
 
   getCurrentGame() {
-    return this.http.get(this.engineUrl + 'game/current-game', { responseType: 'text' })
+    return this.http.get<CurrentGame>(this.engineUrl + 'game/current-game')
   }
 
   leaveTheGameApi(gameName: string) {
@@ -55,11 +60,15 @@ export class GameService {
 
           this.setGameInfo(gameInfo);
 
-          if (gameInfo.gs === GS.HakemChooseHokm && gameInfo.myCards) {
+          if (gameInfo.gameType == 'hokm' && gameInfo.gs === GS.HakemChooseHokm && gameInfo.myCards) {
             if (gameInfo.myIndex == gameInfo.hakemIndex) {
               this.handlePlayedCards(new PlayedCards('c', 'd', 's', 'h'));
             } else {
               this.handlePlayedCards(new PlayedCards());
+            }
+          } else if (gameInfo.gameType == 'shelem') {
+            if (gameInfo.gs === GS.DetermineFirstHakem) {
+              this.handleWhosTurnFlag(gameInfo.whosTurnToClaimIndex);
             }
           } else if (gameInfo.gs == GS.RoundGameStarted) {
             this.handleWhosTurnFlag(gameInfo.whosTurnIndex);
@@ -85,15 +94,31 @@ export class GameService {
       });
     });
 
-    this.hubConnection.on('DetermineTheFirstHakem', (gs: GS, cards: string[]) => {
+    this.hubConnection.on('DetermineTheHakem', (gs: GS, cards: string[]) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
         gameInfo.gs = gs;
+
         gameInfo.blue1Card = cards[0];
         gameInfo.red1Card = cards[1];
         gameInfo.blue2Card = cards[2];
         gameInfo.red2Card = cards[3];
+
         this.setGameInfo(gameInfo);
+      }
+    });
+
+    this.hubConnection.on('PlayerClaimsPoint', (whosTurnToClaimIndex: number) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo) {
+        gameInfo.blue1Card = null;
+        gameInfo.red1Card = null;
+        gameInfo.blue2Card = null;
+        gameInfo.red2Card = null;
+        gameInfo.hokmSuit = null;
+        gameInfo.whosTurnToClaimIndex = whosTurnToClaimIndex;
+        this.setGameInfo(gameInfo);
+        this.handleWhosTurnFlag(whosTurnToClaimIndex);
       }
     });
 

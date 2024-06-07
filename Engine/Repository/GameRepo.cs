@@ -35,11 +35,11 @@
             }
             _context.Game.Add(gameToAdd);
         }
-        public string GetGameName(string playerName)
+        public CurrentGameDto GetCurrentGame(string playerName)
         {
             return _context.Game
                 .Where(x => x.Players.Select(p => p.Name).Contains(playerName))
-                .Select(x => x.Name)
+                .ProjectTo<CurrentGameDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefault();
         }
         public GameInfoDto GetGameInfo(string gameName, string playerName)
@@ -70,7 +70,7 @@
                 gameInfo.MyIndex = 4;
             }
 
-            if (gameInfo.GS == SD.GS.HakemChooseHokm)
+            if (gameInfo.GS == SD.GS.HakemChooseHokm && gameInfo.GameType == SD.Hokm)
             {
                 Card cards = null;
 
@@ -117,7 +117,7 @@
                     gameInfo.MyCards = firstFiveCards;
                 }
             }
-            else if (gameInfo.GS == SD.GS.RoundGameStarted)
+            else if ((gameInfo.GameType == SD.Hokm && gameInfo.GS == SD.GS.RoundGameStarted) || (gameInfo.GameType == SD.Shelem))
             {
                 Card cards = null;
                 if (gameInfo.MyIndex == 1)
@@ -225,59 +225,60 @@
         }
         public void UpdateGame(Game game, GameUpdateDto model)
         {
-            if (model.HakemIndex > 0)
-            {
-                game.HakemIndex = model.HakemIndex;
-            }
-
-            if (model.WhosTurnIndex > 0)
-            {
-                game.WhosTurnIndex = model.WhosTurnIndex;
-            }
-
-            if (model.RoundStartsByIndex > 0)
-            {
-                game.RoundStartsByIndex = model.RoundStartsByIndex;
-            }
-
-            if (!string.IsNullOrEmpty(model.HokmSuit))
-            {
-                game.HokmSuit = model.HokmSuit;
-            }
+            if (model.HakemIndex > 0) game.HakemIndex = model.HakemIndex;
+            if (model.WhosTurnIndex > 0) game.WhosTurnIndex = model.WhosTurnIndex;
+            if (model.RoundStartsByIndex > 0) game.RoundStartsByIndex = model.RoundStartsByIndex;
+            if (!string.IsNullOrEmpty(model.HokmSuit)) game.HokmSuit = model.HokmSuit;
+            if (model.ClaimStartsByIndex > 0) game.ClaimStartsByIndex = model.ClaimStartsByIndex;
+            if (model.WhosTurnToClaimIndex > 0) game.WhosTurnToClaimIndex = model.WhosTurnToClaimIndex;
         }
         public void AssignPlayersCards(Game game)
         {
             if (!string.IsNullOrEmpty(game.Blue1CardsName)) return;
 
+            int cardsToDistribute = 0;
+            if (game.GameType == SD.Hokm) cardsToDistribute = 13;
+            else cardsToDistribute = 12;
+
             var deckOfCard = SD.GetShuffledDeckOfCards();
             List<string> cards = new List<string>();
 
-            for (int i = 0; i < 13; i++)
+            for (int i = 0; i < cardsToDistribute; i++)
             {
                 cards.Add(deckOfCard.ElementAt(i));
             }
             game.Blue1Cards = _unity.CardRepo.SetPlayerCards(game.Blue1, cards);
             cards.Clear();
 
-            for (int i = 13; i < 26; i++)
+            for (int i = cardsToDistribute; i < (cardsToDistribute * 2); i++)
             {
                 cards.Add(deckOfCard.ElementAt(i));
             }
             game.Red1Cards = _unity.CardRepo.SetPlayerCards(game.Red1, cards);
             cards.Clear();
 
-            for (int i = 26; i < 39; i++)
+            for (int i = cardsToDistribute * 2; i < (cardsToDistribute * 3); i++)
             {
                 cards.Add(deckOfCard.ElementAt(i));
             }
             game.Blue2Cards = _unity.CardRepo.SetPlayerCards(game.Blue2, cards);
             cards.Clear();
 
-            for (int i = 39; i < deckOfCard.Count; i++)
+            for (int i = cardsToDistribute * 3; i < (cardsToDistribute * 4); i++)
             {
                 cards.Add(deckOfCard.ElementAt(i));
             }
             game.Red2Cards = _unity.CardRepo.SetPlayerCards(game.Red2, cards);
+            cards.Clear();
+
+            if (game.GameType == SD.Shelem)
+            {
+                for (int i = cardsToDistribute * 4; i < deckOfCard.Count; i++)
+                {
+                    cards.Add(deckOfCard.ElementAt(i));
+                }
+                game.HakemCards = _unity.CardRepo.SetPlayerCards($"{game.Name}_hakem", cards);
+            }
         }
         public HakemCardsToHokm GetHakemCardsToHokm(Game game)
         {

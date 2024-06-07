@@ -16,8 +16,6 @@ namespace Engine.Data.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    TotalGamePolicyCards = table.Column<int>(type: "int", nullable: false),
-                    TotalCardsLeft = table.Column<int>(type: "int", nullable: false),
                     Card1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Card2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Card3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -30,10 +28,7 @@ namespace Engine.Data.Migrations
                     Card10 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Card11 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Card12 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Card13 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Card14 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Card15 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Card16 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Card13 = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,7 +94,13 @@ namespace Engine.Data.Migrations
                     BlueTotalScore = table.Column<int>(type: "int", nullable: false),
                     WhosTurnIndex = table.Column<int>(type: "int", nullable: false),
                     RoundStartsByIndex = table.Column<int>(type: "int", nullable: false),
-                    VoteToEndCount = table.Column<int>(type: "int", nullable: false),
+                    RoundTargetScore = table.Column<int>(type: "int", nullable: false),
+                    ClaimStartsByIndex = table.Column<int>(type: "int", nullable: false),
+                    WhosTurnToClaimIndex = table.Column<int>(type: "int", nullable: false),
+                    Blue1Claimed = table.Column<int>(type: "int", nullable: false),
+                    Red1Claimed = table.Column<int>(type: "int", nullable: false),
+                    Blue2Claimed = table.Column<int>(type: "int", nullable: false),
+                    Red2Claimed = table.Column<int>(type: "int", nullable: false),
                     Blue1Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Red1Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Blue2Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -107,7 +108,8 @@ namespace Engine.Data.Migrations
                     Blue1CardsName = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     Red1CardsName = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     Blue2CardsName = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    Red2CardsName = table.Column<string>(type: "nvarchar(20)", nullable: true)
+                    Red2CardsName = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    HakemCardsName = table.Column<string>(type: "nvarchar(20)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,6 +122,11 @@ namespace Engine.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Game_Card_Blue2CardsName",
                         column: x => x.Blue2CardsName,
+                        principalTable: "Card",
+                        principalColumn: "Name");
+                    table.ForeignKey(
+                        name: "FK_Game_Card_HakemCardsName",
+                        column: x => x.HakemCardsName,
                         principalTable: "Card",
                         principalColumn: "Name");
                     table.ForeignKey(
@@ -206,6 +213,11 @@ namespace Engine.Data.Migrations
                 name: "IX_Game_Blue2CardsName",
                 table: "Game",
                 column: "Blue2CardsName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Game_HakemCardsName",
+                table: "Game",
+                column: "HakemCardsName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Game_Red1CardsName",

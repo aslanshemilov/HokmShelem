@@ -6,17 +6,21 @@
         {
             
         }
-        public GameUpdateDto(int hIndex = 0, int wti = 0, int rsbi = 0, string hs = null)
+        public GameUpdateDto(int hakemIndex = 0, int whosTurnIndex = 0, int roundStartsByIndex = 0, string hokmSuit = null, int claimStartsByIndex = 0, int whosTurnToClaimIndex = 0)
         {
-            HakemIndex = hIndex;
-            WhosTurnIndex = wti;
-            RoundStartsByIndex = rsbi;
-            HokmSuit = hs;
+            HakemIndex = hakemIndex;
+            WhosTurnIndex = whosTurnIndex;
+            RoundStartsByIndex = roundStartsByIndex;
+            HokmSuit = hokmSuit;
+            ClaimStartsByIndex = claimStartsByIndex;
+            WhosTurnToClaimIndex = whosTurnToClaimIndex;
         }
 
         public int HakemIndex { get; set; }
         public int WhosTurnIndex { get; set; }
         public int RoundStartsByIndex { get; set; }
         public string HokmSuit { get; set; }
+        public int ClaimStartsByIndex { get; set; }
+        public int WhosTurnToClaimIndex { get; set; }
     }
 }

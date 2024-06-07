@@ -1,4 +1,7 @@
-﻿namespace Engine.Repository
+﻿using Engine.Entities;
+using Microsoft.IdentityModel.Tokens;
+
+namespace Engine.Repository
 {
     public class CardRepo : BaseRepo<Card>, ICardRepo
     {
@@ -36,23 +39,30 @@
         }
         public Card SetPlayerCards(string playerName, List<string> cards)
         {
-            var cardToAdd = new Card()
+            var cardToAdd = new Card();
+            cardToAdd.Name = playerName;
+
+            cardToAdd.Card1 = cards.ElementAt(0);
+            cardToAdd.Card2 = cards.ElementAt(1);
+            cardToAdd.Card3 = cards.ElementAt(2);
+            cardToAdd.Card4 = cards.ElementAt(3);
+
+            if (cards.Count >= 12)
             {
-                Name = playerName,
-                Card1 = cards.ElementAt(0),
-                Card2 = cards.ElementAt(1),
-                Card3 = cards.ElementAt(2),
-                Card4 = cards.ElementAt(3),
-                Card5 = cards.ElementAt(4),
-                Card6 = cards.ElementAt(5),
-                Card7 = cards.ElementAt(6),
-                Card8 = cards.ElementAt(7),
-                Card9 = cards.ElementAt(8),
-                Card10 = cards.ElementAt(9),
-                Card11 = cards.ElementAt(10),
-                Card12 = cards.ElementAt(11),
-                Card13 = cards.ElementAt(12)
-            };
+                cardToAdd.Card5 = cards.ElementAt(4);
+                cardToAdd.Card6 = cards.ElementAt(5);
+                cardToAdd.Card7 = cards.ElementAt(6);
+                cardToAdd.Card8 = cards.ElementAt(7);
+                cardToAdd.Card9 = cards.ElementAt(8);
+                cardToAdd.Card10 = cards.ElementAt(9);
+                cardToAdd.Card11 = cards.ElementAt(10);
+                cardToAdd.Card12 = cards.ElementAt(11);
+            }
+
+            if (cards.Count == 13)
+            {
+                cardToAdd.Card13 = cards.ElementAt(12);
+            }
 
             return cardToAdd;
         }
@@ -76,22 +86,11 @@
         {
             if (game != null)
             {
-                if (!string.IsNullOrEmpty(game.Blue1CardsName))
-                {
-                    RemovePlayerCards(game.Blue1);
-                }
-                if (!string.IsNullOrEmpty(game.Red1CardsName))
-                {
-                    RemovePlayerCards(game.Red1);
-                }
-                if (!string.IsNullOrEmpty(game.Blue2CardsName))
-                {
-                    RemovePlayerCards(game.Blue2);
-                }
-                if (!string.IsNullOrEmpty(game.Red2CardsName))
-                {
-                    RemovePlayerCards(game.Red2);
-                }
+                if (!string.IsNullOrEmpty(game.Blue1CardsName)) RemovePlayerCards(game.Blue1);
+                if (!string.IsNullOrEmpty(game.Red1CardsName)) RemovePlayerCards(game.Red1);
+                if (!string.IsNullOrEmpty(game.Blue2CardsName)) RemovePlayerCards(game.Blue2);
+                if (!string.IsNullOrEmpty(game.Red2CardsName)) RemovePlayerCards(game.Red2);
+                if (!string.IsNullOrEmpty(game.HakemCardsName)) RemovePlayerCards(game.HakemCardsName);
             }
         }
 

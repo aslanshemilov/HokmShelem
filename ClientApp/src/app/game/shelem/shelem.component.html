@@ -1,6 +1,6 @@
 <div class="container-fluid" *ngIf="(gameService.gameInfo$ | async) as gameInfo">
     <div class="hs-layout hs-layout-format">
-        <div class="card border-danger">
+        <div class="card border-info mt-1">
             <div class="card-header d-flex justify-content-between">
                 <span class="h4">{{gameInfo.gameType | titlecase}}
                     (<span class="text-warning">{{gameInfo.targetScore}}</span>)
@@ -83,7 +83,12 @@
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <div></div>
+                            <div class="hs-xy-center">
+                                <div class="d-grid" style="width: 50%;"
+                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
+                                    <button type="button" class="btn btn-danger btn-sm">Pass</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="up-down-throw-cards-box">
@@ -135,13 +140,14 @@
                             </div>
                             <div class="hs-xy-center" appDropzone (drop)="playerDroppedTheCard($event)">
                                 <!-- card 1 -->
+
                                 <ng-container *ngIf="gameInfo.gs == 2 && gameInfo.myIndex == gameInfo.hakemIndex">
                                     <img class="played-card-img cursor-pointer"
                                         src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.png"
                                         (click)="chooseHokm(gameInfo.blue1Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == 3 || gameInfo.gs == 1">
+                                <ng-container *ngIf="gameInfo.gs == 3">
                                     <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 1">
                                         <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
                                             *ngIf="gameInfo.blue1Card == 'turn'"></i>
@@ -167,6 +173,14 @@
                                             src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                     </ng-container>
                                 </ng-container>
+
+                                <ng-container
+                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
+                                    <form id="claimPointFormId" [formGroup]="claimPointForm" (ngSubmit)="claimPoint()">
+                                        <input formControlName="point" class="form-control" type="number" />
+                                    </form>
+                                </ng-container>
+
                             </div>
                         </div>
 
@@ -207,7 +221,12 @@
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <div></div>
+                            <div class="hs-xy-center">
+                                <div class="d-grid" style="width: 50%;"
+                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
+                                    <button form="claimPointFormId" type="submit" class="btn btn-success btn-sm">Claim</button>
+                                </div>
+                            </div>
                         </div>
 
                     </section>
@@ -270,7 +289,7 @@
                 </div>
             </div>
         </div>
-        <div class="card border-danger">
+        <div class="card border-info mt-1">
             <div class="card-header">Chats</div>
             <div class="card-body hs-chat-box hs-position-relative scroller">
                 <app-chat-messages [messageThreads]="(gameService.gameChats$ | async)">

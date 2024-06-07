@@ -26,6 +26,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           let apiResponse: ApiResponse;
           apiResponse = error.error;
 
+          if (error.status === 400) {
+            if (error.error.displayByDefault) {
+              this.sharedService.showNotification(false, error.error.title, error.error.message, error.error.isHtmlEnabled);
+            }
+          }
+
           if (error.status === 401) {
             this.sharedService.showNotification(false, error.error.title, error.error.message, error.error.isHtmlEnabled);
           }

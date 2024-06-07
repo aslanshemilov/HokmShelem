@@ -45,7 +45,6 @@ export class HokmComponent implements AfterViewInit, OnDestroy {
         this.router.navigateByUrl('/');
       }
     })
-
   }
 
   private initializeResizeObserver(): void {

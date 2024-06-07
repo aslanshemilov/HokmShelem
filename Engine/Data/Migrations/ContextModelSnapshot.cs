@@ -43,15 +43,6 @@ namespace Engine.Data.Migrations
                     b.Property<string>("Card13")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Card14")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Card15")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Card16")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Card2")
                         .HasColumnType("nvarchar(max)");
 
@@ -75,12 +66,6 @@ namespace Engine.Data.Migrations
 
                     b.Property<string>("Card9")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalCardsLeft")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalGamePolicyCards")
-                        .HasColumnType("int");
 
                     b.HasKey("Name");
 
@@ -122,6 +107,9 @@ namespace Engine.Data.Migrations
                     b.Property<string>("Blue1CardsName")
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("Blue1Claimed")
+                        .HasColumnType("int");
+
                     b.Property<string>("Blue1Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -135,6 +123,9 @@ namespace Engine.Data.Migrations
                     b.Property<string>("Blue2CardsName")
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("Blue2Claimed")
+                        .HasColumnType("int");
+
                     b.Property<string>("Blue2Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -145,6 +136,9 @@ namespace Engine.Data.Migrations
                     b.Property<int>("BlueTotalScore")
                         .HasColumnType("int");
 
+                    b.Property<int>("ClaimStartsByIndex")
+                        .HasColumnType("int");
+
                     b.Property<int>("GS")
                         .HasColumnType("int");
 
@@ -152,6 +146,9 @@ namespace Engine.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("HakemCardsName")
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("HakemIndex")
                         .HasColumnType("int");
@@ -168,6 +165,9 @@ namespace Engine.Data.Migrations
                     b.Property<string>("Red1CardsName")
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("Red1Claimed")
+                        .HasColumnType("int");
+
                     b.Property<string>("Red1Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -180,6 +180,9 @@ namespace Engine.Data.Migrations
 
                     b.Property<string>("Red2CardsName")
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Red2Claimed")
+                        .HasColumnType("int");
 
                     b.Property<string>("Red2Status")
                         .IsRequired()
@@ -197,13 +200,16 @@ namespace Engine.Data.Migrations
                     b.Property<string>("RoundSuit")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoundTargetScore")
+                        .HasColumnType("int");
+
                     b.Property<int>("TargetScore")
                         .HasColumnType("int");
 
-                    b.Property<int>("VoteToEndCount")
+                    b.Property<int>("WhosTurnIndex")
                         .HasColumnType("int");
 
-                    b.Property<int>("WhosTurnIndex")
+                    b.Property<int>("WhosTurnToClaimIndex")
                         .HasColumnType("int");
 
                     b.HasKey("Name");
@@ -211,6 +217,8 @@ namespace Engine.Data.Migrations
                     b.HasIndex("Blue1CardsName");
 
                     b.HasIndex("Blue2CardsName");
+
+                    b.HasIndex("HakemCardsName");
 
                     b.HasIndex("Red1CardsName");
 
@@ -359,6 +367,10 @@ namespace Engine.Data.Migrations
                         .WithMany()
                         .HasForeignKey("Blue2CardsName");
 
+                    b.HasOne("Engine.Entities.Card", "HakemCards")
+                        .WithMany()
+                        .HasForeignKey("HakemCardsName");
+
                     b.HasOne("Engine.Entities.Card", "Red1Cards")
                         .WithMany()
                         .HasForeignKey("Red1CardsName");
@@ -370,6 +382,8 @@ namespace Engine.Data.Migrations
                     b.Navigation("Blue1Cards");
 
                     b.Navigation("Blue2Cards");
+
+                    b.Navigation("HakemCards");
 
                     b.Navigation("Red1Cards");
 

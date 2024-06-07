@@ -14,6 +14,7 @@ import { LoginWithExternal } from '../shared/models/account/loginWithExternal';
 import jwt_decode from 'jwt-decode';
 import { SharedService } from '../shared/shared.service';
 import { GameService } from '../game/game.service';
+import { CurrentGame } from '../shared/models/engine/currentGame';
 
 @Injectable({
   providedIn: 'root'
@@ -209,23 +210,17 @@ export class AccountService {
 
   private handleGameLostConnectionIfAny() {
     this.gameService.getCurrentGame().subscribe({
-      next: gameName => {
-        if (gameName) {
-          if (this.router.url != '/game/hokm') {
+      next: (currentGame: CurrentGame) => {
+        if (currentGame) {
+          if (this.router.url !== '/game/hokm' && this.router.url !== '/game/shelem') {
             this.router.navigateByUrl('/');
             var result = this.sharedService.confirmBox('warning', 'Lost Connection', 'You have an ongoing game. Would you like to reconnect?');
             result.subscribe({
               next: (answer) => {
                 if (answer) {
-                  this.router.navigateByUrl('/game/hokm');
+                  this.router.navigateByUrl('/game/' + currentGame.gameType);
                 } else {
-                   this.gameService.leaveTheGameApi(gameName).subscribe({
-                    next: _ => {
-
-                    },
-                    error: error => {
-                    }
-                   })
+                   this.gameService.leaveTheGameApi(currentGame.name).subscribe()
                 }
               }
             })

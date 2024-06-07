@@ -30,7 +30,13 @@
         public int BlueTotalScore { get; set; }
         public int WhosTurnIndex { get; set; }
         public int RoundStartsByIndex { get; set; }
-        public int VoteToEndCount { get; set; }
+        public int RoundTargetScore { get; set; }
+        public int ClaimStartsByIndex { get; set; }
+        public int WhosTurnToClaimIndex { get; set; }
+        public int Blue1Claimed { get; set; }
+        public int Red1Claimed { get; set; }
+        public int Blue2Claimed { get; set; }
+        public int Red2Claimed { get; set; }
 
         public SD.PlayerInGameStatus Blue1Status { get; set; }
         public SD.PlayerInGameStatus Red1Status { get; set; }
@@ -55,5 +61,9 @@
         [ForeignKey("Red2Cards")]
         public string Red2CardsName { get; set; }
         public Card Red2Cards { get; set; }
+
+        [ForeignKey("HakemCards")]
+        public string HakemCardsName { get; set; }
+        public Card HakemCards { get; set; }
     }
 }

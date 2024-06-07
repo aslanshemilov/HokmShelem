@@ -1,4 +1,6 @@
-﻿namespace Engine.SignalR
+﻿using Engine.Entities;
+
+namespace Engine.SignalR
 {
     [Authorize]
     public class ShelemHub : Hub
@@ -80,17 +82,6 @@
         {
             await Clients.Group(gameName).SendAsync("ShowHakem", SD.GS.HakemChooseHokm, hakemIndex, roundGameEnded);
         }
-        public async Task HakemGetsCardsToChooseHokmAsync(Game game)
-        {
-            game.GS = SD.GS.HakemChooseHokm;
-            _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
-            _unity.Complete();
-
-            _unity.GameRepo.AssignPlayersCards(game);
-            _unity.Complete();
-            var hakemCardsToHokm = _unity.GameRepo.GetHakemCardsToHokm(game);
-            await Clients.Client(hakemCardsToHokm.HakemConnectionId).SendAsync("HakemChooseHokm", hakemCardsToHokm.Cards);
-        }
         public async Task DisplayPlayerCardsAsync(Game game)
         {
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Blue1))
@@ -101,6 +92,10 @@
                 .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Blue2Cards));
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Red2))
                 .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Red2Cards));
+        }
+        public async Task PlayerClaimsPoint(string gameName, int playerToClaimIndex)
+        {
+            await Clients.Group(gameName).SendAsync("PlayerClaimsPoint", playerToClaimIndex);
         }
         public async Task DisplayWhosTurnAsync(string gameName, int whosTurnIndex)
         {
@@ -134,23 +129,22 @@
         }
         public async Task AllPlayersConnected(Game game)
         {
-            game.GS = SD.GS.DetermineTheFirstHakem;
+            game.GS = SD.GS.DetermineFirstHakem;
             var cards = SD.CardsToDetermineTheFirstHakem();
-            var hakemIndex = SD.GetTheFirstHakemIndex(cards);
-            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex, hakemIndex, hakemIndex));
-            game.GS = SD.GS.HakemChooseHokm;
+            int claimStartsByIndex = SD.GetTheFirstHakemIndex(cards);
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(claimStartsByIndex: claimStartsByIndex, whosTurnToClaimIndex: claimStartsByIndex));
+            _unity.GameRepo.AssignPlayersCards(game);
             _unity.Complete();
-
-            await Clients.Group(game.Name).SendAsync("DetermineTheFirstHakem", SD.GS.DetermineTheFirstHakem, cards);
+            await Clients.Group(game.Name).SendAsync("DetermineTheHakem", SD.GS.DetermineFirstHakem, cards);
             PauseGame(3);
-            await ShowHakemAsync(game.Name, hakemIndex);
-            await HakemGetsCardsToChooseHokmAsync(game);
+            await DisplayPlayerCardsAsync(game);
+            await PlayerClaimsPoint(game.Name, claimStartsByIndex);
         }
         public async Task HakemChoseHokmSuit(string gameName, string suit)
         {
             var game = _unity.GameRepo.FindByName(gameName, includeProperties: "Players,Blue1Cards,Red1Cards,Blue2Cards,Red2Cards");
             game.GS = SD.GS.RoundGameStarted;
-            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hs: suit));
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hokmSuit: suit));
             _unity.Complete();
             await Clients.Group(gameName).SendAsync("DisplayHokmSuit", SD.GS.RoundGameStarted, suit, game.WhosTurnIndex);
             await DisplayPlayerCardsAsync(game);
@@ -194,7 +188,7 @@
                             else
                             {
                                 await ShowHakemAsync(game.Name, game.HakemIndex, true);
-                                await HakemGetsCardsToChooseHokmAsync(game);
+                                //await HakemGetsCardsToChooseHokmAsync(game);
                             }
                         }
                         else

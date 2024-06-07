@@ -6,6 +6,7 @@ import { GameInfo } from 'src/app/shared/models/engine/game';
 import { SharedService } from 'src/app/shared/shared.service';
 import { environment } from 'src/environments/environment';
 import { GameService } from '../game.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-shelem',
@@ -18,11 +19,14 @@ export class ShelemComponent implements AfterViewInit, OnDestroy {
   @ViewChild('divgamebox') divgamebox: ElementRef | undefined;
   @ViewChild('playerCardsDiv', { static: false }) playerCardsDiv: ElementRef | undefined;
   divHeight: number | undefined;
+  claimPointForm: FormGroup = new FormGroup({});
+  submitted = false;
   private resizeObserver: ResizeObserver | undefined;
   
   constructor(public gameService: GameService,
     private accountService: AccountService,
     private sharedService: SharedService,
+    private formBuilder: FormBuilder,
     private router: Router
   ) { }
 
@@ -31,6 +35,7 @@ export class ShelemComponent implements AfterViewInit, OnDestroy {
       next: _ => {
         this.game$ = this.gameService.gameInfo$;
         this.gameService.canExit = false;
+        this.initializeForm();
         this.connectToGame();
         setTimeout(() => {
           this.scrollToGameBox();
@@ -101,6 +106,20 @@ export class ShelemComponent implements AfterViewInit, OnDestroy {
       const myArray = imgSrc.split("/").pop();
       const val = myArray.slice(0, myArray.indexOf('.'));
       this.gameService.playerPlayedTheCard(val);
+    }
+  }
+
+  initializeForm() {
+    this.claimPointForm = this.formBuilder.group({
+      point: ['', [Validators.required]],
+    });
+  }
+
+  claimPoint() {
+    this.submitted = true;
+
+    if (this.claimPointForm.valid) {
+      console.log(this.claimPointForm.get('point')?.value)
     }
   }
 

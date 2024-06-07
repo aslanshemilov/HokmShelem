@@ -4,7 +4,7 @@
     {
         //int CountOfActiveGames();
         void CreateGame(Room room);
-        string GetGameName(string playerName);
+        CurrentGameDto GetCurrentGame(string playerName);
         GameInfoDto GetGameInfo(string gameName, string playerName);
         bool AllPlayersAreConnected(Game game);
         string HakemConnectionId(Game game);

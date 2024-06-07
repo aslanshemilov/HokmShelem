@@ -134,14 +134,14 @@
         }
         public async Task AllPlayersConnected(Game game)
         {
-            game.GS = SD.GS.DetermineTheFirstHakem;
+            game.GS = SD.GS.DetermineFirstHakem;
             var cards = SD.CardsToDetermineTheFirstHakem();
             var hakemIndex = SD.GetTheFirstHakemIndex(cards);
-            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex, hakemIndex, hakemIndex));
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hakemIndex: hakemIndex, whosTurnIndex: hakemIndex, roundStartsByIndex: hakemIndex));
             game.GS = SD.GS.HakemChooseHokm;
             _unity.Complete();
 
-            await Clients.Group(game.Name).SendAsync("DetermineTheFirstHakem", SD.GS.DetermineTheFirstHakem, cards);
+            await Clients.Group(game.Name).SendAsync("DetermineTheHakem", SD.GS.DetermineFirstHakem, cards);
             PauseGame(3);
             await ShowHakemAsync(game.Name, hakemIndex);
             await HakemGetsCardsToChooseHokmAsync(game);
@@ -150,7 +150,7 @@
         {
             var game = _unity.GameRepo.FindByName(gameName, includeProperties: "Players,Blue1Cards,Red1Cards,Blue2Cards,Red2Cards");
             game.GS = SD.GS.RoundGameStarted;
-            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hs: suit));
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hokmSuit: suit));
             _unity.Complete();
             await Clients.Group(gameName).SendAsync("DisplayHokmSuit", SD.GS.RoundGameStarted, suit, game.WhosTurnIndex);
             await DisplayPlayerCardsAsync(game);
