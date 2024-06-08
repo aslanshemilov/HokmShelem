@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Engine.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240606215802_ModelCreation")]
+    [Migration("20240608021127_ModelCreation")]
     partial class ModelCreation
     {
         /// <inheritdoc />
@@ -210,9 +210,6 @@ namespace Engine.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("WhosTurnIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WhosTurnToClaimIndex")
                         .HasColumnType("int");
 
                     b.HasKey("Name");

@@ -21,7 +21,7 @@
         public enum GS // GS -> GameStage
         {
             GameHasNotStarted,        // 0
-            DetermineFirstHakem,   // 1
+            DetermineTheInitiator,    // 1
             HakemChooseHokm,          // 2
             RoundGameStarted          // 3
         }
@@ -84,7 +84,7 @@
 
             return cards;
         }
-        public static int GetTheFirstHakemIndex(List<string> cards)
+        public static int GetTheFirstInitiatorIndex(List<string> cards)
         {
             List<int> values = new List<int>();
             foreach(var card in cards)
@@ -147,10 +147,21 @@
                 Red1 = game.Red1,
                 Blue2 = game.Blue2,
                 Red2 = game.Red2,
-                Status = string.IsNullOrEmpty(status) ? SD.Completed : status,
-                Winner = string.IsNullOrEmpty(status) ? (game.RedTotalScore >= game.TargetScore ? SD.Red : SD.Blue) : null,
+                Status = string.IsNullOrEmpty(status) ? Completed : status,
+                Winner = string.IsNullOrEmpty(status) ? (game.RedTotalScore >= game.TargetScore ? Red : Blue) : null,
                 LeftBy = leftBy
             };
+        }
+        public static int LastMaxClaimPoint(int blue1Claimed, int red1Claimed, int blue2Claimed, int red2Claimed)
+        {
+            return Math.Max(Math.Max(blue1Claimed, red1Claimed), Math.Max(blue2Claimed, red2Claimed));
+        }
+        public static int GetNextIndex(int currentIndex)
+        {
+            if (currentIndex == 1) return 2;
+            else if (currentIndex == 2) return 3;
+            else if (currentIndex == 3) return 4;
+            else return 1;
         }
     }
 }

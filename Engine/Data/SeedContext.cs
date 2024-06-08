@@ -52,7 +52,6 @@ namespace Engine.Data
             }
 
             // adding a test game
-            //return;
             if (!context.Player.Any())
             {
                 var kim = new Player

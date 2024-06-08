@@ -1,0 +1,4 @@
+<span class="point" *ngIf="point">
+    <i class="fa fa-times" *ngIf="point == -1"></i>
+    <ng-container *ngIf="point > 0">{{point}}</ng-container>
+</span>

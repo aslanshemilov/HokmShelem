@@ -56,39 +56,47 @@
                                         (click)="chooseHokm(gameInfo.red2Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == 3 || gameInfo.gs == 1">
-                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 1">
-                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 1">
+                                    <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 2">
+                                    <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 3">
+                                    <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 4">
+                                    <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == 1">
+                                    <ng-container *ngIf="gameInfo.myIndex == 1">
+                                        <app-claimed-point [point]="gameInfo.red2Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 2">
-                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 2">
+                                        <app-claimed-point [point]="gameInfo.blue1Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 3">
-                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 3">
+                                        <app-claimed-point [point]="gameInfo.red1Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 4">
-                                        <i class="h4 bi bi-arrow-left-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 4">
+                                        <app-claimed-point [point]="gameInfo.blue2Claimed"></app-claimed-point>
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <div class="hs-xy-center">
-                                <div class="d-grid" style="width: 50%;"
-                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
-                                    <button type="button" class="btn btn-danger btn-sm">Pass</button>
-                                </div>
-                            </div>
+                            <div></div>
                         </div>
 
                         <div class="up-down-throw-cards-box">
@@ -100,30 +108,43 @@
                                         (click)="chooseHokm(gameInfo.blue2Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == 3 || gameInfo.gs == 1">
-                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 1">
-                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 1">
+                                    <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 2">
+                                    <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 3">
+                                    <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 4">
+                                    <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == 1">
+                                    <ng-container *ngIf="gameInfo.myIndex == 1">
+                                        <app-claimed-point [point]="gameInfo.blue2Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 2">
-                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 2">
+                                        <app-claimed-point [point]="gameInfo.red2Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 3">
-                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 3">
+                                        <app-claimed-point [point]="gameInfo.blue1Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 4">
-                                        <i class="h4 bi bi-arrow-up-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 4">
+                                        <app-claimed-point [point]="gameInfo.red1Claimed"></app-claimed-point>
                                     </ng-container>
                                 </ng-container>
                             </div>
@@ -147,40 +168,51 @@
                                         (click)="chooseHokm(gameInfo.blue1Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == 3">
-                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 1">
-                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
-                                    </ng-container>
-                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 2">
-                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
-                                    </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 3">
-                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
-                                    </ng-container>
-                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 4">
-                                        <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
-                                    </ng-container>
+                                <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 1">
+                                    <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 2">
+                                    <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 3">
+                                    <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 4">
+                                    <i class="h4 bi bi-arrow-down-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
                                 </ng-container>
 
-                                <ng-container
-                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
-                                    <form id="claimPointFormId" [formGroup]="claimPointForm" (ngSubmit)="claimPoint()">
-                                        <input formControlName="point" class="form-control" type="number" />
-                                    </form>
+                                <ng-container *ngIf="gameInfo.gs == 1">
+                                    <ng-container *ngIf="gameInfo.myIndex != gameInfo.whosTurnIndex">
+                                        <ng-container *ngIf="gameInfo.myIndex == 1">
+                                            <app-claimed-point [point]="gameInfo.blue1Claimed"></app-claimed-point>
+                                        </ng-container>
+                                        <ng-container *ngIf="gameInfo.myIndex == 2">
+                                            <app-claimed-point [point]="gameInfo.red1Claimed"></app-claimed-point>
+                                        </ng-container>
+                                        <ng-container *ngIf="gameInfo.myIndex == 3">
+                                            <app-claimed-point [point]="gameInfo.blue2Claimed"></app-claimed-point>
+                                        </ng-container>
+                                        <ng-container *ngIf="gameInfo.myIndex == 4">
+                                            <app-claimed-point [point]="gameInfo.red2Claimed"></app-claimed-point>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="gameInfo.myIndex == gameInfo.whosTurnIndex">
+                                        <app-claim-point-input (pointToClaim)="playerClaimedPoint($event)"
+                                            [initialValue]="gameInfo.nextAvailablePoint"></app-claim-point-input>
+                                    </ng-container>
                                 </ng-container>
-
                             </div>
                         </div>
 
@@ -194,41 +226,48 @@
                                         (click)="chooseHokm(gameInfo.red1Card)">
                                 </ng-container>
 
-                                <ng-container *ngIf="gameInfo.gs == 3 || gameInfo.gs == 1">
-                                    <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 1">
-                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                <ng-container *ngIf="gameInfo.red1Card && gameInfo.myIndex == 1">
+                                    <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red1Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 2">
+                                    <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 3">
+                                    <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                        *ngIf="gameInfo.red2Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                </ng-container>
+                                <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 4">
+                                    <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
+                                        *ngIf="gameInfo.blue1Card == 'turn'"></i>
+                                    <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
+                                        src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                </ng-container>
+
+                                <ng-container *ngIf="gameInfo.gs == 1">
+                                    <ng-container *ngIf="gameInfo.myIndex == 1">
+                                        <app-claimed-point [point]="gameInfo.red1Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue2Card && gameInfo.myIndex == 2">
-                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue2Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 2">
+                                        <app-claimed-point [point]="gameInfo.blue2Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.red2Card && gameInfo.myIndex == 3">
-                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
-                                            *ngIf="gameInfo.red2Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.red2Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.red2Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 3">
+                                        <app-claimed-point [point]="gameInfo.red2Claimed"></app-claimed-point>
                                     </ng-container>
-                                    <ng-container *ngIf="gameInfo.blue1Card && gameInfo.myIndex == 4">
-                                        <i class="h4 bi bi-arrow-right-circle-fill blinking-span"
-                                            *ngIf="gameInfo.blue1Card == 'turn'"></i>
-                                        <img class="played-card-img" *ngIf="gameInfo.blue1Card != 'turn'"
-                                            src="{{blobImageUrl}}/{{gameInfo.blue1Card}}.jpg">
+                                    <ng-container *ngIf="gameInfo.myIndex == 4">
+                                        <app-claimed-point [point]="gameInfo.blue1Claimed"></app-claimed-point>
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <div class="hs-xy-center">
-                                <div class="d-grid" style="width: 50%;"
-                                    *ngIf="gameInfo.gs == 1 && gameInfo.myIndex == gameInfo.whosTurnToClaimIndex">
-                                    <button form="claimPointFormId" type="submit" class="btn btn-success btn-sm">Claim</button>
-                                </div>
-                            </div>
+                            <div></div>
                         </div>
-
                     </section>
 
                     <!-- sit one -->

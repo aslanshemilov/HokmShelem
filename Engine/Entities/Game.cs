@@ -32,7 +32,6 @@
         public int RoundStartsByIndex { get; set; }
         public int RoundTargetScore { get; set; }
         public int ClaimStartsByIndex { get; set; }
-        public int WhosTurnToClaimIndex { get; set; }
         public int Blue1Claimed { get; set; }
         public int Red1Claimed { get; set; }
         public int Blue2Claimed { get; set; }

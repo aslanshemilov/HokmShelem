@@ -67,8 +67,8 @@ export class GameService {
               this.handlePlayedCards(new PlayedCards());
             }
           } else if (gameInfo.gameType == 'shelem') {
-            if (gameInfo.gs === GS.DetermineFirstHakem) {
-              this.handleWhosTurnFlag(gameInfo.whosTurnToClaimIndex);
+            if (gameInfo.gs === GS.DetermineTheInitiator) {
+              this.handleWhosTurnToClaimFlag(gameInfo.whosTurnIndex, gameInfo.nextAvailablePoint);
             }
           } else if (gameInfo.gs == GS.RoundGameStarted) {
             this.handleWhosTurnFlag(gameInfo.whosTurnIndex);
@@ -94,7 +94,7 @@ export class GameService {
       });
     });
 
-    this.hubConnection.on('DetermineTheHakem', (gs: GS, cards: string[]) => {
+    this.hubConnection.on('DetermineTheInitiator', (gs: GS, cards: string[]) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
         gameInfo.gs = gs;
@@ -108,17 +108,38 @@ export class GameService {
       }
     });
 
-    this.hubConnection.on('PlayerClaimsPoint', (whosTurnToClaimIndex: number) => {
+    this.hubConnection.on('PlayerClaimsPoint', (whosTurnToClaimIndex: number, lastClaimedPoint) => {
+      this.handleWhosTurnToClaimFlag(whosTurnToClaimIndex, lastClaimedPoint);
+    });
+
+    this.hubConnection.on('ShelemStarts', (gs: GS) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
+        gameInfo.gs = gs;
         gameInfo.blue1Card = null;
         gameInfo.red1Card = null;
         gameInfo.blue2Card = null;
         gameInfo.red2Card = null;
         gameInfo.hokmSuit = null;
-        gameInfo.whosTurnToClaimIndex = whosTurnToClaimIndex;
+        gameInfo.blue1Claimed = 0;
+        gameInfo.red1Claimed = 0;
+        gameInfo.blue2Claimed = 0;
+        gameInfo.red2Claimed = 0;
+        gameInfo.whosTurnIndex = -1;
+
         this.setGameInfo(gameInfo);
-        this.handleWhosTurnFlag(whosTurnToClaimIndex);
+      }
+    });
+
+    this.hubConnection.on('DisplayClaimedPoint', (playerIndex: number, point) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo) {
+        if (playerIndex == 1) gameInfo.blue1Claimed = point;
+        else if (playerIndex == 2) gameInfo.red1Claimed = point;
+        else if (playerIndex == 3) gameInfo.blue2Claimed = point;
+        else gameInfo.red2Claimed = point;
+
+        this.setGameInfo(gameInfo);
       }
     });
 
@@ -252,6 +273,13 @@ export class GameService {
     }
   }
 
+  async playerClaimedPoint(point: number) {
+    const gameInfo = this.getGameInfoSourceValue();
+    if (this.hubConnection && gameInfo) {
+      return this.hubConnection.invoke('PlayerClaimedPoint', this.gameName, gameInfo.myIndex, point);
+    }
+  }
+
   async hakemChoseHokmSuit(suit: string) {
     if (this.hubConnection) {
       return this.hubConnection.invoke('HakemChoseHokmSuit', this.gameName, suit);
@@ -332,6 +360,33 @@ export class GameService {
         gameInfo.blue2Card = 'turn';
       } else if (whosTurnIndex == 4) {
         gameInfo.red2Card = 'turn';
+      }
+
+      this.setGameInfo(gameInfo);
+    }
+  }
+  
+  private handleWhosTurnToClaimFlag(whosTurnIndex: number, nextAvailablePoint: number) {
+    const gameInfo = this.getGameInfoSourceValue();
+    if (gameInfo) {
+      gameInfo.whosTurnIndex = whosTurnIndex;
+      gameInfo.nextAvailablePoint = nextAvailablePoint;
+      gameInfo.blue1Card = null;
+      gameInfo.red1Card = null;
+      gameInfo.blue2Card = null;
+      gameInfo.red2Card = null;
+      gameInfo.hokmSuit = null;
+
+      if (gameInfo.myIndex !== gameInfo.whosTurnIndex) {
+        if (whosTurnIndex == 1) {
+          gameInfo.blue1Card = 'turn';
+        } else if (whosTurnIndex == 2) {
+          gameInfo.red1Card = 'turn';
+        } else if (whosTurnIndex == 3) {
+          gameInfo.blue2Card = 'turn';
+        } else if (whosTurnIndex == 4) {
+          gameInfo.red2Card = 'turn';
+        }
       }
 
       this.setGameInfo(gameInfo);

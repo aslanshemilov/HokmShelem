@@ -152,6 +152,11 @@
                 gameInfo.MyCards = _unity.CardRepo.GetCardsAsList(cards);
             }
 
+            if (gameInfo.GameType == SD.Shelem)
+            {
+                gameInfo.NextAvailablePoint = SD.LastMaxClaimPoint(gameInfo.Blue1Claimed, gameInfo.Red1Claimed, gameInfo.Blue2Claimed, gameInfo.Red2Claimed) + 5;
+            }
+
             return gameInfo;
         }
         public bool AllPlayersAreConnected(Game game)
@@ -230,7 +235,83 @@
             if (model.RoundStartsByIndex > 0) game.RoundStartsByIndex = model.RoundStartsByIndex;
             if (!string.IsNullOrEmpty(model.HokmSuit)) game.HokmSuit = model.HokmSuit;
             if (model.ClaimStartsByIndex > 0) game.ClaimStartsByIndex = model.ClaimStartsByIndex;
-            if (model.WhosTurnToClaimIndex > 0) game.WhosTurnToClaimIndex = model.WhosTurnToClaimIndex;
+        }
+        public void ResetShelem(Game game)
+        {
+            _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
+            game.GS = SD.GS.DetermineTheInitiator;
+            game.Blue1Claimed = 0;
+            game.Red1Claimed = 0;
+            game.Blue2Claimed = 0;
+            game.Red2Claimed = 0;
+            game.RoundTargetScore = 0;
+            game.ClaimStartsByIndex = SD.GetNextIndex(game.ClaimStartsByIndex);
+            game.WhosTurnIndex = game.ClaimStartsByIndex;
+        }
+        public int PlayerClaimsPoint(Game game, int playerIndex, int point)
+        {
+            if (playerIndex == 1) game.Blue1Claimed = point;
+            else if (playerIndex == 2) game.Red1Claimed = point;
+            else if (playerIndex == 3) game.Blue2Claimed = point;
+            else game.Red2Claimed = point;
+
+            if (game.Blue1Claimed > 0 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed == -1)
+            {
+                game.RoundTargetScore = point;
+                return 1;
+            }
+
+            if (game.Blue1Claimed == -1 && game.Red1Claimed > 0 && game.Blue2Claimed == -1 && game.Red2Claimed == -1)
+            {
+                game.RoundTargetScore = point;
+                return 2;
+            }
+
+            if (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed > 0 && game.Red2Claimed == -1)
+            {
+                game.RoundTargetScore = point;
+                return 3;
+            }
+
+            if (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed > 0)
+            {
+                game.RoundTargetScore = point;
+                return 4;
+            }
+
+            if (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed == -1)
+            {
+                // all Players have passed
+                return -1;
+            }
+
+            // Claim continues
+            if (playerIndex == 1)
+            {
+                if (game.Red1Claimed > -1) game.WhosTurnIndex = 2;
+                else if (game.Red1Claimed == -1 && game.Blue2Claimed > -1) game.WhosTurnIndex = 3;
+                else game.WhosTurnIndex = 4;
+            }
+            else if (playerIndex == 2)
+            {
+                if (game.Blue2Claimed > -1) game.WhosTurnIndex = 3;
+                else if (game.Blue2Claimed == -1 && game.Red2Claimed > -1) game.WhosTurnIndex = 4;
+                else game.WhosTurnIndex = 1;
+            }
+            else if (playerIndex == 3)
+            {
+                if (game.Red2Claimed > -1) game.WhosTurnIndex = 4;
+                else if (game.Red2Claimed == -1 && game.Blue1Claimed > -1) game.WhosTurnIndex = 1;
+                else game.WhosTurnIndex = 2;
+            }
+            else if (playerIndex == 4)
+            {
+                if (game.Blue1Claimed > -1) game.WhosTurnIndex = 1;
+                else if (game.Blue1Claimed == -1 && game.Red1Claimed > -1) game.WhosTurnIndex = 2;
+                else game.WhosTurnIndex = 3;
+            }
+
+            return 0;
         }
         public void AssignPlayersCards(Game game)
         {
@@ -504,7 +585,7 @@
         {
             _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
             Remove(game);
-            foreach(var player in game.Players)
+            foreach (var player in game.Players)
             {
                 player.RoomName = null;
             }

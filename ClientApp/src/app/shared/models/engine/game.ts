@@ -20,11 +20,11 @@ export interface GameInfo {
     blueTotalScore: number;
     whosTurnIndex: number;
     roundTargetScore: number;
-    whosTurnToClaimIndex: number;
     blue1Claimed: number;
     red1Claimed: number;
     blue2Claimed: number;
     red2Claimed: number;
+    nextAvailablePoint: number;
    
     myPlayerName: string;
     myIndex: number;
@@ -52,7 +52,7 @@ export interface SitSetting {
 
 export enum GS {
     GameHasNotStarted,        // 0
-    DetermineFirstHakem,      // 1
+    DetermineTheInitiator,    // 1
     HakemChooseHokm,          // 2
     RoundGameStarted          // 3
 }

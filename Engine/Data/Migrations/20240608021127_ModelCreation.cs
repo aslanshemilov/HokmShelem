@@ -96,7 +96,6 @@ namespace Engine.Data.Migrations
                     RoundStartsByIndex = table.Column<int>(type: "int", nullable: false),
                     RoundTargetScore = table.Column<int>(type: "int", nullable: false),
                     ClaimStartsByIndex = table.Column<int>(type: "int", nullable: false),
-                    WhosTurnToClaimIndex = table.Column<int>(type: "int", nullable: false),
                     Blue1Claimed = table.Column<int>(type: "int", nullable: false),
                     Red1Claimed = table.Column<int>(type: "int", nullable: false),
                     Blue2Claimed = table.Column<int>(type: "int", nullable: false),

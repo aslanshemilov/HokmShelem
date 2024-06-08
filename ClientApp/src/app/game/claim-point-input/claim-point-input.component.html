@@ -1,0 +1,18 @@
+<form [formGroup]="claimPointForm" (ngSubmit)="claimPoint()" *ngIf="initialValue">
+    <div class="row">
+        <div class="col">
+            <input formControlName="point" class="form-control" type="number"
+                [class.is-invalid]="(submitted || claimPointForm.get('point')?.dirty) && claimPointForm.get('point')?.errors" 
+                mask="000"/>
+        </div>
+        <div class="mt-2 d-flex justify-content-between">
+            <button type="button" style="width: 45%; font-size: large;" class="btn btn-dark" (click)="pass()">
+                <i class="bi bi-ban"></i>
+            </button>
+            <button type="submit" style="width: 45%; font-size: large;" class="btn btn-success"
+                [disabled]="claimPointForm.get('point')?.errors">
+                <i class="bi bi-check-circle"></i>
+            </button>
+        </div>
+    </div>
+</form>

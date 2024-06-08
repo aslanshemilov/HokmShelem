@@ -209,9 +209,6 @@ namespace Engine.Data.Migrations
                     b.Property<int>("WhosTurnIndex")
                         .HasColumnType("int");
 
-                    b.Property<int>("WhosTurnToClaimIndex")
-                        .HasColumnType("int");
-
                     b.HasKey("Name");
 
                     b.HasIndex("Blue1CardsName");

@@ -11,6 +11,8 @@
         int GetPlayerIndex(Game game, string playerName);
         void UpdatePlayerStatusOfTheGame(Game game, string playerName, SD.PlayerInGameStatus status);
         void UpdateGame(Game game, GameUpdateDto model);
+        void ResetShelem(Game game);
+        int PlayerClaimsPoint(Game game, int playerIndex, int point);
         void AssignPlayersCards(Game game);
         HakemCardsToHokm GetHakemCardsToHokm(Game game);
         bool HandlePlayerPlayedTheCard(Game game, string card, string playerName, int playerIndex);

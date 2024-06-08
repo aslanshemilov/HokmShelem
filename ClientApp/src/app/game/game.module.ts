@@ -7,6 +7,8 @@ import { PlayerCardComponent } from './player-card/player-card.component';
 import { GameInterruptionButtonsComponent } from './game-interruption-buttons/game-interruption-buttons.component';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ShelemComponent } from './shelem/shelem.component';
+import { ClaimPointInputComponent } from './claim-point-input/claim-point-input.component';
+import { ClaimedPointComponent } from './claimed-point/claimed-point.component';
 
 
 @NgModule({
@@ -15,6 +17,8 @@ import { ShelemComponent } from './shelem/shelem.component';
     PlayerCardComponent,
     GameInterruptionButtonsComponent,
     ShelemComponent,
+    ClaimPointInputComponent,
+    ClaimedPointComponent,
   ],
   imports: [
     CommonModule,
