@@ -1,5 +1,4 @@
 ﻿using Engine.Entities;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Engine.Repository
 {
@@ -66,6 +65,48 @@ namespace Engine.Repository
 
             return cardToAdd;
         }
+        public int ShelemUpdateHakemCards(string gameName, string playerName, List<string> selectedCards)
+        {
+            var playerCards = GetFirstOrDefault(c => c.Name == playerName);
+            var hakemCards = GetFirstOrDefault(c => c.Name == gameName + "_hakem");
+
+            var playerCardsAsList = GetCardsAsList(playerCards);
+            var hakemCardsAsList = GetCardsAsList(hakemCards);
+
+            playerCardsAsList.AddRange(hakemCardsAsList);
+            playerCardsAsList.RemoveAll(selectedCards.Contains);
+
+            playerCards.Card1 = playerCardsAsList.ElementAt(0);
+            playerCards.Card2 = playerCardsAsList.ElementAt(1);
+            playerCards.Card3 = playerCardsAsList.ElementAt(2);
+            playerCards.Card4 = playerCardsAsList.ElementAt(3);
+            playerCards.Card5 = playerCardsAsList.ElementAt(4);
+            playerCards.Card6 = playerCardsAsList.ElementAt(5);
+            playerCards.Card7 = playerCardsAsList.ElementAt(6);
+            playerCards.Card8 = playerCardsAsList.ElementAt(7);
+            playerCards.Card9 = playerCardsAsList.ElementAt(8);
+            playerCards.Card10 = playerCardsAsList.ElementAt(9);
+            playerCards.Card11 = playerCardsAsList.ElementAt(10);
+            playerCards.Card12 = playerCardsAsList.ElementAt(11);
+
+            int totalSelectedCardsPoint = 5;
+
+            foreach(var card in selectedCards)
+            {
+                var value = SD.GetValueOfCard(card);
+                if (value == 4)
+                {
+                    totalSelectedCardsPoint += 5;
+                }
+                else if (value == 9 || value == 13)
+                {
+                    totalSelectedCardsPoint += 10;
+                }
+
+            }
+
+            return totalSelectedCardsPoint;
+        }
         public void RemoveCardFromPlayerHand(Card card, string cardToRemove)
         {
             if (card.Card1 == cardToRemove) card.Card1 = null;
@@ -102,6 +143,10 @@ namespace Engine.Repository
             {
                 _context.Card.Remove(card);
             }
+        }
+        private void EmptyPlayerCards(Card card)
+        {
+           
         }
         #endregion
     }

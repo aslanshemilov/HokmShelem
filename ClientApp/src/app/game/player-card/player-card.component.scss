@@ -24,7 +24,13 @@ div[cdkDrag] {
 
 img[cdkDragHandle] {
     touch-action: none;
-    /* Prevent default touch actions */
     user-select: none;
-    /* Prevent text selection on double click */
+}
+
+img {
+    transition: transform 150ms ease-in-out;
+}
+
+.jump {
+    transform: translateY(-15px);
 }

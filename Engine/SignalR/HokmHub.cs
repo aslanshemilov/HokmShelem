@@ -152,7 +152,7 @@
             game.GS = SD.GS.RoundGameStarted;
             _unity.GameRepo.UpdateGame(game, new GameUpdateDto(hokmSuit: suit));
             _unity.Complete();
-            await Clients.Group(gameName).SendAsync("DisplayHokmSuit", SD.GS.RoundGameStarted, suit, game.WhosTurnIndex);
+            await Clients.Group(gameName).SendAsync("DisplayHokmSuitHokm", SD.GS.RoundGameStarted, suit, game.WhosTurnIndex);
             await DisplayPlayerCardsAsync(game);
         }
         public async Task PlayerPlayedTheCard(string gameName, string card)

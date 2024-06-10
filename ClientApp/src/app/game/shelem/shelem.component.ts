@@ -109,6 +109,10 @@ export class ShelemComponent implements AfterViewInit, OnDestroy {
     this.gameService.playerClaimedPoint(point);
   }
 
+  hakemPutDownCards() {
+    this.gameService.hakemPutDownCards();
+  }
+
   private scrollToGameBox(): void {
     if (this.divgamebox) {
       this.divgamebox.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });

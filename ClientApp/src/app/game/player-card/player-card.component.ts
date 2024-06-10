@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { GameService } from '../game.service';
 import { GS } from 'src/app/shared/models/engine/game';
 import { environment } from 'src/environments/environment';
@@ -9,6 +9,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
   styleUrls: ['./player-card.component.scss']
 })
 export class PlayerCardComponent implements OnInit {
+  @ViewChildren('jumpingImg') jumpingImg!: QueryList<ElementRef>;
   @Input() cards: string[] | undefined;
   @Output() cardBeingPlayed = new EventEmitter();
   blobImageUrl = environment.azureContainerUrl + 'game';
@@ -21,10 +22,32 @@ export class PlayerCardComponent implements OnInit {
     this.getScreenWidth();
   }
 
-  constructor(public gameService: GameService) { }
+  constructor(public gameService: GameService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
     this.getScreenWidth();
+  }
+
+  onSelectCard(enabled: boolean, card: string, event: MouseEvent) {
+    if (enabled) {
+      event.stopPropagation();
+      const found = this.gameService.selectedCards.find(c => c === card);
+      if (found) {
+        const imgElement = this.getCardElement(card);
+        if (imgElement) {
+          this.renderer.removeClass(imgElement.nativeElement, 'jump');
+        }
+        this.gameService.selectedCards = [...this.gameService.selectedCards.filter(c => c !== found)];
+      } else {
+        if (this.gameService.selectedCards.length < 4) {
+          this.gameService.selectedCards = [...this.gameService.selectedCards, card];
+          const imgElement = this.getCardElement(card);
+          if (imgElement) {
+            this.renderer.addClass(imgElement.nativeElement, 'jump');
+          }
+        }
+      }
+    }
   }
 
   onDoubleClick(card: string, event: MouseEvent) {
@@ -37,7 +60,6 @@ export class PlayerCardComponent implements OnInit {
           clearTimeout(this.clickTimeout);
           this.clickTimeout = null;
         }
-
         this.cardBeingPlayed.emit(card);
       }
     }
@@ -47,10 +69,13 @@ export class PlayerCardComponent implements OnInit {
     this.screenWidth = window.innerWidth;
   }
 
-  onDragEnded(event: CdkDragEnd) {   
+  onDragEnded(event: CdkDragEnd) {
     const draggedElement = event.source.element.nativeElement;
     draggedElement.style.transform = 'none';
     event.source._dragRef.reset();
   }
 
+  private getCardElement(card: string): ElementRef | undefined {
+    return this.jumpingImg.find((div) => div.nativeElement.src.includes(card));
+  }
 }

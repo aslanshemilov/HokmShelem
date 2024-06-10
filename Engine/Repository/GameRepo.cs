@@ -1,4 +1,6 @@
-﻿namespace Engine.Repository
+﻿using Engine.Entities;
+
+namespace Engine.Repository
 {
     public class GameRepo : BaseRepo<Game>, IGameRepo
     {
@@ -154,7 +156,16 @@
 
             if (gameInfo.GameType == SD.Shelem)
             {
-                gameInfo.NextAvailablePoint = SD.LastMaxClaimPoint(gameInfo.Blue1Claimed, gameInfo.Red1Claimed, gameInfo.Blue2Claimed, gameInfo.Red2Claimed) + 5;
+                if (gameInfo.GS == SD.GS.DetermineTheInitiator)
+                {
+                    var nextAvailablePoint = SD.LastMaxClaimPoint(gameInfo.Blue1Claimed, gameInfo.Red1Claimed, gameInfo.Blue2Claimed, gameInfo.Red2Claimed);
+                    gameInfo.NextAvailablePoint = nextAvailablePoint == 0 ? 105 : nextAvailablePoint + 5;
+                }
+                else if (gameInfo.GS == SD.GS.HakemChooseHokm && GetPlayerNameByIndex(gameInfo, gameInfo.HakemIndex).Equals(playerName))
+                {
+                    var hakemCards = _unity.CardRepo.GetFirstOrDefault(x => x.Name.Equals(gameInfo.GameName + "_hakem"));
+                    gameInfo.MyCards.AddRange(_unity.CardRepo.GetCardsAsList(hakemCards));
+                }
             }
 
             return gameInfo;
@@ -168,65 +179,29 @@
         }
         public string HakemConnectionId(Game game)
         {
-            if (game.HakemIndex == 1)
-            {
-                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue1);
-            }
-            else if (game.HakemIndex == 2)
-            {
-                return _unity.PlayerRepo.GetPlayerConnectionId(game.Red1);
-            }
-            else if (game.HakemIndex == 3)
-            {
-                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
-            }
-            else
-            {
-                return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
-            }
+            if (game.HakemIndex == 1) return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue1);
+            else if (game.HakemIndex == 2) return _unity.PlayerRepo.GetPlayerConnectionId(game.Red1);
+            else if (game.HakemIndex == 3) return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
+            else return _unity.PlayerRepo.GetPlayerConnectionId(game.Blue2);
         }
         public int GetPlayerIndex(Game game, string playerName)
         {
             if (game != null)
             {
-                if (game.Blue1 == playerName)
-                {
-                    return 1;
-                }
-                else if (game.Red1 == playerName)
-                {
-                    return 2;
-                }
-                else if (game.Blue2 == playerName)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 4;
-                }
+                if (game.Blue1 == playerName) return 1;
+                else if (game.Red1 == playerName) return 2;
+                else if (game.Blue2 == playerName) return 3;
+                else return 4;
             }
 
             return 0;
         }
         public void UpdatePlayerStatusOfTheGame(Game game, string playerName, SD.PlayerInGameStatus status)
         {
-            if (game.Blue1.Equals(playerName))
-            {
-                game.Blue1Status = status;
-            }
-            else if (game.Red1.Equals(playerName))
-            {
-                game.Red1Status = status;
-            }
-            else if (game.Blue2.Equals(playerName))
-            {
-                game.Blue2Status = status;
-            }
-            else if (game.Red2.Equals(playerName))
-            {
-                game.Red2Status = status;
-            }
+            if (game.Blue1.Equals(playerName)) game.Blue1Status = status;
+            else if (game.Red1.Equals(playerName)) game.Red1Status = status;
+            else if (game.Blue2.Equals(playerName)) game.Blue2Status = status;
+            else if (game.Red2.Equals(playerName)) game.Red2Status = status;
         }
         public void UpdateGame(Game game, GameUpdateDto model)
         {
@@ -397,6 +372,11 @@
             };
 
             return new HakemCardsToHokm(hakemConnectionId, firstFiveCards);
+        }
+        public int ShelemUpdateHakemCards(Game game, List<string> selectedCards)
+        {
+            var hakemName = GetHakemName(game);
+            return _unity.CardRepo.ShelemUpdateHakemCards(game.Name, hakemName, selectedCards);
         }
         public bool HandlePlayerPlayedTheCard(Game game, string card, string playerName, int playerIndex)
         {
@@ -590,6 +570,20 @@
                 player.RoomName = null;
             }
         }
+        public string GetPlayerNameByIndex(Game game, int index)
+        {
+            if (index == 1) return game.Blue1;
+            else if (index == 2) return game.Red1;
+            else if (index == 3) return game.Blue2;
+            else return game.Red2;
+        }
+        public string GetPlayerNameByIndex(GameInfoDto game, int index)
+        {
+            if (index == 1) return game.Blue1;
+            else if (index == 2) return game.Red1;
+            else if (index == 3) return game.Blue2;
+            else return game.Red2;
+        }
         #region Private Methods
         private void SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(Game game, Card playerCards, string card, int playerIndex)
         {
@@ -631,6 +625,13 @@
             }
 
             return value;
+        }
+        private string GetHakemName(Game game)
+        {
+            if (game.HakemIndex == 1) return game.Blue1;
+            else if (game.HakemIndex == 2) return game.Red1;
+            else if (game.HakemIndex == 3) return game.Blue2;
+            else return game.Red2;
         }
         #endregion
     }

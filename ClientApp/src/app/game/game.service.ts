@@ -12,7 +12,6 @@ import { NotificationMessage } from '../shared/models/engine/notificationMessage
 import { PlayedCards } from '../shared/models/engine/playedCards';
 import { Router } from '@angular/router';
 import { CurrentGame } from '../shared/models/engine/currentGame';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +25,8 @@ export class GameService {
   private gameInfoSource = new BehaviorSubject<GameInfo | null>(null);
   gameInfo$ = this.gameInfoSource.asObservable();
   gameName: string | undefined;
+  gameType: string | undefined;
+  selectedCards: string[] = [];
 
   private gameChatsSource = new BehaviorSubject<MessageThread[]>([]);
   gameChats$ = this.gameChatsSource.asObservable();
@@ -33,12 +34,9 @@ export class GameService {
   playerCardsDivHeightSource = new BehaviorSubject<number | null>(null);
   playerCardsDivHeight$ = this.playerCardsDivHeightSource.asObservable();
 
-  bsModalRef?: BsModalRef;
-
   constructor(private http: HttpClient,
     private sharedService: SharedService,
-    private router: Router,
-    private modalService: BsModalService) { }
+    private router: Router) { }
 
   getCurrentGame() {
     return this.http.get<CurrentGame>(this.engineUrl + 'game/current-game')
@@ -53,6 +51,7 @@ export class GameService {
       map((gameInfo: GameInfo) => {
         if (gameInfo) {
           this.gameName = gameInfo.gameName;
+          this.gameType = gameInfo.gameType;
           gameInfo.sitSetting = getSitSetting(gameInfo);
           if (gameInfo.myCards) {
             gameInfo.myCards = getSortCards(gameInfo.myCards)
@@ -60,12 +59,16 @@ export class GameService {
 
           this.setGameInfo(gameInfo);
 
-          if (gameInfo.gameType == 'hokm' && gameInfo.gs === GS.HakemChooseHokm && gameInfo.myCards) {
-            if (gameInfo.myIndex == gameInfo.hakemIndex) {
+          if (gameInfo.gs === GS.HakemChooseHokm && gameInfo.myCards) {
+            if (gameInfo.myIndex == gameInfo.hakemIndex && gameInfo.hokmSuit == null) {
               this.handlePlayedCards(new PlayedCards('c', 'd', 's', 'h'));
             } else {
               this.handlePlayedCards(new PlayedCards());
             }
+          }
+
+          if (gameInfo.gameType == 'hokm') {
+
           } else if (gameInfo.gameType == 'shelem') {
             if (gameInfo.gs === GS.DetermineTheInitiator) {
               this.handleWhosTurnToClaimFlag(gameInfo.whosTurnIndex, gameInfo.nextAvailablePoint);
@@ -154,6 +157,7 @@ export class GameService {
         gameInfo.blue2Card = null;
         gameInfo.red2Card = null;
         gameInfo.hokmSuit = null;
+        this.selectedCards = [];
 
         if (roundGameEnded) {
           gameInfo.blueRoundScore = 0;
@@ -172,6 +176,15 @@ export class GameService {
       }
     });
 
+    this.hubConnection.on('HakemGetsHakemCards', (cards: string[]) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo) {
+        cards.forEach(card => gameInfo.myCards.push(card));
+        gameInfo.myCards = getSortCards(gameInfo.myCards);
+        this.setGameInfo(gameInfo);
+      }
+    });
+
     this.hubConnection.on('HakemChooseHokm', (cards: string[]) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo) {
@@ -179,7 +192,7 @@ export class GameService {
       }
     });
 
-    this.hubConnection.on('DisplayHokmSuit', (gs: GS, suit: string, whosTurnIndex: number) => {
+    this.hubConnection.on('DisplayHokmSuitHokm', (gs: GS, suit: string, whosTurnIndex: number) => {
       const gameInfo = this.getGameInfoSourceValue();
       if (gameInfo && suit && whosTurnIndex) {
         gameInfo.gs = gs;
@@ -190,6 +203,18 @@ export class GameService {
         gameInfo.red2Card = null;
         this.setGameInfo(gameInfo);
         this.handleWhosTurnFlag(whosTurnIndex);
+      }
+    });
+
+    this.hubConnection.on('DisplayHokmSuitShelem', (suit: string) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo && suit) {
+        gameInfo.hokmSuit = suit;
+        gameInfo.blue1Card = null;
+        gameInfo.red1Card = null;
+        gameInfo.blue2Card = null;
+        gameInfo.red2Card = null;
+        this.setGameInfo(gameInfo);
       }
     });
 
@@ -286,6 +311,12 @@ export class GameService {
     }
   }
 
+  async hakemPutDownCards() {
+    if (this.hubConnection) {
+      return this.hubConnection.invoke('HakemPutDownCards', this.gameName, this.selectedCards);
+    }
+  }
+
   async playerPlayedTheCard(card: string) {
     if (this.hubConnection) {
       return this.hubConnection.invoke('PlayerPlayedTheCard', this.gameName, card);
@@ -365,7 +396,7 @@ export class GameService {
       this.setGameInfo(gameInfo);
     }
   }
-  
+
   private handleWhosTurnToClaimFlag(whosTurnIndex: number, nextAvailablePoint: number) {
     const gameInfo = this.getGameInfoSourceValue();
     if (gameInfo) {
