@@ -71,8 +71,10 @@ export class PlayerCardComponent implements OnInit {
 
   onDragEnded(event: CdkDragEnd) {
     const draggedElement = event.source.element.nativeElement;
-    draggedElement.style.transform = 'none';
-    event.source._dragRef.reset();
+    setTimeout(() => {
+      draggedElement.style.transform = 'none';
+      event.source._dragRef.reset();
+    }, 150);
   }
 
   private getCardElement(card: string): ElementRef | undefined {

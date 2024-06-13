@@ -91,10 +91,12 @@ export class ShelemComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  // double clicking the card
   playerPlayedTheCard(card: string) {
     this.gameService.playerPlayedTheCard(card);
   }
 
+   // drag and dropping the card
   playerDroppedTheCard(event: any) {
     if (event.target.tagName === 'IMG') {
       const imgElement = event.target;

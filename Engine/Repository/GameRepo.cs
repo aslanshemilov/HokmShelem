@@ -27,7 +27,7 @@ namespace Engine.Repository
                 Blue1 = room.Blue1,
                 Red1 = room.Red1,
                 Blue2 = room.Blue2,
-                Red2 = room.Red2
+                Red2 = room.Red2,
             };
 
             foreach (var player in room.Players)
@@ -159,13 +159,16 @@ namespace Engine.Repository
                 if (gameInfo.GS == SD.GS.DetermineTheInitiator)
                 {
                     var nextAvailablePoint = SD.LastMaxClaimPoint(gameInfo.Blue1Claimed, gameInfo.Red1Claimed, gameInfo.Blue2Claimed, gameInfo.Red2Claimed);
-                    gameInfo.NextAvailablePoint = nextAvailablePoint == 0 ? 105 : nextAvailablePoint + 5;
+                    gameInfo.NextAvailablePoint = nextAvailablePoint == 0 ? SD.ShelemMinRoundClaim : nextAvailablePoint + 5;
                 }
                 else if (gameInfo.GS == SD.GS.HakemChooseHokm && GetPlayerNameByIndex(gameInfo, gameInfo.HakemIndex).Equals(playerName))
                 {
                     var hakemCards = _unity.CardRepo.GetFirstOrDefault(x => x.Name.Equals(gameInfo.GameName + "_hakem"));
                     gameInfo.MyCards.AddRange(_unity.CardRepo.GetCardsAsList(hakemCards));
                 }
+
+                gameInfo.BlueRoundScore = 0;
+                gameInfo.RedRoundScore = 0;
             }
 
             return gameInfo;
@@ -230,27 +233,37 @@ namespace Engine.Repository
             else if (playerIndex == 3) game.Blue2Claimed = point;
             else game.Red2Claimed = point;
 
-            if (game.Blue1Claimed > 0 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed == -1)
+            if (point > 0) game.RoundTargetScore = point;
+
+            if (game.Blue1Claimed == SD.ShelemMaxRoundClaim || (game.Blue1Claimed > 0 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed == -1))
             {
-                game.RoundTargetScore = point;
+                game.Red1Claimed = -1;
+                game.Blue2Claimed = -1;
+                game.Red2Claimed = -1;
                 return 1;
             }
 
-            if (game.Blue1Claimed == -1 && game.Red1Claimed > 0 && game.Blue2Claimed == -1 && game.Red2Claimed == -1)
+            if (game.Red1Claimed == SD.ShelemMaxRoundClaim || (game.Blue1Claimed == -1 && game.Red1Claimed > 0 && game.Blue2Claimed == -1 && game.Red2Claimed == -1))
             {
-                game.RoundTargetScore = point;
+                game.Blue1Claimed = -1;
+                game.Blue2Claimed = -1;
+                game.Red2Claimed = -1;
                 return 2;
             }
 
-            if (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed > 0 && game.Red2Claimed == -1)
+            if (game.Blue2Claimed == SD.ShelemMaxRoundClaim || (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed > 0 && game.Red2Claimed == -1))
             {
-                game.RoundTargetScore = point;
+                game.Blue1Claimed = -1;
+                game.Red1Claimed = -1;
+                game.Red2Claimed = -1;
                 return 3;
             }
 
-            if (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed > 0)
+            if (game.Red2Claimed == SD.ShelemMaxRoundClaim || (game.Blue1Claimed == -1 && game.Red1Claimed == -1 && game.Blue2Claimed == -1 && game.Red2Claimed > 0))
             {
-                game.RoundTargetScore = point;
+                game.Blue1Claimed = -1;
+                game.Red1Claimed = -1;
+                game.Blue2Claimed = -1;
                 return 4;
             }
 
@@ -373,10 +386,12 @@ namespace Engine.Repository
 
             return new HakemCardsToHokm(hakemConnectionId, firstFiveCards);
         }
-        public int ShelemUpdateHakemCards(Game game, List<string> selectedCards)
+        public void ShelemUpdateHakemCards(Game game, List<string> selectedCards)
         {
             var hakemName = GetHakemName(game);
-            return _unity.CardRepo.ShelemUpdateHakemCards(game.Name, hakemName, selectedCards);
+            var score = _unity.CardRepo.ShelemUpdateHakemCards(game.Name, hakemName, selectedCards);
+            if (game.HakemIndex == 1 || game.HakemIndex == 3) game.BlueRoundScore = score;
+            else game.RedRoundScore = score;
         }
         public bool HandlePlayerPlayedTheCard(Game game, string card, string playerName, int playerIndex)
         {
@@ -384,23 +399,31 @@ namespace Engine.Repository
             // if the played card by the player is the first round card
             if (game.RoundSuit == null)
             {
+                if (game.GameType == SD.Shelem)
+                {
+                    // for Shelem, the first played card by Hakem must be Hokm
+                    if (game.HakemIndex == playerIndex && game.NthCardIsBeingPlayed == 1)
+                    {
+                        var playerHasRoundSuitCard = PlayerHasTheSuitCardInHand(playerCards, game.HokmSuit);
+                        if (playerHasRoundSuitCard && !SD.GetSuitOfCard(card).Equals(game.HokmSuit))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            game.RoundSuit = SD.GetSuitOfCard(game.HokmSuit);
+                            SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(game, playerCards, card, playerIndex);
+                            return true;
+                        }
+                    }
+                }
                 game.RoundSuit = SD.GetSuitOfCard(card);
                 SetPlayedCardAndNextPersonTurnAndRemoveCardFromHand(game, playerCards, card, playerIndex);
                 return true;
             }
             else
             {
-                var playerHasRoundSuitCard = false;
-                var playerCardsAsList = _unity.CardRepo.GetCardsAsList(playerCards);
-
-                for (int i = 0; i < playerCardsAsList.Count; i++)
-                {
-                    if (SD.GetSuitOfCard(playerCardsAsList[i]).Equals(game.RoundSuit))
-                    {
-                        playerHasRoundSuitCard = true;
-                        i = playerCardsAsList.Count;
-                    }
-                }
+                var playerHasRoundSuitCard = PlayerHasTheSuitCardInHand(playerCards, game.RoundSuit);
 
                 //  check if player has card of current round suit
                 if (playerHasRoundSuitCard)
@@ -457,7 +480,15 @@ namespace Engine.Repository
                     game.WhosTurnIndex = 3;
                     game.RoundStartsByIndex = 3;
                 }
-                game.BlueRoundScore++;
+
+                if (game.GameType == SD.Shelem)
+                {
+                    game.BlueRoundScore += SD.GetShelemRoundScore(game.Blue1Card, game.Red1Card, game.Blue2Card, game.Red2Card);
+                }
+                else if (game.GameType == SD.Hokm)
+                {
+                    game.BlueRoundScore++;
+                }
             }
             else
             {
@@ -471,7 +502,15 @@ namespace Engine.Repository
                     game.WhosTurnIndex = 4;
                     game.RoundStartsByIndex = 4;
                 }
-                game.RedRoundScore++;
+
+                if (game.GameType == SD.Shelem)
+                {
+                    game.RedRoundScore += SD.GetShelemRoundScore(game.Blue1Card, game.Red1Card, game.Blue2Card, game.Red2Card);
+                }
+                else if (game.GameType == SD.Hokm)
+                {
+                    game.RedRoundScore++;
+                }
             }
 
             // empty the cards
@@ -480,52 +519,108 @@ namespace Engine.Repository
             game.Blue2Card = null;
             game.Red2Card = null;
             game.RoundSuit = null;
+            game.NthCardIsBeingPlayed++;
         }
         public int GetNewHakemIndex(Game game)
         {
-            // Blue won the round game
-            if (game.BlueRoundScore == SD.HokmEndOfRoundScore)
+            if (game.GameType == SD.Hokm)
             {
-                game.BlueTotalScore++;
-                // in case of Kot
-                if (game.RedRoundScore == 0)
+                // Blue won the round game
+                if (game.BlueRoundScore == SD.HokmEndOfRoundScore)
                 {
                     game.BlueTotalScore++;
-
-                    // Hakem Kot
-                    if (game.HakemIndex == 2 || game.HakemIndex == 4)
+                    // in case of Kot
+                    if (game.RedRoundScore == 0)
                     {
                         game.BlueTotalScore++;
+
+                        // Hakem Kot
+                        if (game.HakemIndex == 2 || game.HakemIndex == 4)
+                        {
+                            game.BlueTotalScore++;
+                        }
                     }
+
+
+                    if (game.HakemIndex == 2) return 3;
+                    else if (game.HakemIndex == 4) return 1;
+                    else return game.HakemIndex;
                 }
 
-
-                if (game.HakemIndex == 2) return 3;
-                else if (game.HakemIndex == 4) return 1;
-                else return game.HakemIndex;
-            }
-
-            // Red won the round game
-            if (game.RedRoundScore == SD.HokmEndOfRoundScore)
-            {
-                game.RedTotalScore++;
-                // in case of Kot
-                if (game.BlueRoundScore == 0)
+                // Red won the round game
+                if (game.RedRoundScore == SD.HokmEndOfRoundScore)
                 {
                     game.RedTotalScore++;
-                    // Hakem Kot
-                    if (game.HakemIndex == 1 || game.HakemIndex == 3)
+                    // in case of Kot
+                    if (game.BlueRoundScore == 0)
                     {
                         game.RedTotalScore++;
+                        // Hakem Kot
+                        if (game.HakemIndex == 1 || game.HakemIndex == 3)
+                        {
+                            game.RedTotalScore++;
+                        }
                     }
+
+                    if (game.HakemIndex == 3) return 4;
+                    else if (game.HakemIndex == 1) return 2;
+                    else return game.HakemIndex;
                 }
 
-                if (game.HakemIndex == 3) return 4;
-                else if (game.HakemIndex == 1) return 2;
-                else return game.HakemIndex;
+                return 0;
             }
+            else
+            {
+                // Shelem game calculation
+                if (game.BlueRoundScore + game.RedRoundScore == SD.ShelemMaxRoundClaim)
+                {
+                    if (game.HakemIndex == 1 || game.HakemIndex == 3)
+                    {
+                        if (game.BlueRoundScore == SD.ShelemMaxRoundClaim)
+                        {
+                            // Shelem has happened
+                            game.BlueTotalScore += SD.ShelemMaxRoundClaim * 2;
+                        }
+                        else if (game.BlueRoundScore >= game.RoundTargetScore)
+                        {
+                            game.BlueTotalScore += game.BlueRoundScore;
+                        }
+                        else
+                        {
+                            game.BlueTotalScore -= game.RoundTargetScore;
+                        }
 
-            return 0;
+                        game.RedTotalScore += game.RedRoundScore;
+                    }
+                    else
+                    {
+                        if (game.RedRoundScore == SD.ShelemMaxRoundClaim)
+                        {
+                            // Shelem has happened
+                            game.RedTotalScore += SD.ShelemMaxRoundClaim * 2;
+                        }
+                        else if (game.RedRoundScore >= game.RoundTargetScore)
+                        {
+                            game.RedTotalScore += game.RedRoundScore;
+                        }
+                        else
+                        {
+                            game.RedTotalScore -= game.RoundTargetScore;
+                        }
+
+                        game.BlueTotalScore += game.RedRoundScore;
+                    }
+
+                    game.ClaimStartsByIndex = SD.GetNextIndex(game.ClaimStartsByIndex);
+                    game.WhosTurnIndex = game.ClaimStartsByIndex;
+
+                    return game.WhosTurnIndex;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
         public void ResetRoundGame(Game game, int hakemIndex)
         {
@@ -537,21 +632,43 @@ namespace Engine.Repository
             game.HokmSuit = null;
             game.RedRoundScore = 0;
             game.BlueRoundScore = 0;
-            game.HakemIndex = hakemIndex;
-            game.RoundStartsByIndex = hakemIndex;
-            game.WhosTurnIndex = hakemIndex;
+            game.RoundTargetScore = 0;
+            game.Blue1Claimed = 0;
+            game.Red1Claimed = 0;
+            game.Blue2Claimed = 0;
+            game.Red2Claimed = 0;
+            
+            if (game.GameType == SD.Hokm)
+            {
+                game.HakemIndex = hakemIndex;
+                game.RoundStartsByIndex = hakemIndex;
+                game.WhosTurnIndex = hakemIndex;
+            }
+            else
+            {
+                game.HakemIndex = 0;
+                game.RoundStartsByIndex = 0;
+                game.WhosTurnIndex = 0;
+            }
+           
+            game.NthCardIsBeingPlayed = 1;
         }
         public string EndOfTheGame(Game game)
         {
             string winner = null;
-            if (game.BlueTotalScore >= game.TargetScore)
+            if (game.BlueTotalScore > game.RedTotalScore)
             {
-                winner = SD.Blue;
+                if (game.BlueTotalScore >= game.TargetScore)
+                {
+                    winner = SD.Blue;
+                }
             }
-
-            if (game.RedTotalScore >= game.TargetScore)
+            else if (game.RedTotalScore > game.BlueTotalScore)
             {
-                winner = SD.Red;
+                if (game.RedTotalScore >= game.TargetScore)
+                {
+                    winner = SD.Red;
+                }
             }
 
             if (!string.IsNullOrEmpty(winner))
@@ -632,6 +749,22 @@ namespace Engine.Repository
             else if (game.HakemIndex == 2) return game.Red1;
             else if (game.HakemIndex == 3) return game.Blue2;
             else return game.Red2;
+        }
+        private bool PlayerHasTheSuitCardInHand(Card playerCards, string suit)
+        {
+            var playerHasRoundSuitCard = false;
+            var playerCardsAsList = _unity.CardRepo.GetCardsAsList(playerCards);
+
+            for (int i = 0; i < playerCardsAsList.Count; i++)
+            {
+                if (SD.GetSuitOfCard(playerCardsAsList[i]).Equals(suit))
+                {
+                    playerHasRoundSuitCard = true;
+                    i = playerCardsAsList.Count;
+                }
+            }
+
+            return playerHasRoundSuitCard;
         }
         #endregion
     }

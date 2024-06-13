@@ -21,7 +21,7 @@ export class ClaimPointInputComponent implements OnInit {
 
   initializeForm() {
     this.claimPointForm = this.formBuilder.group({
-      point: [this.initialValue, [Validators.required, Validators.pattern('(105|110|115|120|125|130|135|140|145|150|155|160|165)'), 
+      point: [this.initialValue, [Validators.required, Validators.pattern('(100|105|110|115|120|125|130|135|140|145|150|155|160|165)'), 
         this.biggerOrEqualsToInitialValue()]],
     });
   }

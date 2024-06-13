@@ -114,7 +114,7 @@ namespace Engine.Data
                 {
                     Name = "kim",
                     GameType = "shelem",
-                    TargetScore = 300,
+                    TargetScore = 50,
                     Blue1 = "Kim",
                     Red1 = "Todd",
                     Blue2 = "Wong",

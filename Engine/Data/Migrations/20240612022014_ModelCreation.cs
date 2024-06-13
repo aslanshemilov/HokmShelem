@@ -82,6 +82,7 @@ namespace Engine.Data.Migrations
                     Red2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GS = table.Column<int>(type: "int", nullable: false),
                     HakemIndex = table.Column<int>(type: "int", nullable: false),
+                    NthCardIsBeingPlayed = table.Column<int>(type: "int", nullable: false),
                     HokmSuit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoundSuit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Blue1Card = table.Column<string>(type: "nvarchar(max)", nullable: true),

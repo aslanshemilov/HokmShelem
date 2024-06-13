@@ -1,6 +1,4 @@
-﻿using Engine.Entities;
-
-namespace Engine.Repository
+﻿namespace Engine.Repository
 {
     public class CardRepo : BaseRepo<Card>, ICardRepo
     {
@@ -11,6 +9,11 @@ namespace Engine.Repository
             _context = context;
         }
 
+        public List<string> GetCardsAsList(string name)
+        {
+            var card = GetFirstOrDefault(x => x.Name == name);
+            return GetCardsAsList(card);
+        }
         public List<string> GetCardsAsList(Card card)
         {
             if (card != null)
@@ -102,7 +105,6 @@ namespace Engine.Repository
                 {
                     totalSelectedCardsPoint += 10;
                 }
-
             }
 
             return totalSelectedCardsPoint;

@@ -1,9 +1,4 @@
-﻿using Engine.Dtos;
-using Engine.Entities;
-using Microsoft.AspNetCore.SignalR;
-using System.Numerics;
-
-namespace Engine.SignalR
+﻿namespace Engine.SignalR
 {
     [Authorize]
     public class ShelemHub : Hub
@@ -52,7 +47,7 @@ namespace Engine.SignalR
                             _unity.Complete();
                             await Clients.Group(game.Name).SendAsync("DetermineTheInitiator", SD.GS.DetermineTheInitiator, cards);
                             PauseGame(2);
-                            await ShelemStartsAsync(game);
+                            await ShelemRound_RE_StartsAsync(game);
                         }
                     }
                 }
@@ -88,13 +83,16 @@ namespace Engine.SignalR
 
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task ShelemStartsAsync(Game game)
+        public async Task ShelemRound_RE_StartsAsync(Game game)
         {
             await Clients.Group(game.Name).SendAsync("ShelemStarts", SD.GS.DetermineTheInitiator);
+            _unity.CardRepo.RemoveAllPlayersCardsFromTheGame(game);
+            _unity.Complete();
             _unity.GameRepo.AssignPlayersCards(game);
+            _unity.GameRepo.UpdateGame(game, new GameUpdateDto(whosTurnIndex: game.WhosTurnIndex));
             _unity.Complete();
             await DisplayPlayerCardsAsync(game);
-            await PlayerClaimsPointAsync(game, game.ClaimStartsByIndex, 105);
+            await PlayerClaimsPointAsync(game, game.ClaimStartsByIndex, SD.ShelemMinRoundClaim);
         }
         public async Task ShowHakemAsync(string gameName, int hakemIndex, bool roundGameEnded = false)
         {
@@ -103,13 +101,13 @@ namespace Engine.SignalR
         public async Task DisplayPlayerCardsAsync(Game game)
         {
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Blue1))
-                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Blue1Cards));
+                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Blue1));
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Red1))
-                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Red1Cards));
+                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Red1));
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Blue2))
-                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Blue2Cards));
+                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Blue2));
             await Clients.Client(_unity.PlayerRepo.GetPlayerConnectionId(game.Red2))
-                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Red2Cards));
+                .SendAsync("DisplayMyCards", _unity.CardRepo.GetCardsAsList(game.Red2));
         }
         public async Task PlayerClaimsPointAsync(Game game, int whosTurnIndex, int lastClaimedPoint)
         {
@@ -154,13 +152,13 @@ namespace Engine.SignalR
             if (result == 0) // Claim continues
             {
                 int nextAvailablePoint = SD.LastMaxClaimPoint(game.Blue1Claimed, game.Red1Claimed, game.Blue2Claimed, game.Red2Claimed);
-                await PlayerClaimsPointAsync(game, game.WhosTurnIndex, nextAvailablePoint == 0 ? 105 : nextAvailablePoint + 5);
+                await PlayerClaimsPointAsync(game, game.WhosTurnIndex, nextAvailablePoint == 0 ? SD.ShelemMinRoundClaim : nextAvailablePoint + 5);
             }
             else if (result == -1) // All players passed
             {
                 _unity.GameRepo.ResetShelem(game);
                 _unity.Complete();
-                await ShelemStartsAsync(game);
+                await ShelemRound_RE_StartsAsync(game);
             }
             else
             {
@@ -185,8 +183,10 @@ namespace Engine.SignalR
         public async Task HakemPutDownCards(string gameName, List<string> selectedCards)
         {
             var game = _unity.GameRepo.FindByName(gameName);
-            int s = _unity.GameRepo.ShelemUpdateHakemCards(game, selectedCards);
+            game.GS = SD.GS.RoundGameStarted;
+            _unity.GameRepo.ShelemUpdateHakemCards(game, selectedCards);
             _unity.Complete();
+            await Clients.Group(gameName).SendAsync("ShelemRoundGameStarted", SD.GS.RoundGameStarted);
         }
         public async Task PlayerPlayedTheCard(string gameName, string card)
         {
@@ -226,8 +226,7 @@ namespace Engine.SignalR
                             }
                             else
                             {
-                                await ShowHakemAsync(game.Name, game.HakemIndex, true);
-                                //await HakemGetsCardsToChooseHokmAsync(game);
+                                await ShelemRound_RE_StartsAsync(game);
                             }
                         }
                         else

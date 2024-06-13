@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Engine.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240608021127_ModelCreation")]
+    [Migration("20240612022014_ModelCreation")]
     partial class ModelCreation
     {
         /// <inheritdoc />
@@ -158,6 +158,9 @@ namespace Engine.Data.Migrations
 
                     b.Property<string>("HokmSuit")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NthCardIsBeingPlayed")
+                        .HasColumnType("int");
 
                     b.Property<string>("Red1")
                         .HasColumnType("nvarchar(max)");

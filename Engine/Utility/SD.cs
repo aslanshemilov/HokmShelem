@@ -10,6 +10,8 @@
         public const int ShelemMinScore = 300;
         public const int ShelemMaxScore = 1200;
         public const int HokmEndOfRoundScore = 7;
+        public const int ShelemMinRoundClaim = 100;
+        public const int ShelemMaxRoundClaim = 165;
 
         // Game history status
         public const string Completed = "completed";
@@ -126,16 +128,11 @@
         }
         public static int FourthPLayerIndex(int roundStartIndex)
         {
-            if (roundStartIndex == 1)
-                return 4;
-            else if (roundStartIndex == 2)
-                return 1;
-            else if (roundStartIndex == 3)
-                return 2;
-            else if (roundStartIndex == 4)
-                return 3;
-
-            return -1;
+            if (roundStartIndex == 1) return 4;
+            else if (roundStartIndex == 2) return 1;
+            else if (roundStartIndex == 3) return 2;
+            else if (roundStartIndex == 4) return 3;
+            else return -1;
         }
         public static GameHistory GetGameHistory(Game game, string status = null, string leftBy = null)
         {
@@ -162,6 +159,28 @@
             else if (currentIndex == 2) return 3;
             else if (currentIndex == 3) return 4;
             else return 1;
+        }
+        public static int GetShelemRoundScore(string card1, string card2, string card3, string card4)
+        {
+            int score = 5;
+            int value = 0;
+            value = GetValueOfCard(card1);
+            if (value == 4) score += 5;
+            if (value == 9 || value == 13) score += 10;
+
+            value = GetValueOfCard(card2);
+            if (value == 4) score += 5;
+            if (value == 9 || value == 13) score += 10;
+
+            value = GetValueOfCard(card3);
+            if (value == 4) score += 5;
+            if (value == 9 || value == 13) score += 10;
+
+            value = GetValueOfCard(card4);
+            if (value == 4) score += 5;
+            if (value == 9 || value == 13) score += 10;
+
+            return score;
         }
     }
 }

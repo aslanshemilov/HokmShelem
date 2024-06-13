@@ -18,6 +18,7 @@
         public string Red2 { get; set; }
         public SD.GS GS { get; set; } = SD.GS.GameHasNotStarted;
         public int HakemIndex { get; set; }
+        public int NthCardIsBeingPlayed { get; set; } = 1;
         public string HokmSuit { get; set; }
         public string RoundSuit { get; set; }
         public string Blue1Card { get; set; }
@@ -36,7 +37,7 @@
         public int Red1Claimed { get; set; }
         public int Blue2Claimed { get; set; }
         public int Red2Claimed { get; set; }
-
+      
         public SD.PlayerInGameStatus Blue1Status { get; set; }
         public SD.PlayerInGameStatus Red1Status { get; set; }
         public SD.PlayerInGameStatus Blue2Status { get; set; }

@@ -156,6 +156,9 @@ namespace Engine.Data.Migrations
                     b.Property<string>("HokmSuit")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NthCardIsBeingPlayed")
+                        .HasColumnType("int");
+
                     b.Property<string>("Red1")
                         .HasColumnType("nvarchar(max)");
 

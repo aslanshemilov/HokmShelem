@@ -67,12 +67,8 @@ export class GameService {
             }
           }
 
-          if (gameInfo.gameType == 'hokm') {
-
-          } else if (gameInfo.gameType == 'shelem') {
-            if (gameInfo.gs === GS.DetermineTheInitiator) {
-              this.handleWhosTurnToClaimFlag(gameInfo.whosTurnIndex, gameInfo.nextAvailablePoint);
-            }
+          if (gameInfo.gameType == 'shelem' && gameInfo.gs === GS.DetermineTheInitiator) {
+            this.handleWhosTurnToClaimFlag(gameInfo.whosTurnIndex, gameInfo.nextAvailablePoint);
           } else if (gameInfo.gs == GS.RoundGameStarted) {
             this.handleWhosTurnFlag(gameInfo.whosTurnIndex);
           }
@@ -124,6 +120,7 @@ export class GameService {
         gameInfo.blue2Card = null;
         gameInfo.red2Card = null;
         gameInfo.hokmSuit = null;
+        gameInfo.hakemIndex = 0;
         gameInfo.blue1Claimed = 0;
         gameInfo.red1Claimed = 0;
         gameInfo.blue2Claimed = 0;
@@ -172,6 +169,27 @@ export class GameService {
           gameInfo.red2Card = 's';
         }
 
+        if (gameInfo.gameType == 'shelem') {
+          if (hakemIndex == 1) {
+            gameInfo.red1Claimed = -1;
+            gameInfo.blue2Claimed = -1;
+            gameInfo.red2Claimed = -1;
+          } else if (hakemIndex == 2) {
+            gameInfo.blue1Claimed = -1;
+            gameInfo.blue2Claimed = -1;
+            gameInfo.red2Claimed = -1;
+          } else if (hakemIndex == 3) {
+            gameInfo.blue1Claimed = -1;
+            gameInfo.red1Claimed = -1;
+            gameInfo.red2Claimed = -1;
+          } else {
+            gameInfo.blue1Claimed = -1;
+            gameInfo.red1Claimed = -1;
+            gameInfo.blue2Claimed = -1;
+          }
+        }
+
+
         this.setGameInfo(gameInfo);
       }
     });
@@ -215,6 +233,15 @@ export class GameService {
         gameInfo.blue2Card = null;
         gameInfo.red2Card = null;
         this.setGameInfo(gameInfo);
+      }
+    });
+
+    this.hubConnection.on('ShelemRoundGameStarted', (gs: GS) => {
+      const gameInfo = this.getGameInfoSourceValue();
+      if (gameInfo) {
+        gameInfo.gs = gs;
+        this.setGameInfo(gameInfo);
+        this.handleWhosTurnFlag(gameInfo.hakemIndex);
       }
     });
 
@@ -313,7 +340,13 @@ export class GameService {
 
   async hakemPutDownCards() {
     if (this.hubConnection) {
-      return this.hubConnection.invoke('HakemPutDownCards', this.gameName, this.selectedCards);
+      return this.hubConnection.invoke('HakemPutDownCards', this.gameName, this.selectedCards).then(_ => {
+        const gameInfo = this.getGameInfoSourceValue();
+        if (gameInfo) {
+          let toBeRemoved = new Set(this.selectedCards);
+          gameInfo.myCards = gameInfo.myCards.filter(card => !toBeRemoved.has(card));
+        }
+      });
     }
   }
 
@@ -405,13 +438,13 @@ export class GameService {
       gameInfo.blue1Card = null;
       gameInfo.red1Card = null;
       gameInfo.blue2Card = null;
-      gameInfo.red2Card = null;
+      gameInfo.red2Card = null; 
       gameInfo.hokmSuit = null;
 
       if (gameInfo.myIndex !== gameInfo.whosTurnIndex) {
         if (whosTurnIndex == 1) {
           gameInfo.blue1Card = 'turn';
-        } else if (whosTurnIndex == 2) {
+        } else if (whosTurnIndex == 2) { 
           gameInfo.red1Card = 'turn';
         } else if (whosTurnIndex == 3) {
           gameInfo.blue2Card = 'turn';

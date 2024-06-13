@@ -7,7 +7,7 @@
                 </span>
                 <app-game-interruption-buttons></app-game-interruption-buttons>
             </div>
-            <div class="card-body hs-box hs-game-box scroller" #divgamebox>
+            <div class="card-body hs-box hs-game-box scroller no-select" #divgamebox>
                 <div class="hs-side-column hs-row-format">
                     <!-- hokm suit -->
                     <section class="hs-xy-center">
@@ -18,7 +18,7 @@
                     <!-- sit four -->
                     <section class="hs-player-sit hs-position-relative"
                         [ngClass]="gameInfo.sitSetting.sitColorOfOpponent">
-                        <div id="sit-4-player-name">{{gameInfo.sitSetting.sitFour}}</div>
+                        <div class="cursor-pointer" id="sit-4-player-name">{{gameInfo.sitSetting.sitFour}}</div>
                         <div class="text-center" *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex == 1 && gameInfo.sitSetting.sitFormat == 2) ||
                         (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 3) ||
                         (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 4) ||
@@ -27,7 +27,14 @@
                         </div>
                     </section>
                     <section class="hs-xy-center">
-                        <span class="badge bg-danger text-body">{{gameInfo.redRoundScore}}</span>
+                        <span class="badge bg-danger text-body" *ngIf="gameInfo.gs == 2 || gameInfo.gs == 3">
+                            <ng-container *ngIf="gameInfo.red1Claimed >= 100">
+                                {{gameInfo.red1Claimed}}
+                            </ng-container>
+                            <ng-container *ngIf="gameInfo.red2Claimed >= 100">
+                                {{gameInfo.red2Claimed}}
+                            </ng-container>
+                        </span>
                     </section>
                 </div>
 
@@ -41,7 +48,7 @@
                             <img class="crown" src="{{blobImageUrl}}/crown.png">
                         </div>
                         <div class="text-center">
-                            <label>{{gameInfo.sitSetting.sitThree}}</label>
+                            <label class="cursor-pointer">{{gameInfo.sitSetting.sitThree}}</label>
                         </div>
                     </section>
 
@@ -303,7 +310,7 @@
                     <section class="hs-player-sit hs-position-relative" [ngClass]="gameInfo.sitSetting.sitColorOfMe">
                         <div class="player-name-box hs-position-relative">
                             <div class="player-label">
-                                <span class="me-1">{{gameInfo.myPlayerName}}</span>
+                                <span class="me-1 cursor-pointer">{{gameInfo.myPlayerName}}</span>
                                 <ng-container *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex == 1 && gameInfo.sitSetting.sitFormat == 1) ||
                                 (gameInfo.hakemIndex == 2 && gameInfo.sitSetting.sitFormat == 2) ||
                                 (gameInfo.hakemIndex == 3 && gameInfo.sitSetting.sitFormat == 3) ||
@@ -343,7 +350,7 @@
                     <!-- sit two -->
                     <section class="hs-player-sit hs-position-relative"
                         [ngClass]="gameInfo.sitSetting.sitColorOfOpponent">
-                        <div id="sit-2-player-name">{{gameInfo.sitSetting.sitTwo}}</div>
+                        <div class="cursor-pointer" id="sit-2-player-name">{{gameInfo.sitSetting.sitTwo}}</div>
                         <div class="text-center" *ngIf="gameInfo.hakemIndex && (gameInfo.hakemIndex === 1 && gameInfo.sitSetting.sitFormat === 4) ||
                         (gameInfo.hakemIndex === 2 && gameInfo.sitSetting.sitFormat === 1) ||
                         (gameInfo.hakemIndex === 3 && gameInfo.sitSetting.sitFormat === 2) ||
@@ -352,8 +359,13 @@
                         </div>
                     </section>
                     <section class="hs-xy-center">
-                        <span class="badge bg-info text-body">
-                            {{gameInfo.blueRoundScore}}
+                        <span class="badge bg-info text-body" *ngIf="gameInfo.gs == 2 || gameInfo.gs == 3">
+                            <ng-container *ngIf="gameInfo.blue1Claimed >= 100">
+                                {{gameInfo.blue1Claimed}}
+                            </ng-container>
+                            <ng-container *ngIf="gameInfo.blue2Claimed >= 100">
+                                {{gameInfo.blue2Claimed}}
+                            </ng-container>
                         </span>
                     </section>
                 </div>
