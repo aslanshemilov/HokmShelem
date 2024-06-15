@@ -40,14 +40,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   registerAsGuest() {
-    this.accountService.registerAsGuest().subscribe({
-      next: (user: ApplicationUser | null) => {
-        if (user) {
-          this.sharedService.showNotification(true, 'Guest Player', 'Your name is <strong>' + user.playerName + '</strong>', true);
-          this.router.navigateByUrl('/lobby');
-        }
-      }
-    });
+    this.homeService.openRegisterGuestUserModal();
+    
   }
 
   private startHomePageInfoApiCall(): void {

@@ -15,7 +15,7 @@ export class CreateRoomComponent implements OnInit {
   roomName: string = '';
   minScore: number = 0;
   maxScore: number = 0;
-  createRoomForm: FormGroup = new FormGroup({});;
+  createRoomForm: FormGroup = new FormGroup({});
 
   constructor(private lobbyService: LobbyService,
     private formBuilder: FormBuilder,

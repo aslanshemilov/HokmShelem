@@ -52,84 +52,84 @@ namespace Engine.Data
             }
 
             // adding a test game
-            if (!context.Player.Any())
-            {
-                var kim = new Player
-                {
-                    Name = "Kim",
-                    Badge = "grey",
-                    Rate = 1854,
-                    HokmScore = 474,
-                    ShelemScore = 1806826,
-                    GamesWon = 6101,
-                    GamesLost = 3323,
-                    GamesLeft = 580,
-                    PhotoUrl = "https://randomuser.me/api/portraits/men/50.jpg",
-                    Country = "New-Zealand"
-                };
+            //if (!context.Player.Any())
+            //{
+            //    var kim = new Player
+            //    {
+            //        Name = "Kim",
+            //        Badge = "grey",
+            //        Rate = 1854,
+            //        HokmScore = 474,
+            //        ShelemScore = 1806826,
+            //        GamesWon = 6101,
+            //        GamesLost = 3323,
+            //        GamesLeft = 580,
+            //        PhotoUrl = "https://randomuser.me/api/portraits/men/50.jpg",
+            //        Country = "New-Zealand"
+            //    };
 
-                var todd = new Player
-                {
-                    Name = "Todd",
-                    Badge = "pink",
-                    Rate = 0,
-                    HokmScore = 0,
-                    ShelemScore = 0,
-                    GamesWon = 0,
-                    GamesLost = 0,
-                    GamesLeft = 0,
-                    PhotoUrl = "https://randomuser.me/api/portraits/men/9.jpg",
-                    Country = "Canada"
-                };
+            //    var todd = new Player
+            //    {
+            //        Name = "Todd",
+            //        Badge = "pink",
+            //        Rate = 0,
+            //        HokmScore = 0,
+            //        ShelemScore = 0,
+            //        GamesWon = 0,
+            //        GamesLost = 0,
+            //        GamesLeft = 0,
+            //        PhotoUrl = "https://randomuser.me/api/portraits/men/9.jpg",
+            //        Country = "Canada"
+            //    };
 
-                var wong = new Player
-                {
-                    Name = "Wong",
-                    Badge = "gold",
-                    Rate = 5076,
-                    HokmScore = 2547,
-                    ShelemScore = 2266965,
-                    GamesWon = 6653,
-                    GamesLost = 7471,
-                    GamesLeft = 4317,
-                    PhotoUrl = "https://randomuser.me/api/portraits/men/85.jpg",
-                    Country = "United-States-of-America",
-                };
+            //    var wong = new Player
+            //    {
+            //        Name = "Wong",
+            //        Badge = "gold",
+            //        Rate = 5076,
+            //        HokmScore = 2547,
+            //        ShelemScore = 2266965,
+            //        GamesWon = 6653,
+            //        GamesLost = 7471,
+            //        GamesLeft = 4317,
+            //        PhotoUrl = "https://randomuser.me/api/portraits/men/85.jpg",
+            //        Country = "United-States-of-America",
+            //    };
 
-                var miler = new Player
-                {
-                    Name = "Miller",
-                    Badge = "gold",
-                    Rate = 6097,
-                    HokmScore = 1068,
-                    ShelemScore = 3765630,
-                    GamesWon = 5004,
-                    GamesLost = 6118,
-                    GamesLeft = 4598,
-                    PhotoUrl = "https://randomuser.me/api/portraits/men/28.jpg",
-                    Country = "United-States-of-America",
-                };
+            //    var miler = new Player
+            //    {
+            //        Name = "Miller",
+            //        Badge = "gold",
+            //        Rate = 6097,
+            //        HokmScore = 1068,
+            //        ShelemScore = 3765630,
+            //        GamesWon = 5004,
+            //        GamesLost = 6118,
+            //        GamesLeft = 4598,
+            //        PhotoUrl = "https://randomuser.me/api/portraits/men/28.jpg",
+            //        Country = "United-States-of-America",
+            //    };
 
-                var game = new Game
-                {
-                    Name = "kim",
-                    GameType = "shelem",
-                    TargetScore = 50,
-                    Blue1 = "Kim",
-                    Red1 = "Todd",
-                    Blue2 = "Wong",
-                    Red2 = "Miller"
-                };
+            //    var game = new Game
+            //    {
+            //        Name = "kim",
+            //        GameType = "shelem",
+            //        TargetScore = 50,
+            //        Blue1 = "Kim",
+            //        Red1 = "Todd",
+            //        Blue2 = "Wong",
+            //        Red2 = "Miller"
+            //    };
 
-                game.Players.Add(kim);
-                game.Players.Add(todd);
-                game.Players.Add(wong);
-                game.Players.Add(miler);
+            //    game.Players.Add(kim);
+            //    game.Players.Add(todd);
+            //    game.Players.Add(wong);
+            //    game.Players.Add(miler);
 
-                context.Game.Add(game);
+            //    context.Game.Add(game);
 
-                await context.SaveChangesAsync();
-            }
+            //    await context.SaveChangesAsync();
+            //}
         }
     }
 }

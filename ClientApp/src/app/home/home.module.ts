@@ -10,6 +10,7 @@ import { TemsOfServiceComponent } from './tems-of-service/tems-of-service.compon
 import { AboutUsComponent } from './about-us/about-us.component';
 import { RulesComponent } from './rules/rules.component';
 import { CoreModule } from '../core/core.module';
+import { RegisterAsGuestComponent } from './register-as-guest/register-as-guest.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { CoreModule } from '../core/core.module';
     TemsOfServiceComponent,
     AboutUsComponent,
     RulesComponent,
+    RegisterAsGuestComponent,
   ],
   imports: [
     CommonModule,

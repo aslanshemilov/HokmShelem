@@ -61,3 +61,4 @@ global using Microsoft.AspNetCore.Authentication;
 global using System.Net.Http.Headers;
 global using System.Threading;
 global using Api.Dtos.GameHistory;
+global using Api.Dtos.Guest;

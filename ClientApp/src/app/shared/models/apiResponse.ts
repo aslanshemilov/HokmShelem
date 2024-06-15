@@ -6,9 +6,10 @@ export class ApiResponse {
     errors: string[];
     isHtmlEnabled: boolean;
     displayByDefault: boolean;
+    showWithToastr: boolean;
 
     constructor(statusCode: number, title: string, message: string, details: string, errors: string[], 
-        isHtmlEnabled: boolean = false, displayByDefault: boolean = false) {
+        isHtmlEnabled: boolean = false, displayByDefault: boolean = false, showWithToastr: boolean = false) {
         this.statusCode = statusCode;
         this.title = title;
         this.message = message;
@@ -16,5 +17,6 @@ export class ApiResponse {
         this.errors = errors;
         this.isHtmlEnabled = isHtmlEnabled;
         this.displayByDefault = displayByDefault;
+        this.showWithToastr = showWithToastr;
     }
 }

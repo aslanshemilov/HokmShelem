@@ -3,14 +3,6 @@
     [Authorize]
     public class LobbyController : ApiCoreController
     {
-        //[AllowAnonymous]
-        //[HttpGet("join-as-guest")]
-        //public ActionResult<string> JoinAsGuest()
-        //{
-
-           
-        //}
-
         [HttpGet("roomname-taken")]
         public ActionResult<bool> RoomNameTaken([FromQuery] string roomName)
         {

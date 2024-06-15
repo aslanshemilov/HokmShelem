@@ -15,6 +15,7 @@ import jwt_decode from 'jwt-decode';
 import { SharedService } from '../shared/shared.service';
 import { GameService } from '../game/game.service';
 import { CurrentGame } from '../shared/models/engine/currentGame';
+import { Guest } from '../shared/models/guest/guest';
 
 @Injectable({
   providedIn: 'root'
@@ -98,6 +99,10 @@ export class AccountService {
   }
 
   logout() {
+    if (this.isGuestUser) {
+      this.http.delete(this.apiUrl + 'guest').subscribe()
+    }
+   
     localStorage.removeItem(environment.applicationUserKey);
     this.isGuestUser = false;
     this.applicationUserSource.next(null);
@@ -151,8 +156,8 @@ export class AccountService {
     return null;
   }
 
-  registerAsGuest() {
-    return this.http.post<ApplicationUser | null>(this.apiUrl + 'guest', {}).pipe(
+  registerAsGuest(model: Guest) {
+    return this.http.post<ApplicationUser | null>(this.apiUrl + 'guest', model).pipe(
       map((user: ApplicationUser | null) => {
         if (user) {
           this.isGuestUser = true;
@@ -220,7 +225,7 @@ export class AccountService {
                 if (answer) {
                   this.router.navigateByUrl('/game/' + currentGame.gameType);
                 } else {
-                   this.gameService.leaveTheGameApi(currentGame.name).subscribe()
+                  this.gameService.leaveTheGameApi(currentGame.name).subscribe()
                 }
               }
             })

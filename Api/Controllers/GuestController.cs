@@ -12,13 +12,28 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApplicationUserDto>> RegisterAsGuest()
+        public async Task<ActionResult<ApplicationUserDto>> RegisterAsGuest(GuestDto model)
         {
-            var guestToAdd = new Guest() { PlayerName = UniqueRandomName() };
+            model.GuestName = UniqueGuestName(model.GuestName);
+            var guestToAdd = new Guest() { PlayerName = model.GuestName };
             Context.Guest.Add(guestToAdd);
             await Context.SaveChangesAsync();
 
             return CreateGuestUserDto(guestToAdd);
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteGuest()
+        {
+            var guest = await Context.Guest.FirstOrDefaultAsync(x => x.PlayerName == User.GetPlayerName());
+            if (guest != null)
+            {
+                Context.Guest.Remove(guest);
+                await Context.SaveChangesAsync();
+            }
+
+            return Ok();
         }
 
         [Authorize]
@@ -80,16 +95,23 @@
                 JWT = _jwtService.CreateGuestJWT(user)
             };
         }
-        private string UniqueRandomName()
+        private string UniqueGuestName(string guestName)
         {
-            var randomeName = SD.GetRandomName();
-
-            while (Context.Guest.Any(x => x.PlayerName.ToLower() == randomeName.ToLower()))
+            guestName = "g_" + guestName;
+            int i = 1;
+            if (!Context.Guest.Any(x => x.PlayerName.ToLower() == guestName.ToLower()))
             {
-                randomeName = SD.GetRandomName();
+                return guestName;
+            }
+            else
+            {
+                while (Context.Guest.Any(x => x.PlayerName.ToLower() == (guestName.ToLower() + i.ToString())))
+                {
+                    i++;
+                }
             }
 
-            return randomeName;
+            return guestName + i.ToString();
         }
         #endregion
     }

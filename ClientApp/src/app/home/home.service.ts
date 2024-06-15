@@ -5,6 +5,8 @@ import { MessageAdd } from '../shared/models/hokmshelem/messageAdd';
 import { ApiResponse } from '../shared/models/apiResponse';
 import { ReplaySubject, delay, map } from 'rxjs';
 import { HomePageInfo } from '../shared/models/engine/homePageInfo';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { RegisterAsGuestComponent } from './register-as-guest/register-as-guest.component';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +16,15 @@ export class HomeService {
   engineUrl = environment.engineUrl;
   visited = false;
   loadingGameInfo = false;
+  bsModalRef?: BsModalRef;
 
   private homePageInfoSource = new ReplaySubject<HomePageInfo | null>(1);
   homePageInfo$ = this.homePageInfoSource.asObservable();
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient,
+    private modalService: BsModalService
+  ) { }
+  
   visitor() {
     return this.http.get(this.apiUrl + 'hokmshelem');
   }
@@ -39,5 +44,10 @@ export class HomeService {
         }
       })
     )
+  }
+
+  openRegisterGuestUserModal() {
+    this.bsModalRef = this.modalService.show(RegisterAsGuestComponent);
+    this.bsModalRef.content.closeBtnName = 'Close';
   }
 }

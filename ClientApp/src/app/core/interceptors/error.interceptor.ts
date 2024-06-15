@@ -28,7 +28,11 @@ export class ErrorInterceptor implements HttpInterceptor {
 
           if (error.status === 400) {
             if (error.error.displayByDefault) {
-              this.sharedService.showNotification(false, error.error.title, error.error.message, error.error.isHtmlEnabled);
+              if (error.error.showWithToastr) {
+                this.toastr.error(error.error.message);
+              } else {
+                this.sharedService.showNotification(false, error.error.title, error.error.message, error.error.isHtmlEnabled);
+              }
             }
           }
 
