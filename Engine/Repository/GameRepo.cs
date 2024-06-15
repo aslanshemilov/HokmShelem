@@ -608,7 +608,7 @@ namespace Engine.Repository
                             game.RedTotalScore -= game.RoundTargetScore;
                         }
 
-                        game.BlueTotalScore += game.RedRoundScore;
+                        game.BlueTotalScore += game.BlueRoundScore;
                     }
 
                     game.ClaimStartsByIndex = SD.GetNextIndex(game.ClaimStartsByIndex);

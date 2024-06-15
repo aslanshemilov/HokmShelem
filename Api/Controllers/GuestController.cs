@@ -97,7 +97,7 @@
         }
         private string UniqueGuestName(string guestName)
         {
-            guestName = "g_" + guestName;
+            //guestName = "g_" + guestName;
             int i = 1;
             if (!Context.Guest.Any(x => x.PlayerName.ToLower() == guestName.ToLower()))
             {

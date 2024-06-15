@@ -184,20 +184,20 @@
                 await userManager.AddToRoleAsync(todd, SD.Player);
 
 
-                var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var dummyUsers = JsonSerializer.Deserialize<List<ApplicationUser>>(userData);
+                //var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
+                //var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                //var dummyUsers = JsonSerializer.Deserialize<List<ApplicationUser>>(userData);
 
-                foreach (var user in dummyUsers)
-                {
-                    var badge = await context.Badge.FirstOrDefaultAsync(c => c.Color == SD.GetBadgeColorByRate(user.UserProfile.Rate));
-                    user.UserProfile.Badge = badge;
-                    user.LockoutEnabled = true;
-                    user.EmailConfirmed = true;
+                //foreach (var user in dummyUsers)
+                //{
+                //    var badge = await context.Badge.FirstOrDefaultAsync(c => c.Color == SD.GetBadgeColorByRate(user.UserProfile.Rate));
+                //    user.UserProfile.Badge = badge;
+                //    user.LockoutEnabled = true;
+                //    user.EmailConfirmed = true;
 
-                    await userManager.CreateAsync(user, SD.DefaultPassword);
-                    await userManager.AddToRoleAsync(user, SD.Player);
-                }
+                //    await userManager.CreateAsync(user, SD.DefaultPassword);
+                //    await userManager.AddToRoleAsync(user, SD.Player);
+                //}
             }
 
             if (context.ChangeTracker.HasChanges())
