@@ -60,9 +60,11 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       playerName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.-]*$'), Validators.minLength(3), Validators.maxLength(15)], [this.checkPlayerNameNotTaken()]],
       email: ['', [Validators.required, Validators.pattern('^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$')]],
-      password: ['', [Validators.required, Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$')]],
+      password: ['', [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,15}$')]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
-      countryId: [0, [Validators.required, this.countrySelected()]]
+      countryId: [0, [Validators.required, this.countrySelected()]],
+      ageConsent: ['', [Validators.required, this.trueValue()]],
+      termsOfService: ['', [Validators.required, this.trueValue()]]
     });
 
     this.registerForm.controls['password'].valueChanges.subscribe({
@@ -97,6 +99,12 @@ export class RegisterComponent implements OnInit {
         this.sharedService.showNotification(false, "Failed", "Unable to register with your facebook account.");
       }
     })
+  }
+
+  private  trueValue(): ValidatorFn {
+    return (control: AbstractControl) => {
+      return control.value === true ? null : { notMinimumAge: true };
+    }
   }
 
   private  matchValues(matchTo: string): ValidatorFn {

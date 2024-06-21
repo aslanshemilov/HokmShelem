@@ -128,6 +128,16 @@ namespace Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto model)
         {
+            if (model.AgeConsent == false)
+            {
+                return BadRequest(new ApiResponse(400, message: "We're sorry, but you must be at least 16 years old to sign up for this website."));
+            }
+
+            if (model.TermsOfService == false)
+            {
+                return BadRequest(new ApiResponse(400, message: "In order to create an account, you must agree to our terms of service."));
+            }
+
             if (await CheckEmailExistsAsync(model.Email))
             {
                 return BadRequest(new ApiResponse(400, message: SM.EmailTaken(model.Email)));

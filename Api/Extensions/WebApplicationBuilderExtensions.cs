@@ -83,8 +83,8 @@ namespace Api.Extensions
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Lockout.AllowedForNewUsers = false;

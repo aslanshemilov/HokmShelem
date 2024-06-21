@@ -7,7 +7,7 @@ import { playerOrGuestGuard } from './core/guards/player-or-guest.guard';
 const routes: Routes = [
   // default component
   { path: '', loadChildren: () => import('./home/home.module').then(module => module.HomeModule) },
-  // { path: 'account', loadChildren: () => import('./account/account.module').then(module => module.AccountModule) },
+  { path: 'account', loadChildren: () => import('./account/account.module').then(module => module.AccountModule) },
   {
     path: '',
     runGuardsAndResolvers: 'always',

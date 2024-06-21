@@ -2,30 +2,24 @@
     <div class="d-flex justify-content-center">
         <div class="col-12 col-lg-5">
             <main class="form-signin">
-                <form [formGroup]="registerForm" (ngSubmit)="register()"
-                    autocomplete="off">
+                <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
                     <div class="text-center mb-4">
                         <h1 class="h3 mb-3 font-weight-normal">Let's Get Started to
                             <span class="text-danger">Play</span>
                         </h1>
                     </div>
-    
+
                     <div class="form-floating mb-3">
-                        <input formControlName="playerName" type="text"
-                            placeholder="Player name"
-                            class="form-control"
+                        <input formControlName="playerName" type="text" placeholder="Player name" class="form-control"
                             placeholder="Player name (Username)"
                             [class.is-invalid]="(submitted || registerForm.get('playerName')?.dirty) && registerForm.get('playerName')?.errors"
                             [class.is-valid]="registerForm.get('playerName')?.status === 'VALID'" />
                         <label for="playerName">
                             Player name (Username)
                         </label>
-                        <div
-                            *ngIf="registerForm.get('playerName')?.status === 'PENDING'"
+                        <div *ngIf="registerForm.get('playerName')?.status === 'PENDING'"
                             class="fa fa-spinner fa-spin loader"></div>
-                        <div
-                            class="position-absolute top-50 start-50 translate-middle"
-                            *ngIf>
+                        <div class="position-absolute top-50 start-50 translate-middle" *ngIf>
                             <span>Checking...</span>
                         </div>
                         <div class="invalid-feedback"
@@ -41,17 +35,15 @@
                             *ngIf="registerForm.get('playerName')?.dirty && registerForm.get('playerName')?.hasError('playerNameTaken')">
                             Player name is already taken. Please choose another name
                         </div>
-                        <div class="text-danger"
-                            *ngIf="registerForm.get('playerName')?.hasError('pattern')">
+                        <div class="text-danger" *ngIf="registerForm.get('playerName')?.hasError('pattern')">
                             No special characters
                         </div>
                     </div>
-    
+
                     <div class="form-floating mb-3">
                         <select class="form-select" formControlName="countryId"
                             [class.is-invalid]="submitted && registerForm.get('countryId')?.errors">
-                            <option *ngFor="let country of countries"
-                                [value]="country.id">
+                            <option *ngFor="let country of countries" [value]="country.id">
                                 {{country.name}}
                             </option>
                         </select>
@@ -60,36 +52,44 @@
                             Country is required
                         </div>
                     </div>
-    
-                    <app-text-input
-                        [formControl]="$any(registerForm.controls['email'])"
-                        [label]="'Email address'"
+
+                    <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'Email address'"
                         [submitted]="submitted"></app-text-input>
-    
-                    <app-text-input
-                        [formControl]="$any(registerForm.controls['password'])"
-                        [label]="'Password'"
+
+                    <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'"
                         [submitted]="submitted"
-                        [invalidPatternMessage]="'Password must be at least 6 characters, no more than 15 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit'"
+                        [invalidPatternMessage]="'Password must be at least 6 characters, no more than 15 characters, and must include at least one numeric digit'"
                         [type]="'password'"></app-text-input>
-    
-                    <app-text-input
-                        [formControl]="$any(registerForm.controls['confirmPassword'])"
-                        [label]="'Confirm Password'"
-                        [submitted]="submitted"
-                        [type]="'password'"></app-text-input>
-    
-                    <div class="form-floating" *ngIf="apiResponse">
-                        <app-validation-messages
-                            [apiResponse]="apiResponse"></app-validation-messages>
+
+                    <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])"
+                        [label]="'Confirm Password'" [submitted]="submitted" [type]="'password'"></app-text-input>
+
+                    <div class="form-check">
+                        <input formControlName="ageConsent" class="form-check-input" type="checkbox"
+                            [class.is-invalid]="(submitted || registerForm.get('ageConsent')?.dirty) && registerForm.get('ageConsent')?.errors">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            I am at least 16 years old
+                        </label>
                     </div>
-    
+
+                    <div class="form-check">
+                        <input formControlName="termsOfService" class="form-check-input" type="checkbox"
+                            [class.is-invalid]="(submitted || registerForm.get('termsOfService')?.dirty) && registerForm.get('termsOfService')?.errors">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            I agree to the <a routerLink="/terms-of-service">terms of service</a>.
+                        </label>
+                    </div>
+
+                    <div class="form-floating" *ngIf="apiResponse">
+                        <app-validation-messages [apiResponse]="apiResponse"></app-validation-messages>
+                    </div>
+
                     <div class="d-grid mt-4 px-1">
                         <button class="btn btn-lg btn-warning" type="submit">Create
                             Account</button>
                     </div>
                 </form>
-    
+
                 <div class="row d-flex justify-content-center mt-5">
                     <div class="col-4">
                         <hr>
@@ -99,11 +99,10 @@
                         <hr>
                     </div>
                 </div>
-    
+
                 <div class="d-flex justify-content-between mt-3">
                     <div #googleButton></div>
-                    <div style="text-align: center; width: 180px;"
-                        class="btn btn-primary btn-sm"
+                    <div style="text-align: center; width: 180px;" class="btn btn-primary btn-sm"
                         (click)="registerWithFacebook()">
                         <i class="fa fa-facebook">&nbsp;Facebook</i>
                     </div>

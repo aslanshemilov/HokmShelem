@@ -27,7 +27,7 @@ export class RegisterAsGuestComponent implements OnInit {
 
   initializeForm() {
     this.regusterGuestForm = this.formBuilder.group({
-      guestName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15), Validators.pattern('^[a-zA-Z0-9_.-]*$')]]
+      guestName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]]
     });
   }
 

@@ -7,8 +7,7 @@
 <div class="modal-body">
     <form [formGroup]="regusterGuestForm" (ngSubmit)="register()" id="regusterGuestForm">
         <app-text-input-f2 [formControl]="$any(regusterGuestForm.controls['guestName'])" [label]="'Name'"
-            [submitted]="submitted"
-            [invalidPatternMessage]="'No special characters'"></app-text-input-f2>
+            [submitted]="submitted"></app-text-input-f2>
     </form>
 </div>
 <div class="modal-footer">
