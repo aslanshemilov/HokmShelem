@@ -1,26 +1,22 @@
-﻿using Mailjet.Client.Resources;
-
-namespace Api.Controllers
+﻿namespace Api.Controllers
 {
     public class AccountController : ApiCoreController
     {
         private readonly IJWTService _jwtService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailService _emailService;
+        
         private readonly HttpClient _facebookHttpClient;
 
         public AccountController(
             IJWTService jwtService,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager,
-            IEmailService emailService
+            UserManager<ApplicationUser> userManager
             )
         {
             _jwtService = jwtService;
             _signInManager = signInManager;
             _userManager = userManager;
-            _emailService = emailService;
             _facebookHttpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://graph.facebook.com")
@@ -438,12 +434,11 @@ namespace Api.Controllers
             var body = $"<p>Hello: {user.PlayerName}</p>" +
                 $"<p>Please confirm your email address by clicking on the following link.</p>" +
                 $"<p><a href=\"{url}\">Click here</a></p>" +
-                $"<p>Thank you," +
-                $"<br>{Configuration["Email:ApplicationName"]}";
+                $"<p>{Configuration["Email:ApplicationName"]}</p>";
 
             var emailSend = new EmailSendDto(user.Email, "Confirm your email", body);
 
-            return await _emailService.SendEmailAsync(emailSend);
+            return await EmailService.SendEmailAsync(emailSend);
         }
 
         private async Task<bool> SendForgotUsernameOrPasswordEmail(ApplicationUser user)
@@ -456,12 +451,11 @@ namespace Api.Controllers
                 $"<p>Username: {user.UserName}</p>" +
                 $"<p>In order to reset your password, please click on the following link.</p>" +
                 $"<p><a href=\"{url}\">Click here</a></p>" +
-                $"<p>Thank you," +
-                $"<br>{Configuration["Email:ApplicationName"]}";
+                $"<p>{Configuration["Email:ApplicationName"]}</p>";
 
             var emailSend = new EmailSendDto(user.Email, "Forgot username or password", body);
 
-            return await _emailService.SendEmailAsync(emailSend);
+            return await EmailService.SendEmailAsync(emailSend);
         }
 
         private async Task ResetUserLockoutAsync(ApplicationUser user)

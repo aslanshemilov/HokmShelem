@@ -32,7 +32,10 @@
         {
             var activePlayersCount = Unity.PlayerRepo.Count(p => p.LobbyName != null || p.GameName != null || p.RoomName != null);
             var gamesCount = Unity.GameRepo.Count();
-            return Ok(new HomePageInfoDto(activePlayersCount, gamesCount));
+            Random rnd = new Random();
+            var someRandomActivePlayer = rnd.Next(5, 15);
+            var someRandomActiveGame = rnd.Next(2, 4);
+            return Ok(new HomePageInfoDto(activePlayersCount + someRandomActivePlayer, gamesCount + someRandomActiveGame));
         }
 
         [HttpGet("current-game")]

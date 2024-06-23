@@ -29,6 +29,8 @@
         public const string Completed = "completed";
         public const string Left = "left";
         public const string VotedToEnd = "voted to end";
+        public const string Hokm = "hokm";
+        public const string Shelem = "shelem";
 
         public static readonly List<string> Statuses = new List<string> { Online, Offline, InGame, Banned };
 

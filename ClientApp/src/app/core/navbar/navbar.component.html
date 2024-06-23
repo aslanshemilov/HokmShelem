@@ -30,16 +30,16 @@
                 <div class="dropdown" dropdown *ngIf="(accountService.applicationUser$ | async) as user">
                     <a class="dropdown-toggle" style="text-decoration: none; cursor: pointer;" dropdownToggle>
                         <span class="welcome text-warning">{{user.playerName}}</span>
-                        <img class="profilePic mx-1" src="{{user.photoUrl || './assets/images/site/avatar.png'}}">
+                        <img class="profilePic mx-1" src="{{user.photoUrl || blobImageUrl + '/user.png'}}">
                     </a>
                     <ng-container *ngIf="user.roles.length > 0">
                         <div class="dropdown-menu" *dropdownMenu>
-                            <a class="dropdown-item" routerLink="/profile"
+                            <!-- <a class="dropdown-item" routerLink="/profile"
                                 [ngClass]="darkMode ? 'text-white' : 'text-black'">
                                 <i class="bi bi-person-circle me-2"></i> My
                                 Profile
-                            </a>
-                            <div class="dropdown-divider"></div>
+                            </a> -->
+                            <!-- <div class="dropdown-divider"></div> -->
                             <a (click)="logout()" class="dropdown-item"
                                 [ngClass]="darkMode ? 'text-white' : 'text-black'">
                                 <i class="bi bi-door-closed-fill me-2"></i>

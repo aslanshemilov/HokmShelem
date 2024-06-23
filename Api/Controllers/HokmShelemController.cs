@@ -1,4 +1,7 @@
-﻿namespace Api.Controllers
+﻿using Mailjet.Client.Resources;
+using System;
+
+namespace Api.Controllers
 {
     public class HokmShelemController : ApiCoreController
     {
@@ -23,6 +26,13 @@
 
             await UnitOfWork.HokmShelemRepository.AddMessageAsync(visitorIp, model);
             await UnitOfWork.CompleteAsync();
+
+            var body = $"<p>Name: {model.Name}<br>Email: {model.Email}</p>" +
+              $"<p>Message:<br>" +
+              $"{model.Message}</p>";
+
+            var emailSend = new EmailSendDto("hokmshelem@gmail.com", "Client Message", body);
+            await EmailService.SendEmailAsync(emailSend);
 
             return Ok(new ApiResponse(200, title: "Message Received", message: "Thank you for contacting us, your message has been received."));
         }

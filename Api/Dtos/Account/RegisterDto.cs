@@ -14,7 +14,7 @@
         [Required]
         public bool TermsOfService { get; set; }
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,15}$", ErrorMessage = "Password must be at least 6 characters, no more than 15 characters, and must include at least one upper case letter, one lower case letter, and one numeric digit")]
+        [RegularExpression("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,15}$", ErrorMessage = "Password must contain at least one letter, at least one number, and be between 6-15 characters in length with no special characters.")]
         public string Password { get; set; }
         [Required]
         public int CountryId { get; set; }

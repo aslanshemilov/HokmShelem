@@ -18,7 +18,7 @@
         [HttpPost]
         public async Task<ActionResult<ApiResult>> CreateGameHistory(GameHistoryDto model)
         {
-            UnitOfWork.GameHistoryRepository.CreateGameHistory(model);
+            await UnitOfWork.GameHistoryRepository.CreateGameHistoryAsync(model);
             if (UnitOfWork.HasChanges())
             {
                 if (await UnitOfWork.CompleteAsync())

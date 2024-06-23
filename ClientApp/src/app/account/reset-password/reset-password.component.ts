@@ -48,7 +48,7 @@ export class ResetPasswordComponent implements OnInit {
     this.resetPasswordForm = this.formBuilder.group({
       username: [{ value: username, disabled: true }],
       email: [{ value: email, disabled: true }],
-      newPassword: ['', [Validators.required, Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$')]],
+      newPassword: ['', [Validators.required, Validators.pattern('^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,15}$')]],
       confirmPassword: ['', [Validators.required, this.matchValues('newPassword')]],
     });
 

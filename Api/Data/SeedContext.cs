@@ -98,7 +98,7 @@
                     UserProfile = adminProfile
                 };
 
-                await userManager.CreateAsync(admin, SD.DefaultPassword);
+                await userManager.CreateAsync(admin, "ShayanSholeh123");
                 await userManager.AddToRolesAsync(admin, new[] { SD.Admin, SD.Moderator, SD.Player });
 
                 // Sholeh

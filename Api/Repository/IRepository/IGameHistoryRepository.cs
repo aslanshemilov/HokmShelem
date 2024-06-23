@@ -2,7 +2,7 @@
 {
     public interface IGameHistoryRepository
     {
-        void CreateGameHistory(GameHistoryDto model);
+        Task CreateGameHistoryAsync(GameHistoryDto model);
         Task<List<GameHistoryDto>> GetAllGameHistories();
     }
 }

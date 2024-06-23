@@ -6,7 +6,7 @@ namespace StaticDetail
     {
         // Messages
         #region Success
-        public const string AccountCreatedConfirmEmail = "Your account has been created, and a confirmation email has been sent. Please confirm your email address.";
+        public const string AccountCreatedConfirmEmail = "Your account has been created, and a confirmation email has been sent. Please look into you email inbox or spam folder to confirm your email address. ";
         public const string ConfirmationEmailLinkSent = "A confirmation link has been sent. Please log in to your email and confirm your address.";
         public const string PasswordHasBeenReset = "Your password has been reset";
         public const string EmailConfirmed = "Your email address has been confirmed, and your account has been activated. You can now log in and enjoy your stay.";

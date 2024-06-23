@@ -9,10 +9,12 @@
         private IHostEnvironment _environment;
         private IConfiguration _configuration;
         private Context _context;
+        private IEmailService _emailService;
         protected IUnitOfWork UnitOfWork => _unitOfWork ??= HttpContext.RequestServices.GetService<IUnitOfWork>();
         protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
         protected IHostEnvironment Environment => _environment ??= HttpContext.RequestServices.GetService<IHostEnvironment>();
         protected IConfiguration Configuration => _configuration ??= HttpContext.RequestServices.GetService<IConfiguration>();
         protected Context Context => _context ??= HttpContext.RequestServices.GetService<Context>();
+        protected IEmailService EmailService => _emailService ??= HttpContext.RequestServices.GetService<IEmailService>();
     }
 }

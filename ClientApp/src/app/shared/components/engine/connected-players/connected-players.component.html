@@ -11,7 +11,7 @@
 
         <ng-template #playerProfile>
             <p>
-                <img style="width: 60px; height: 60px;" src="{{player.photoUrl}}" /><br><br>
+                <img style="width: 60px; height: 60px;" src="{{player.photoUrl || blobImageUrl + 'site/user.png'}}" /><br><br>
                 Rate: {{player.rate}}<br>
                 Hokm score: {{player.hokmScore}}<br>
                 Shelem score: {{player.shelemScore}}<br>
