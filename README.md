@@ -1,5 +1,7 @@
 # HokmShelem
 
+Url: [HokmShelem](https://hokmshelem.com)
+
 This is a multi-player card game platform designed to provide a comprehensive and enjoyable gaming experience, combining the thrill of competition with the fun of social interaction. Players can sign up and create profiles, view other players' profiles (including rating, score, about, and profile picture), connect to the chat lobby to chat with other players, and create games. Other players can join these games and play card games in teams of two, with the ability to chat and enjoy their time together during gameplay.
 
 In this application, we offer two types of games:
