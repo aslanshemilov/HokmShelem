@@ -45,17 +45,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private startHomePageInfoApiCall(): void {
-    this.homeService.getHomePageInfo().subscribe({
-      next: _ => {
-        this.intervalId = setInterval(() => {
-          this.homeService.getHomePageInfo().subscribe({
-            error: _ => {
-              this.stopHomePageInfoApiCall();
-            }
-          })
-        }, 30000); 
-      }
-    });    
+    this.homeService.getHomePageInfo().subscribe();    
+    // this.homeService.getHomePageInfo().subscribe({
+    //   next: _ => {
+    //     this.intervalId = setInterval(() => {
+    //       this.homeService.getHomePageInfo().subscribe({
+    //         error: _ => {
+    //           this.stopHomePageInfoApiCall();
+    //         }
+    //       })
+    //     }, 30000); 
+    //   }
+    // });    
   }
 
   private stopHomePageInfoApiCall(): void {

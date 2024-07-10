@@ -52,47 +52,47 @@
                     }
                 }
 
-                if (model.Status == SD.Left)
-                {
-                    if (model.GameType == SD.Hokm)
-                    {
-                        if (model.LeftBy.ToLower() == blue1.PlayerName.ToLower())
-                        {
-                            blue1.UserProfile.HokmScore -= 10;
-                        }
-                        else if (model.LeftBy.ToLower() == red1.PlayerName.ToLower())
-                        {
-                            red1.UserProfile.HokmScore -= 10;
-                        }
-                        else if (model.LeftBy.ToLower() == blue2.PlayerName.ToLower())
-                        {
-                            blue2.UserProfile.HokmScore -= 10;
-                        }
-                        else if (model.LeftBy.ToLower() == red2.PlayerName.ToLower())
-                        {
-                            red2.UserProfile.HokmScore -= 10;
-                        }
-                    }
-                    else
-                    {
-                        if (model.LeftBy.ToLower() == blue1.PlayerName.ToLower())
-                        {
-                            blue1.UserProfile.ShelemScore -= 1000;
-                        }
-                        else if (model.LeftBy.ToLower() == red1.PlayerName.ToLower())
-                        {
-                            red1.UserProfile.ShelemScore -= 1000;
-                        }
-                        else if (model.LeftBy.ToLower() == blue2.PlayerName.ToLower())
-                        {
-                            blue2.UserProfile.ShelemScore -= 1000;
-                        }
-                        else if (model.LeftBy.ToLower() == red2.PlayerName.ToLower())
-                        {
-                            red2.UserProfile.ShelemScore -= 1000;
-                        }
-                    }
-                }
+                //if (model.Status == SD.Left)
+                //{
+                //    if (model.GameType == SD.Hokm)
+                //    {
+                //        if (model.LeftBy.ToLower() == blue1.PlayerName.ToLower())
+                //        {
+                //            blue1.UserProfile.HokmScore -= 10;
+                //        }
+                //        else if (model.LeftBy.ToLower() == red1.PlayerName.ToLower())
+                //        {
+                //            red1.UserProfile.HokmScore -= 10;
+                //        }
+                //        else if (model.LeftBy.ToLower() == blue2.PlayerName.ToLower())
+                //        {
+                //            blue2.UserProfile.HokmScore -= 10;
+                //        }
+                //        else if (model.LeftBy.ToLower() == red2.PlayerName.ToLower())
+                //        {
+                //            red2.UserProfile.HokmScore -= 10;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (model.LeftBy.ToLower() == blue1.PlayerName.ToLower())
+                //        {
+                //            blue1.UserProfile.ShelemScore -= 1000;
+                //        }
+                //        else if (model.LeftBy.ToLower() == red1.PlayerName.ToLower())
+                //        {
+                //            red1.UserProfile.ShelemScore -= 1000;
+                //        }
+                //        else if (model.LeftBy.ToLower() == blue2.PlayerName.ToLower())
+                //        {
+                //            blue2.UserProfile.ShelemScore -= 1000;
+                //        }
+                //        else if (model.LeftBy.ToLower() == red2.PlayerName.ToLower())
+                //        {
+                //            red2.UserProfile.ShelemScore -= 1000;
+                //        }
+                //    }
+                //}
             }
 
             _context.GameHistory.Add(_mapper.Map<GameHistory>(model));
