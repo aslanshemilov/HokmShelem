@@ -5,6 +5,7 @@
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<UserSecretsId>a4d5ca5a-3a75-4079-9d38-2c54bda93fd1</UserSecretsId>
+		<AspNetCoreHostingModel>outofprocess</AspNetCoreHostingModel>
 	</PropertyGroup>
 
 	<ItemGroup>
