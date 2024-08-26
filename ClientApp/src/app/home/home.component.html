@@ -32,27 +32,20 @@
                 </div>
             </div>
 
-            <button class="btn" routerLink="/lobby">
+            <!-- <button class="btn" routerLink="/lobby">
                 Play Online
-            </button>
+            </button> -->
 
-            <!-- <ng-container *ngIf="(accountService.applicationUser$ | async) === null">
+            <ng-container *ngIf="(accountService.applicationUser$ | async) === null">
                 <button class="btn" (click)="registerAsGuest()" *appIsNonLoggedinUserOrGuestDirective>
                     Play as Guest
                 </button>
-            </ng-container> -->
+            </ng-container>
         </div>
     </div>
     <h3 class="my-5">
-        <!-- Welcome to HokmShelem! We are a strictly <span class="text-warning">non-gambling</span> platform dedicated to
-        bringing people from all over the world together to connect, chat, play, and enjoy Iranian card games in a safe
-        and friendly environment. -->
         Welcome to <span class="text-warning">hokmshelem.com</span>, the ultimate destination
         for playing Iranian card games like Hokm and Shelem. Connect, socialize, and make new friends with players from
         around the globe. Enjoy all this and more, absolutely FREE!
     </h3>
-
-    <!-- <section>
-        <app-demo></app-demo>
-    </section> -->
 </div>
