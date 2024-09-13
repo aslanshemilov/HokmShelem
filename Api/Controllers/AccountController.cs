@@ -147,14 +147,16 @@
             var userToAdd = await CreateApplicationUserAsync(Mapper.Map<ApplicationUserAddDto>(model));
             if (userToAdd == null) return BadRequest(new ApiResponse(400, message: SM.AccountCreationFailureMessage));
 
-            if (await SendConfirmEmailAsync(userToAdd))
-            {
-                return Ok(new ApiResponse(200, title: SM.ConfirmationEmailSent, message: SM.AccountCreatedConfirmEmail));
-            }
-            else
-            {
-                return BadRequest(new ApiResponse(400, message: SM.EmailSentFailureMessage));
-            }
+            return Ok(new ApiResponse(200, title: "Account Created", "Your account has been created, and you can log in to your account now."));
+
+            //if (await SendConfirmEmailAsync(userToAdd))
+            //{
+            //    return Ok(new ApiResponse(200, title: SM.ConfirmationEmailSent, message: SM.AccountCreatedConfirmEmail));
+            //}
+            //else
+            //{
+            //    return BadRequest(new ApiResponse(400, message: SM.EmailSentFailureMessage));
+            //}
         }
 
         [HttpPost("register-with-third-party")]
@@ -319,7 +321,8 @@
             {
                 UserName = model.PlayerName.ToLower(),
                 PlayerName = model.PlayerName,
-                Email = model.Email
+                Email = model.Email,
+                EmailConfirmed = true
             };
 
             IdentityResult result;

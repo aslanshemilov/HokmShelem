@@ -5,7 +5,7 @@
         [Required]
         public string Token { get; set; }
         [Required(ErrorMessage = "Email is required")]
-        [RegularExpression("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", ErrorMessage = "Invalid email address")]
+        [RegularExpression("^.+@[^\\.].*\\.[a-z]{2,}$", ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
     }
 }

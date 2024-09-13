@@ -45,7 +45,7 @@
 
                     <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'"
                         [submitted]="submitted"
-                        [invalidPatternMessage]="'Password must contain at least one letter, at least one number, and be between 6-15 characters in length with no special characters.'"
+                        [invalidPatternMessage]="'Password must be between 6-15 characters in length.'"
                         [type]="'password'"></app-text-input>
 
                     <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])"
